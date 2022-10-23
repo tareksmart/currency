@@ -20,11 +20,11 @@ ThemeData mytheme(BuildContext context) {
     ),
     scaffoldBackgroundColor: const Color(0xfffafbff),
     inputDecorationTheme: InputDecorationTheme(
-      fillColor: const Color(0xFFE5E5E5),
+      fillColor: MyColors.backGroundTextFieldColor,
       labelStyle: Theme.of(context).textTheme.subtitle1,
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6.0),
-        borderSide: const BorderSide(color: Colors.red),
+        borderSide:  BorderSide(color: MyColors.ButtonColor),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
@@ -32,7 +32,7 @@ ThemeData mytheme(BuildContext context) {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
-        borderSide: const BorderSide(color: Colors.red),
+        borderSide:  BorderSide(color: MyColors.backGroundTextFieldColor),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),

@@ -1,17 +1,18 @@
 import 'package:currencypro/view/constant/myConstants.dart';
+import 'package:currencypro/view/widget/convert_button.dart';
+import 'package:currencypro/view/widget/text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+import '../widget/curr_card.dart';
+
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
-  TextEditingController _baseCurrency_controller = TextEditingController();
-  TextEditingController _toCurr_controller = TextEditingController();
-  final _globalKey=GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      extendBody: true,
       body: SingleChildScrollView(
         child: Stack(
           children: [
@@ -27,19 +28,21 @@ class MyHomePage extends StatelessWidget {
                       fit: BoxFit.fill,
                     ),
                   ),
-                  const SizedBox(
-                    height: 4,
+                   SizedBox(
+                    height: size.height * .15,
                   ),
                   SizedBox(
                     height: size.height * .6,
                     child: AnimationLimiter(
                       child: GridView.count(
+                        childAspectRatio: 2,
                         crossAxisSpacing: .5,
                         crossAxisCount: 3,
                         children: List.generate(
+
                             12,
                             (index) => AnimationConfiguration.staggeredGrid(
-                                  position: index,
+                                  position: 10,
                                   duration: const Duration(seconds: 1),
                                   columnCount: 3,
                                   child: ScaleAnimation(
@@ -48,18 +51,11 @@ class MyHomePage extends StatelessWidget {
                                       decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: MyColors.whiteColor),
-                                      child: TextButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          '9',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline5,
-                                        ),
-                                      ),
+                                      child: MyTextButton(index: index,onPress: (){},),
                                     ),
                                   )),
-                                )),
+                                ),
+                       growable: false ),
                       ),
                     ),
                   )
@@ -73,55 +69,18 @@ class MyHomePage extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: SizedBox(
-                    height: size.height * .3,
-                    width: size.width * .9,
-
-                    child: Card(
-                      color: MyColors.primaryColor,
-                      elevation: 6,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Form(
-                          key: _globalKey,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'usd',
-                                    style: Theme.of(context).textTheme.headline6,
-                                  ),
-                                  SizedBox(width: 4,),
-
-                                  Expanded(
-                                    child: TextFormField(
-                                      controller: _baseCurrency_controller,
-                                      decoration: InputDecoration(
-                                          labelStyle:
-                                              Theme.of(context).textTheme.subtitle2),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'inr',
-                                    style: Theme.of(context).textTheme.headline6,
-                                  ),
-                                  //TextFormField()
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  child:Currencycard() ,
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                SizedBox(
+                  height: size.height * .5,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child:ConvertButton(text: 'CONVERT', onTab: () {  },size: size,) ,
                 ),
               ],
             )
