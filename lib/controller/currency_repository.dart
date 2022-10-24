@@ -5,9 +5,10 @@ import '../model/currency_data.dart';
 class CurrencyRepository{
   final CurrencyWebService webService;
 
-  CurrencyRepository(this.webService);
+  CurrencyRepository({required this.webService});
   Future<List<CurrencyData>> getAllCurrency ()async{
 final currencies=await webService.getAllCurrencyData();
+print(currencies.toString()+'===========');
 var currToLoist=currencies.map((currency) => CurrencyData.fromMap(currency)).toList();
 return currToLoist;
   }

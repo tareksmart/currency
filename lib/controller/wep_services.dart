@@ -15,9 +15,10 @@ class CurrencyWebService {
   Future<List<dynamic>> getAllCurrencyData()async{
     try{
       var response=await dio.get('supported-currencies');
+      print(response.data+'===========');
       return response.data;
 
     }
-    on Exception catch(e){return [];}
+    on Exception catch(e){print('$e');return [];}
   }
 }

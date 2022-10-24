@@ -1,7 +1,11 @@
+import 'package:currencypro/controller/cubit/curency_cubit.dart';
+import 'package:currencypro/controller/currency_repository.dart';
 import 'package:currencypro/view/constant/myConstants.dart';
 import 'package:currencypro/view/widget/convert_button.dart';
 import 'package:currencypro/view/widget/text_button.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import '../widget/curr_card.dart';
@@ -70,7 +74,8 @@ class MyHomePage extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child:Currencycard() ,
+                  child:
+                       Currencycard(),
                 ),
               ],
             ),
@@ -81,7 +86,9 @@ class MyHomePage extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child:ConvertButton(text: 'CONVERT', onTab: () {  },size: size,) ,
+                  child:ConvertButton(text: 'CONVERT', onTab: () async {
+
+                  },size: size,) ,
                 ),
               ],
             )
