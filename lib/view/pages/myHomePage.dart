@@ -13,6 +13,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Stack(
           children: [
@@ -55,7 +56,7 @@ class MyHomePage extends StatelessWidget {
                                     ),
                                   )),
                                 ),
-                       growable: false ),
+                        ),
                       ),
                     ),
                   )

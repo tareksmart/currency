@@ -7,4 +7,5 @@ class MyColors {
   static Color ButtonColor = Color(0xff6391ff);
   static Color primaryColor = Color(0xfffafbff);
   static Color backGroundTextFieldColor = Color(0xffeef2ff);
+
 }

@@ -1,10 +1,12 @@
+import 'package:currencypro/utilities/asset_links.dart';
 import 'package:flutter/material.dart';
 
 import '../constant/myConstants.dart';
+
 class Currencycard extends StatelessWidget {
-   Currencycard({Key? key}) : super(key: key);
-  TextEditingController _baseCurrency_controller = TextEditingController();
-  TextEditingController _toCurr_controller = TextEditingController();
+  Currencycard({Key? key}) : super(key: key);
+  final _baseCurrency_controller = TextEditingController();
+  final _toCurr_controller = TextEditingController();
   final _globalKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -25,23 +27,33 @@ class Currencycard extends StatelessWidget {
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: DropdownButton<String>(
                         items: [
                           DropdownMenuItem(
                             child: Row(
-                              children: [Icon(Icons.flag),
+                              children: [
+                                SizedBox(
+                                  width: size.width*.1,
+                                  height: size.height*.05,
+                                  child: Image.network(
+
+                                    AppAssets.usaFlag,
+                                    fit: BoxFit.fill,
+
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 6,
+                                ),
                                 Text(
                                   'USD',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline5!
-                                      .copyWith(
-                                      color:
-                                      MyColors.ButtonColor),
+                                      .copyWith(color: MyColors.ButtonColor),
                                 ),
                               ],
                             ),
@@ -52,7 +64,6 @@ class Currencycard extends StatelessWidget {
                         iconEnabledColor: MyColors.ButtonColor,
                         iconSize: 30,
                         elevation: 0,
-
                       ),
                     ),
                     const SizedBox(
@@ -62,38 +73,47 @@ class Currencycard extends StatelessWidget {
                       child: TextFormField(
                         controller: _baseCurrency_controller,
                         decoration: InputDecoration(
-                            labelStyle: Theme.of(context)
-                                .textTheme
-                                .subtitle2),
+
+                            labelStyle: Theme.of(context).textTheme.subtitle2),
                       ),
                     )
                   ],
                 ),
-                const SizedBox(height: 16,),
+                const SizedBox(
+                  height: 16,
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: DropdownButton<String>(
-
                         items: [
                           DropdownMenuItem(
-                            child: Row(
-                              children: [Icon(Icons.flag),
-                                Text(
-                                  'INR',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline5!
-                                      .copyWith(
-                                      color:
-                                      MyColors.ButtonColor),
+                              child: Row(
+                            children: [
+                              SizedBox(
+                                width: size.width*.1,
+                                height: size.height*.05,
+                                child: Image.network(
+
+                                  AppAssets.andiaFlag,
+                                  fit: BoxFit.fill,
+
                                 ),
-                              ],
-                            ),
-                          )
+                              ),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              Text(
+                                'INR',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline5!
+                                    .copyWith(color: MyColors.ButtonColor),
+                              ),
+                            ],
+                          ))
                         ],
                         onChanged: (value) {},
                         isExpanded: true,
@@ -107,11 +127,9 @@ class Currencycard extends StatelessWidget {
                     ),
                     Expanded(
                       child: TextFormField(
-                        controller: _baseCurrency_controller,
+                        controller: _toCurr_controller,
                         decoration: InputDecoration(
-                            labelStyle: Theme.of(context)
-                                .textTheme
-                                .subtitle2),
+                            labelStyle: Theme.of(context).textTheme.subtitle2),
                       ),
                     )
                   ],
