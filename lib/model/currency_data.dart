@@ -1,16 +1,16 @@
 class CurrencyData {
-  final String currencyCode;
-  final String currencyName;
-  final String icon;
-  final String countryCode;
-  final String countryName;
+   String? currencyCode;
+   String? currencyName;
+   String? icon;
+   String? countryCode;
+   String? countryName;
 
   CurrencyData(
-      {required this.currencyCode,
-        required this.currencyName,
-        required this.icon,
-        required this.countryCode,
-        required this.countryName});
+      { this.currencyCode,
+         this.currencyName,
+         this.icon,
+         this.countryCode,
+         this.countryName});
 
   Map<String, dynamic> toMap() {
     return {
@@ -24,11 +24,11 @@ class CurrencyData {
 
   factory CurrencyData.fromMap(Map<String, dynamic> map) {
     return CurrencyData(
-      currencyCode: map['currencyCode'] as String,
-      currencyName: map['currencyName'] as String,
-      icon: map['icon'] as String,
-      countryCode: map['countryCode'] as String,
-      countryName: map['countryName'] as String,
+      currencyCode: map['currencyCode'] ,
+      currencyName: map['currencyName'] ,
+      icon: map['icon'] ,
+      countryCode: map['countryCode'] ,
+      countryName: map['countryName'] ,
     );
   }
 }

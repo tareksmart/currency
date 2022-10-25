@@ -8,8 +8,8 @@ class CurrencyCubit extends Cubit<CurrencyState>{
   final CurrencyRepository currRepo ;
   CurrencyCubit(this.currRepo):super(CurrencyIntial());
 
- void getAllCurrData(){
-   currRepo.getAllCurrency().then((value) => emit(CurrenciesLoaded(value)));
+ void getAllCurrData()async{
+   await currRepo.getAllCurrency().then((value) => emit(CurrenciesLoaded(value)));
  }
 
   
