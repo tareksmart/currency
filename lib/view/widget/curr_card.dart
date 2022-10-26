@@ -18,17 +18,23 @@ class _CurrencycardState extends State<Currencycard> {
   final _baseCurrency_controller = TextEditingController();
 
   final _toCurr_controller = TextEditingController();
-
+  String _selectedValue='0';
   final _globalKey = GlobalKey<FormState>();
   List<CurrencyData>? allCurrList;
-  String selectedValue='0';
+
   @override
   void initState() {
     BlocProvider.of<CurrencyCubit>(context).getAllCurrData();
     print('trigger=====');
     super.initState();
   }
-
+void dropDownCallBack(String? selectedValue){
+if(selectedValue is String){
+setState(() {
+_selectedValue=selectedValue;
+});
+}
+}
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -54,10 +60,10 @@ class _CurrencycardState extends State<Currencycard> {
                     children: [
                       Expanded(
                         child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
+                          child: DropdownButtonFormField<String>(
                             items: allCurrList?.map((e) {
                               return DropdownMenuItem<String>(
-                                value: selectedValue,
+                                value: 'dd' ,
 
                                 child: Row(
                                   children: [
@@ -81,18 +87,10 @@ class _CurrencycardState extends State<Currencycard> {
                                     ),
                                   ],
                                 ),
+
                               );
                             }).toList(),
-                            onChanged: (value) {
-
-                              print(value);
-                              print('value selected');
-                              setState(() {
-                                selectedValue=value!;
-                                print('selecte value$selectedValue');
-
-                              });
-                            },
+                            onChanged: dropDownCallBack,
                             isExpanded: true,
 
                             iconEnabledColor: MyColors.ButtonColor,
@@ -122,7 +120,7 @@ class _CurrencycardState extends State<Currencycard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: DropdownButton<String>(
+                        child: DropdownButtonFormField<String>(
 
                           items: [
                             DropdownMenuItem(
