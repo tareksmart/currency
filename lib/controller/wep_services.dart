@@ -23,4 +23,12 @@ class CurrencyWebService {
     }
     on Exception catch(e){print('$e');return [];}
   }
+
+  Future<List<dynamic>> getLatestrates() async{
+    try{
+      var response=await dio.get(ApiLinks.currencyRates);
+      return response.data;
+
+    }on Exception catch(e){print('$e');return[];}
+  }
 }

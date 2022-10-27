@@ -1,4 +1,5 @@
 import 'package:currencypro/controller/wep_services.dart';
+import 'package:currencypro/model/currency_rate.dart';
 
 import '../model/currency_data.dart';
 
@@ -19,5 +20,13 @@ class CurrencyRepository {
         }).toList();
 
     return currToLoist;
+  }
+
+  Future<List<CurrencyRate>> getAllRates() async{
+    final rates=await webService.getLatestrates();
+    var ratesList=rates.map((e) {
+      return CurrencyRate.fromJson(e);
+    }).toList();
+    return ratesList;
   }
 }

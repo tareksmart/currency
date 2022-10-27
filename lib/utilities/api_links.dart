@@ -5,5 +5,5 @@ class ApiLinks {
   static const String currencyData =
       'https://api.currencyfreaks.com/supported-currencies';
   static const String currencyRates =
-      'https://api.currencyfreaks.com/latest?apikey=$apiKey';
+      'latest?apikey=$apiKey';
 }
