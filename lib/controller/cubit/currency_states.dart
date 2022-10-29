@@ -1,8 +1,7 @@
 import 'package:currencypro/model/currency_rate.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:currencypro/model/one_rate.dart';
 
 import '../../model/currency_data.dart';
-
 
 abstract class CurrencyState {}
 
@@ -14,8 +13,14 @@ class CurrenciesLoaded extends CurrencyState {
   CurrenciesLoaded(this.currencisList);
 }
 
-class RateLoaded extends CurrencyState{
-  final List<CurrencyRate> ratesList;
+class RateLoaded extends CurrencyState {
+  final CurrencyRate ratesList;
 
   RateLoaded(this.ratesList);
+}
+
+class OneRateLoaded extends CurrencyState {
+  final OneRate rate;
+
+  OneRateLoaded(this.rate);
 }

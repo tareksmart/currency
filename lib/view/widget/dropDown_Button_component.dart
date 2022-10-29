@@ -1,34 +1,48 @@
 import 'package:currencypro/controller/cubit/currency_states.dart';
+import 'package:currencypro/model/one_rate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../controller/cubit/curency_cubit.dart';
 import '../../model/currency_data.dart';
-import '../../model/currency_rate.dart';
 import '../constant/myConstants.dart';
 
-class DropDownButtonComponent extends StatelessWidget {
-   DropDownButtonComponent(
-      {Key? key, required this.size, required this.allCurrList})
+class DropDownButtonComponent extends StatefulWidget {
+  DropDownButtonComponent(
+      {Key? key,
+      required this.size,
+      required this.allCurrList,
+      required this.drop,
+      required this.base})
       : super(key: key);
   final Size size;
   final List<CurrencyData>? allCurrList;
-  List<CurrencyRate>? rateList;
+  Function(String?, bool) drop;
+  final bool base;
+
+  @override
+  State<DropDownButtonComponent> createState() =>
+      _DropDownButtonComponentState();
+}
+
+class _DropDownButtonComponentState extends State<DropDownButtonComponent> {
+  OneRate? rate;
+
   @override
   Widget build(BuildContext context) {
-final bloc= BlocProvider.of<CurrencyCubit>(context,listen: false);
-    return BlocBuilder<CurrencyCubit,CurrencyState>(builder: (context,state){
-      if(state is RateLoaded)rateList=state.ratesList;
+    final bloc = BlocProvider.of<CurrencyCubit>(context, listen: false);
+    return BlocBuilder<CurrencyCubit, CurrencyState>(builder: (context, state) {
+      if (state is OneRateLoaded) rate = state.rate;
       return DropdownButtonHideUnderline(
         child: DropdownButtonFormField<String>(
-          items: allCurrList?.map((e) {
+          items: widget.allCurrList?.map((e) {
             return DropdownMenuItem<String>(
               value: e.currencyCode ?? '',
               child: Row(
                 children: [
                   SizedBox(
-                    width: size.width * .1,
-                    height: size.height * .05,
+                    width: widget.size.width * .1,
+                    height: widget.size.height * .05,
                     child: Image.network(
                       e.icon ?? '',
                       fit: BoxFit.fill,
@@ -49,9 +63,11 @@ final bloc= BlocProvider.of<CurrencyCubit>(context,listen: false);
             );
           }).toList(),
           onChanged: (value) {
-            bloc.getRates();
+            bloc.getOneRates(value!);
             print('==============rate list==========');
-             print(rateList);
+            print(rate?.rate);
+
+            widget.drop(rate?.rate, widget.base);
           },
           isExpanded: true,
           iconEnabledColor: MyColors.ButtonColor,
@@ -59,9 +75,6 @@ final bloc= BlocProvider.of<CurrencyCubit>(context,listen: false);
           elevation: 1,
         ),
       );
-
     });
-
-
   }
 }

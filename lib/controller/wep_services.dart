@@ -10,25 +10,44 @@ class CurrencyWebService {
         connectTimeout: 20 * 1000,
         receiveTimeout: 20 * 1000);
 
-    dio=Dio(options);
+    dio = Dio(options);
   }
-  Future<List<dynamic>> getAllCurrencyData()async{
-    try{
-      var response=await dio.get('supported-currencies');
+  Future<List<dynamic>> getAllCurrencyData() async {
+    try {
+      var response = await dio.get('supported-currencies');
       //print('web===========');
-     // print(response.data[1]);
-     // print('web===========');
+      // print(response.data[1]);
+      // print('web===========');
       return response.data;
-
+    } on Exception catch (e) {
+      print('$e');
+      return [];
     }
-    on Exception catch(e){print('$e');return [];}
   }
 
-  Future<List<dynamic>> getLatestrates() async{
-    try{
-      var response=await dio.get(ApiLinks.currencyRates);
-      return response.data;
+  Future<dynamic> getLatestrates() async {
+    try {
+      var response = await dio.get(ApiLinks.currencyRates);
+      print('web**********************************');
+      print(response.data["rates"]);
+      print('web*********************************');
+      return response.data["rates"];
+    } on Exception catch (e) {
+      print('$e');
+      return [];
+    }
+  }
 
-    }on Exception catch(e){print('$e');return[];}
+  Future<dynamic> getOneRates(String symbole) async {
+    try {
+      var response = await dio.get(ApiLinks.currencyOneRates + symbole);
+      print('web**********************************');
+      print(response.data["rates"]);
+      print('web*********************************');
+      return response.data["rates"];
+    } on Exception catch (e) {
+      print('$e');
+      return [];
+    }
   }
 }
