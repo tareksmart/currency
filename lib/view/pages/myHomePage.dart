@@ -73,25 +73,13 @@ class MyHomePage extends StatelessWidget {
                   height: size.height * .15,
                 ),
                 Align(
-                  alignment: Alignment.center,
+                  alignment: Alignment.centerLeft,
                   child:
-                       Currencycard(),
+                        Currencycard(),
                 ),
               ],
             ),
-            Column(
-              children: [
-                SizedBox(
-                  height: size.height * .5,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child:ConvertButton(text: 'CONVERT', onTab: () async {
 
-                  },size: size,) ,
-                ),
-              ],
-            )
           ],
         ),
       ),
