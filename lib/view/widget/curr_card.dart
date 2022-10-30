@@ -20,8 +20,8 @@ class _CurrencycardState extends State<Currencycard> {
 
   final _toCurr_controller = TextEditingController();
   String _selectedValue = '0';
-  String _basePrice='0';
-  String _toPrice='0';
+  String _basePrice = '0';
+  String _toPrice = '0';
   final _globalKey = GlobalKey<FormState>();
   List<CurrencyData>? allCurrList;
 
@@ -35,16 +35,23 @@ class _CurrencycardState extends State<Currencycard> {
   void dropDownCallBack(String? selectedValue, bool base) {
     if (selectedValue is String) {
       _selectedValue = selectedValue;
-      if (base) {
+      if (base == true) {
         _basePrice = selectedValue;
+        _baseCurrency_controller.text = selectedValue;
       } else {
         _toPrice = selectedValue;
+        _toCurr_controller.text = selectedValue;
       }
       setState(() {});
     }
   }
-  void result(String basePrice,String toPrice,String mony){
 
+  String result(String basePrice, String toPrice, String mony) {
+    double base = double.parse(basePrice);
+    double tPrice = double.parse(toPrice);
+    int mny = int.parse(mony);
+    double result = (tPrice / base) * mny;
+    return result.toString();
   }
 
   @override
@@ -147,7 +154,14 @@ class _CurrencycardState extends State<Currencycard> {
                 alignment: Alignment.center,
                 child: ConvertButton(
                   text: 'CONVERT',
-                  onTab: () async {},
+                  onTab: () {
+                    print('base $_basePrice');
+                    print('_toPrice $_toPrice');
+                    print(
+                        '_baseCurrency_controller.text $_baseCurrency_controller.text');
+                    _toCurr_controller.text = result(_basePrice, _toPrice,
+                        _baseCurrency_controller.text.trim());
+                  },
                   size: size,
                 ),
               ),

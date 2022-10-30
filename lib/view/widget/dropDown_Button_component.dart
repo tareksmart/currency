@@ -32,7 +32,9 @@ class _DropDownButtonComponentState extends State<DropDownButtonComponent> {
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<CurrencyCubit>(context, listen: false);
     return BlocBuilder<CurrencyCubit, CurrencyState>(builder: (context, state) {
-      if (state is OneRateLoaded) rate = state.rate;
+      if (state is OneRateLoaded)
+        rate = state.rate;
+      
       return DropdownButtonHideUnderline(
         child: DropdownButtonFormField<String>(
           items: widget.allCurrList?.map((e) {
@@ -62,12 +64,14 @@ class _DropDownButtonComponentState extends State<DropDownButtonComponent> {
               ),
             );
           }).toList(),
-          onChanged: (value) {
-            bloc.getOneRates(value!);
+          onChanged: (value) async {
+            await bloc.getOneRates(value!);
             print('==============rate list==========');
             print(rate?.rate);
 
-            widget.drop(rate?.rate, widget.base);
+            setState(() {
+              widget.drop(rate?.rate, widget.base);
+            });
           },
           isExpanded: true,
           iconEnabledColor: MyColors.ButtonColor,
@@ -75,6 +79,7 @@ class _DropDownButtonComponentState extends State<DropDownButtonComponent> {
           elevation: 1,
         ),
       );
+
     });
   }
 }

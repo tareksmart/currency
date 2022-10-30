@@ -17,7 +17,7 @@ class CurrencyCubit extends Cubit<CurrencyState> {
     await currRepo.getAllRates().then((value) => emit(RateLoaded(value)));
   }
 
-  void getOneRates(String symbole) async {
+  Future<void> getOneRates(String symbole) async {
     await currRepo
         .getOneRates(symbole)
         .then((value) => emit(OneRateLoaded(value)));
