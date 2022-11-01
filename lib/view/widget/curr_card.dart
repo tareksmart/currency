@@ -32,17 +32,31 @@ class _CurrencycardState extends State<Currencycard> {
     super.initState();
   }
 
-  void dropDownCallBack(String? selectedValue, bool base) {
+  // void dropDownCallBack(String? selectedValue, bool base) {
+  //   if (selectedValue is String) {
+  //     _selectedValue = selectedValue;
+  //     if (base == true) {
+  //       _basePrice = selectedValue;
+  //       _baseCurrency_controller.text = selectedValue;
+  //     } else {
+  //       _toPrice = selectedValue;
+  //       _toCurr_controller.text = selectedValue;
+  //     }
+  //     setState(() {});
+  //   }
+  // }
+  void dropDownCallBack(String? selectedValue) {
+
     if (selectedValue is String) {
-      _selectedValue = selectedValue;
-      if (base == true) {
-        _basePrice = selectedValue;
-        _baseCurrency_controller.text = selectedValue;
-      } else {
-        _toPrice = selectedValue;
-        _toCurr_controller.text = selectedValue;
-      }
-      setState(() {});
+      _basePrice = selectedValue;
+
+      //setState(() {});
+    }
+  }
+
+  void dropDownCallBackToPrice(String? selectedValue) {
+    if (selectedValue is String) {
+      _toPrice = selectedValue;
     }
   }
 
@@ -84,7 +98,7 @@ class _CurrencycardState extends State<Currencycard> {
                               base: true,
                               drop: dropDownCallBack,
                               size: size,
-                              allCurrList: allCurrList,
+                              allCurrList: allCurrList, dropToPrice: (val ) {  },
                             ),
                           ),
                           const SizedBox(
@@ -118,9 +132,10 @@ class _CurrencycardState extends State<Currencycard> {
                           Expanded(
                               child: DropDownButtonComponent(
                             base: false,
-                            drop: dropDownCallBack,
+                            dropToPrice: dropDownCallBackToPrice,
                             size: size,
                             allCurrList: allCurrList,
+                            drop: (val) {},
                           )),
                           const SizedBox(
                             width: 4,
