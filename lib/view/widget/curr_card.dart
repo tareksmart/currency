@@ -32,38 +32,24 @@ class _CurrencycardState extends State<Currencycard> {
     super.initState();
   }
 
-  // void dropDownCallBack(String? selectedValue, bool base) {
-  //   if (selectedValue is String) {
-  //     _selectedValue = selectedValue;
-  //     if (base == true) {
-  //       _basePrice = selectedValue;
-  //       _baseCurrency_controller.text = selectedValue;
-  //     } else {
-  //       _toPrice = selectedValue;
-  //       _toCurr_controller.text = selectedValue;
-  //     }
-  //     setState(() {});
-  //   }
-  // }
-  void dropDownCallBack(String? selectedValue) {
-
+  void dropDownCallBack(String? selectedValue, bool base) {
     if (selectedValue is String) {
-      _basePrice = selectedValue;
-
-      //setState(() {});
-    }
-  }
-
-  void dropDownCallBackToPrice(String? selectedValue) {
-    if (selectedValue is String) {
-      _toPrice = selectedValue;
+      _selectedValue = selectedValue;
+      if (base == true) {
+        _basePrice = selectedValue;
+        //_baseCurrency_controller.text = selectedValue;
+      } else {
+        _toPrice = selectedValue;
+        //_toCurr_controller.text = selectedValue;
+      }
+      setState(() {});
     }
   }
 
   String result(String basePrice, String toPrice, String mony) {
     double base = double.parse(basePrice);
     double tPrice = double.parse(toPrice);
-    int mny = int.parse(mony);
+    double mny = double.parse(mony);
     double result = (tPrice / base) * mny;
     return result.toString();
   }
@@ -71,9 +57,16 @@ class _CurrencycardState extends State<Currencycard> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    String x = '0';
+    GestureDetector gestureDetector = GestureDetector(
+      onTap: () {
+        _baseCurrency_controller.text = x;
+      },
+    );
     return BlocBuilder<CurrencyCubit, CurrencyState>(builder: (context, state) {
       if (state is CurrenciesLoaded) allCurrList = state.currencisList;
       return Stack(
+        alignment: Alignment.center,
         children: [
           SizedBox(
             height: size.height * .4,
@@ -85,7 +78,6 @@ class _CurrencycardState extends State<Currencycard> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Form(
-                  key: _globalKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -95,30 +87,34 @@ class _CurrencycardState extends State<Currencycard> {
                         children: [
                           Expanded(
                             child: DropDownButtonComponent(
+                              key: const ValueKey(1),
                               base: true,
                               drop: dropDownCallBack,
                               size: size,
-                              allCurrList: allCurrList, dropToPrice: (val ) {  },
+                              allCurrList: allCurrList,
                             ),
                           ),
                           const SizedBox(
                             width: 4,
                           ),
                           Expanded(
-                            child: TextFormField(
-                              onChanged: (value) {
-                                value = _selectedValue;
-                                //   _baseCurrency_controller.text = _selectedValue;
-                                setState(() {});
-                                print('inside form field/////////////');
-                                print(_selectedValue);
-                                print('inside form field/////////////');
-                              },
-                              controller: _baseCurrency_controller,
-                              decoration: InputDecoration(
-                                  labelStyle:
-                                      Theme.of(context).textTheme.subtitle2),
-                            ),
+                            child: BlocBuilder<CurrencyCubit, CurrencyState>(
+                                builder: (context, state) {
+                              if (state is PressedNumber) {
+                                if (state.number != '') {
+                                  _baseCurrency_controller.text += state.number;
+                                } else
+                                  _baseCurrency_controller.text = '';
+                              }
+                              return TextFormField(
+                                readOnly: true,
+                                keyboardType: TextInputType.number,
+                                controller: _baseCurrency_controller,
+                                decoration: InputDecoration(
+                                    labelStyle:
+                                        Theme.of(context).textTheme.subtitle2),
+                              );
+                            }),
                           )
                         ],
                       ),
@@ -131,17 +127,18 @@ class _CurrencycardState extends State<Currencycard> {
                         children: [
                           Expanded(
                               child: DropDownButtonComponent(
-                            base: false,
-                            dropToPrice: dropDownCallBackToPrice,
-                            size: size,
-                            allCurrList: allCurrList,
-                            drop: (val) {},
-                          )),
+                                  key: const ValueKey(2),
+                                  base: false,
+                                  size: size,
+                                  allCurrList: allCurrList,
+                                  drop: dropDownCallBack)),
                           const SizedBox(
                             width: 4,
                           ),
                           Expanded(
                             child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              readOnly: true,
                               controller: _toCurr_controller,
                               onChanged: (value) {
                                 value = _selectedValue;
@@ -160,27 +157,23 @@ class _CurrencycardState extends State<Currencycard> {
               ),
             ),
           ),
-          Column(
-            children: [
-              SizedBox(
-                height: size.height * .37,
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: ConvertButton(
+          Align(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: size.height * .37,
+                ),
+                ConvertButton(
                   text: 'CONVERT',
                   onTab: () {
-                    print('base $_basePrice');
-                    print('_toPrice $_toPrice');
-                    print(
-                        '_baseCurrency_controller.text $_baseCurrency_controller.text');
                     _toCurr_controller.text = result(_basePrice, _toPrice,
                         _baseCurrency_controller.text.trim());
                   },
                   size: size,
                 ),
-              ),
-            ],
+              ],
+            ),
           )
         ],
       );

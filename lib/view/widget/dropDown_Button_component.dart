@@ -13,14 +13,13 @@ class DropDownButtonComponent extends StatefulWidget {
       required this.size,
       required this.allCurrList,
       required this.drop,
-        required this.dropToPrice,
       required this.base})
       : super(key: key);
   final Size size;
   final List<CurrencyData>? allCurrList;
- // Function(String?, bool) drop;
-  Function(String?) drop;
-  Function(String?) dropToPrice;
+  // Function(String?, bool) drop;
+  Function(String?, bool) drop;
+
   final bool base;
 
   @override
@@ -31,22 +30,15 @@ class DropDownButtonComponent extends StatefulWidget {
 class _DropDownButtonComponentState extends State<DropDownButtonComponent> {
   OneRate? rate;
   String? currCode;
-
+  bool type = true;
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<CurrencyCubit>(context, listen: false);
     return BlocBuilder<CurrencyCubit, CurrencyState>(builder: (context, state) {
       if (state is OneRateLoaded) {
         rate = state.rate;
-        print('rate reloaded====${rate?.rate}=========');
-        if(widget.base==true)
-        widget.drop(rate?.rate);
-        else
-
-          widget.dropToPrice(rate?.rate);
-
       }
-      
+
       return DropdownButtonHideUnderline(
         child: DropdownButtonFormField<String>(
           items: widget.allCurrList?.map((e) {
@@ -78,23 +70,14 @@ class _DropDownButtonComponentState extends State<DropDownButtonComponent> {
           }).toList(),
           onChanged: (value) async {
             await bloc.getOneRates(value!);
-
-            print('==============rate list==========');
-            print(rate?.rate);
-
-            setState(() {
-
-              currCode=value;
-            });
+            widget.drop(bloc.price, widget.base);
           },
           isExpanded: true,
           iconEnabledColor: MyColors.ButtonColor,
           iconSize: 30,
           elevation: 1,
-
         ),
       );
-
     });
   }
 }

@@ -24,3 +24,8 @@ class OneRateLoaded extends CurrencyState {
 
   OneRateLoaded(this.rate);
 }
+
+class PressedNumber extends CurrencyState {
+  final String number;
+  PressedNumber(this.number);
+}

@@ -1,14 +1,10 @@
-import 'package:currencypro/controller/cubit/curency_cubit.dart';
-import 'package:currencypro/controller/currency_repository.dart';
-import 'package:currencypro/view/constant/myConstants.dart';
-import 'package:currencypro/view/widget/convert_button.dart';
-import 'package:currencypro/view/widget/text_button.dart';
-import 'package:dio/dio.dart';
+import 'package:currencypro/view/widget/drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+import '../constant/myConstants.dart';
 import '../widget/curr_card.dart';
+import '../widget/text_button.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -17,13 +13,13 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      drawer: MyDrawer(size: size),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Stack(
           children: [
             Container(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
                     height: size.height * .4,
@@ -33,7 +29,7 @@ class MyHomePage extends StatelessWidget {
                       fit: BoxFit.fill,
                     ),
                   ),
-                   SizedBox(
+                  SizedBox(
                     height: size.height * .15,
                   ),
                   SizedBox(
@@ -44,22 +40,25 @@ class MyHomePage extends StatelessWidget {
                         crossAxisSpacing: .5,
                         crossAxisCount: 3,
                         children: List.generate(
-
-                            12,
-                            (index) => AnimationConfiguration.staggeredGrid(
-                                  position: 10,
-                                  duration: const Duration(seconds: 1),
-                                  columnCount: 3,
-                                  child: ScaleAnimation(
-                                      child: FadeInAnimation(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: MyColors.whiteColor),
-                                      child: MyTextButton(index: index,onPress: (){},),
-                                    ),
-                                  )),
+                          12,
+                          (index) => AnimationConfiguration.staggeredGrid(
+                            position: 10,
+                            duration: const Duration(seconds: 1),
+                            columnCount: 3,
+                            child: ScaleAnimation(
+                              child: FadeInAnimation(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: MyColors.whiteColor),
+                                  child: MyTextButton(
+                                    index: index,
+                                    onPress: () {},
+                                  ),
                                 ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -72,14 +71,9 @@ class MyHomePage extends StatelessWidget {
                 SizedBox(
                   height: size.height * .15,
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child:
-                        Currencycard(),
-                ),
+                Currencycard(),
               ],
             ),
-
           ],
         ),
       ),
