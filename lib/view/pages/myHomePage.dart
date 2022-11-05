@@ -13,6 +13,13 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        flexibleSpace: Image.asset(
+          'assets/images/waves.png',
+          fit: BoxFit.cover,
+        ),
+      ),
       drawer: MyDrawer(size: size),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -22,7 +29,7 @@ class MyHomePage extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(
-                    height: size.height * .4,
+                    height: size.height * .35,
                     width: double.infinity,
                     child: Image.asset(
                       'assets/images/waves.png',
@@ -69,7 +76,7 @@ class MyHomePage extends StatelessWidget {
             Column(
               children: [
                 SizedBox(
-                  height: size.height * .15,
+                  height: size.height * .03,
                 ),
                 Currencycard(),
               ],

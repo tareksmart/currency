@@ -69,7 +69,7 @@ class _CurrencycardState extends State<Currencycard> {
         alignment: Alignment.center,
         children: [
           SizedBox(
-            height: size.height * .4,
+            height: size.height * .35,
             width: size.width * .9,
             child: Card(
               shadowColor: MyColors.shadowColor,

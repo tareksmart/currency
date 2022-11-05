@@ -21,6 +21,7 @@ dependencies:
   flutter_bloc:
   dio:
   flutter_animated_button:
+  background_app_bar: ^2.0.1
 
 dev_dependencies:
   flutter_test:
