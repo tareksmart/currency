@@ -1,10 +1,15 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
+import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
+import 'card_currency.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({Key? key, required this.size}) : super(key: key);
+  const MyDrawer({Key? key, required this.size, required this.allCur})
+      : super(key: key);
   final Size size;
+  final List<CurrencyData> allCur;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -38,18 +43,6 @@ class MyDrawer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(child: Text('hello')),
-                      Divider(
-                        thickness: 6,
-                        color: Colors.black,
-                      ),
-                      Expanded(
-                        child: Text('hello'),
-                      )
-                    ],
-                  ),
                   Column(
                     children: [
                       SizedBox(
@@ -74,7 +67,31 @@ class MyDrawer extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
+            ExpandableTheme(
+              data: const ExpandableThemeData(
+                iconColor: Colors.blue,
+                useInkWell: true,
+              ),
+              child: ListView.builder(
+                itemCount: 4,
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    children: allCur
+                        .map((e) => Card4(
+                              Cur: e,
+                            ))
+                        .toList(),
+                  );
+                },
+                /*  children: [
+                  Card4(
+                    Cur: allCur[0],
+                  )
+                ],*/
+              ),
+            ),
           ],
         ),
       ),

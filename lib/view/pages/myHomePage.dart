@@ -1,13 +1,30 @@
+import 'package:currencypro/controller/cubit/curency_cubit.dart';
+import 'package:currencypro/controller/cubit/currency_states.dart';
 import 'package:currencypro/view/widget/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
 import '../widget/curr_card.dart';
 import '../widget/text_button.dart';
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  List<CurrencyData> allCur = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    BlocProvider.of<CurrencyCubit>(context, listen: false).getAllCurrData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +37,14 @@ class MyHomePage extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
-      drawer: MyDrawer(size: size),
+      drawer:
+          BlocBuilder<CurrencyCubit, CurrencyState>(builder: (context, state) {
+        if (state is CurrenciesLoaded) allCur = state.currencisList;
+        return MyDrawer(
+          size: size,
+          allCur: allCur,
+        );
+      }),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Stack(
