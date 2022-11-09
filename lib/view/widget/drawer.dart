@@ -46,13 +46,13 @@ class MyDrawer extends StatelessWidget {
                   Column(
                     children: [
                       SizedBox(
-                        height: size.height * .017,
+                        height: size.height * .019,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: size.width * .6,
+                            width: size.width * .5,
                           ),
                           IconButton(
                             onPressed: () {},
@@ -68,28 +68,33 @@ class MyDrawer extends StatelessWidget {
                 ],
               ),
             ),
-            ExpandableTheme(
-              data: const ExpandableThemeData(
-                iconColor: Colors.blue,
-                useInkWell: true,
-              ),
-              child: ListView.builder(
-                itemCount: 4,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return Column(
-                    children: allCur
-                        .map((e) => Card4(
-                              Cur: e,
-                            ))
-                        .toList(),
-                  );
-                },
-                /*  children: [
-                  Card4(
-                    Cur: allCur[0],
-                  )
-                ],*/
+            SizedBox(
+              height: 500,
+              width: 300,
+
+              child: ExpandableTheme(
+                data: const ExpandableThemeData(
+                  iconColor: Colors.blue,
+                  useInkWell: true,
+                ),
+                child: ListView.builder(
+                  itemCount: 4,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(
+                      children: allCur
+                          .map((e) => Card4(
+                                Cur: e,
+                              ))
+                          .toList(),
+                    );
+                  },
+                  /*  children: [
+                    Card4(
+                      Cur: allCur[0],
+                    )
+                  ],*/
+                ),
               ),
             ),
           ],

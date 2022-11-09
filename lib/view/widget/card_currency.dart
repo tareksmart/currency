@@ -26,20 +26,14 @@ class Card4 extends StatelessWidget {
     //   );
     // }
     buildList() {
-      return ListView.builder(
-          shrinkWrap: true,
-          itemCount: 4 /*allCur.length*/,
-          itemBuilder: (context, index) {
-            return Column(children: [
-              Text('$Cur.currencyName'),
-              Text('$Cur.currencyCode'),
-              Text('$Cur.countryName'),
-              Image.network(
-                Cur.icon ?? '',
-                fit: BoxFit.fill,
-              ),
+      return
+             Column(children: [
+              Text('${Cur.currencyName}'),
+              Text('${Cur.currencyCode}'),
+              Text('${Cur.countryName}'),
+
             ]);
-          });
+
     }
 
     return ExpandableNotifier(
@@ -75,12 +69,25 @@ class Card4 extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          child: Text(
-                            "Items",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(color: Colors.white),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                height:50,
+                                width: 50,
+                                child: Image.network(
+                                  Cur.icon ?? '',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              Text(
+                                "${Cur.countryName}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(color: Colors.white),
+                              ),
+
+                            ],
                           ),
                         ),
                       ],
