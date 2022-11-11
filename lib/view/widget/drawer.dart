@@ -5,11 +5,32 @@ import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
 import 'card_currency.dart';
 
-class MyDrawer extends StatelessWidget {
-  const MyDrawer({Key? key, required this.size, required this.allCur})
+class MyDrawer extends StatefulWidget {
+  MyDrawer({Key? key, required this.size, required this.allCur})
       : super(key: key);
   final Size size;
   final List<CurrencyData> allCur;
+
+  @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
+  List<CurrencyData>? searchedList;
+
+  TextEditingController _searchController = TextEditingController();
+
+  List<CurrencyData> searchedCurrency(String searchArg) {
+    if (searchArg.trim() != '') {
+
+      return searchedList = widget.allCur
+          .where((currency) {
+        String g=currency.countryName??'';
+            return g.toLowerCase().startsWith(searchArg);
+          })
+          .toList();
+    } else
+      return widget.allCur;}
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -20,9 +41,11 @@ class MyDrawer extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  width: size.width * .7,
-                  height: size.height * .06,
+                Expanded(
+                  child: SizedBox(
+                    width: widget.size.width * .7,
+                    height: widget.size.height * .06,
+                  ),
                 ),
                 const Icon(Icons.close)
               ],
@@ -32,8 +55,9 @@ class MyDrawer extends StatelessWidget {
               child: Stack(
                 children: [
                   SizedBox(
-                    width: size.width * .8,
+                    width: widget.size.width * .8,
                     child: TextFormField(
+                      controller: _searchController,
                       decoration: InputDecoration(
                         hintStyle: Theme.of(context)
                             .textTheme
@@ -41,18 +65,19 @@ class MyDrawer extends StatelessWidget {
                             .copyWith(color: Colors.black26),
                         hintText: 'Search Country',
                       ),
+                      onChanged: (val) => setState(() {}),
                     ),
                   ),
                   Column(
                     children: [
                       SizedBox(
-                        height: size.height * .019,
+                        height: widget.size.height * .019,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: size.width * .5,
+                            width: widget.size.width * .5,
                           ),
                           IconButton(
                             onPressed: () {},
@@ -71,18 +96,17 @@ class MyDrawer extends StatelessWidget {
             SizedBox(
               height: 500,
               width: 300,
-
               child: ExpandableTheme(
                 data: const ExpandableThemeData(
                   iconColor: Colors.blue,
                   useInkWell: true,
                 ),
                 child: ListView.builder(
-                  itemCount: 4,
+                  itemCount: searchedCurrency(_searchController.text).length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
                     return Column(
-                      children: allCur
+                      children: searchedCurrency(_searchController.text)
                           .map((e) => Card4(
                                 Cur: e,
                               ))

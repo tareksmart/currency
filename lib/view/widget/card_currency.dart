@@ -79,12 +79,14 @@ class Card4 extends StatelessWidget {
                                   fit: BoxFit.fill,
                                 ),
                               ),
-                              Text(
-                                "${Cur.countryName}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(color: Colors.white),
+                              Expanded(
+                                child: Text(
+                                  "${Cur.countryName}",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(color: Colors.white),
+                                ),
                               ),
 
                             ],
