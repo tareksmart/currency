@@ -1,7 +1,10 @@
 import 'dart:math' as math;
 
+import 'package:currencypro/controller/cubit/curency_cubit.dart';
+import 'package:currencypro/controller/cubit/currency_states.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../model/currency_data.dart';
 
@@ -11,13 +14,22 @@ class Card4 extends StatelessWidget {
   final CurrencyData Cur;
   @override
   Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<CurrencyCubit>(context, listen: false);
     buildItem(String label) {
       return Padding(
         padding: const EdgeInsets.all(10.0),
         child: Text(label),
       );
     }
-
+String price(String curr){
+      if(curr.trim()!='') {
+        bloc.getOneRates(curr);
+        return bloc.price;
+      }
+      else
+        return '0';
+      
+}
     // buildList() {
     //   return Column(
     //     children: <Widget>[
@@ -26,13 +38,18 @@ class Card4 extends StatelessWidget {
     //   );
     // }
     buildList() {
-      return
-             Column(children: [
-              Text('${Cur.currencyName}'),
-              Text('${Cur.currencyCode}'),
-              Text('${Cur.countryName}'),
 
-            ]);
+
+                 return Center(
+                   child: Column(children: [
+                    Text('${Cur.currencyName}'),
+                    Text('${Cur.currencyCode}'),
+                    Text('${Cur.countryName}'),
+                     Text(price(Cur.currencyCode??'')),
+
+            ]),
+                 );
+
 
     }
 
@@ -97,7 +114,7 @@ class Card4 extends StatelessWidget {
                   ),
                 ),
                 collapsed: Container(),
-                expanded: SizedBox(height: 200, child: buildList()),
+                expanded: SizedBox(height: 100, child: buildList()),
               ),
             ],
           ),
