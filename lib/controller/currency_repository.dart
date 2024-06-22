@@ -5,42 +5,51 @@ import 'package:currencypro/model/one_rate.dart';
 import '../model/currency_data.dart';
 
 class CurrencyRepository {
-  final CurrencyWebService webService;
 
-  CurrencyRepository({required this.webService});
+
+
 
   Future<List<CurrencyData>> getAllCurrency() async {
-    final currencies = await webService.getAllCurrencyData();
+    final Map currencies = await CurrencyWebService().getAllCurrencyData();
 
-    var currToLoist = currencies.map((currency) {
-      //  print('repo============================');
-      // print(currency);
-      //print('repo============================');
-      return CurrencyData.fromMap(currency);
-    }).toList();
-
-    return currToLoist;
+    CurrencyData currencyData = CurrencyData();
+    List<CurrencyData> currency_data = [];
+    currencies.forEach((key, value) {
+      // print('value:$value['']');
+      var curr = CurrencyData(
+          currencyCode: value['currencyCode'],
+          countryCode: value['countryCode'],
+          currencyName: value['currencyName'],
+          countryName: value['countryName'],
+          icon: value['icon']);
+      currency_data.add(curr);
+      //  print('key by key $key: ${curr.currencyName}');
+    });
+//  print('repo============================');
+//     print(currency_data[0]);
+//     print('repo============================');
+    return currency_data;
   }
 
   Future<CurrencyRate> getAllRates() async {
-    final rates = await webService.getLatestrates();
+    final rates = await CurrencyWebService().getLatestrates();
     var obj = CurrencyRate.fromJson(rates);
 
     //l.map((key, value) => CurrencyRate.fromJson(json));
-    print('repo=/////////////////////////////////////');
-    print(obj.eGP);
-    print('repo//////////////////////////');
+    // print('repo=/////////////////////////////////////');
+    // print(obj.eGP);
+    // print('repo//////////////////////////');
     return obj;
   }
 
   Future<OneRate> getOneRates(String symbole) async {
-    final rates = await webService.getOneRates(symbole);
+    final rates = await CurrencyWebService().getOneRates(symbole);
     var obj = OneRate.fromMap(rates, symbole);
 
     //l.map((key, value) => CurrencyRate.fromJson(json));
-    print('repo=/////////////////////////////////////');
-    print(obj.rate);
-    print('repo//////////////////////////');
+    // print('repo=/////////////////////////////////////');
+    // print(obj.rate);
+    // print('repo//////////////////////////');
     return obj;
   }
 }

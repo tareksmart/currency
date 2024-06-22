@@ -2,24 +2,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../currency_repository.dart';
 import 'currency_states.dart';
+import 'package:currencypro/model/currency_data.dart';
 
 class CurrencyCubit extends Cubit<CurrencyState> {
-  final CurrencyRepository currRepo;
-  CurrencyCubit(this.currRepo) : super(CurrencyIntial());
 
-  void getAllCurrData() async {
-    await currRepo
-        .getAllCurrency()
-        .then((value) => emit(CurrenciesLoaded(value)));
+  CurrencyCubit() : super(CurrencyIntial());
+
+   getAllCurrData() async {
+
+    // await currRepo
+    //     .getAllCurrency()
+    //     .then((value) => emit(CurrenciesLoaded(value)));
+ var currList=  await CurrencyRepository().getAllCurrency();
+ emit(CurrenciesLoaded(currList));
+ print(currList);
   }
 
   void getRates() async {
-    await currRepo.getAllRates().then((value) => emit(RateLoaded(value)));
+    await CurrencyRepository().getAllRates().then((value) {
+      emit(RateLoaded(value));
+    });
   }
 
   String price = '0';
   Future<void> getOneRates(String symbole) async {
-    await currRepo.getOneRates(symbole).then((value) {
+    await CurrencyRepository().getOneRates(symbole).then((value) {
       emit(OneRateLoaded(value));
       price = value.rate!;
     });

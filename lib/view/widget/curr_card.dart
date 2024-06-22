@@ -9,8 +9,8 @@ import 'convert_button.dart';
 import 'dropDown_Button_component.dart';
 
 class Currencycard extends StatefulWidget {
-  Currencycard({Key? key}) : super(key: key);
-
+  Currencycard({Key? key,  required this.allCurrency}) : super(key: key);
+  var allCurrency;
   @override
   State<Currencycard> createState() => _CurrencycardState();
 }
@@ -23,14 +23,9 @@ class _CurrencycardState extends State<Currencycard> {
   String _basePrice = '0';
   String _toPrice = '0';
   final _globalKey = GlobalKey<FormState>();
-  List<CurrencyData>? allCurrList;
 
-  @override
-  void initState() {
-    BlocProvider.of<CurrencyCubit>(context, listen: false).getAllCurrData();
-    print('trigger=====');
-    super.initState();
-  }
+
+
 
   void dropDownCallBack(String? selectedValue, bool base) {
     if (selectedValue is String) {
@@ -42,7 +37,7 @@ class _CurrencycardState extends State<Currencycard> {
         _toPrice = selectedValue;
         //_toCurr_controller.text = selectedValue;
       }
-      setState(() {});
+    //  setState(() {});
     }
   }
 
@@ -63,8 +58,7 @@ class _CurrencycardState extends State<Currencycard> {
         _baseCurrency_controller.text = x;
       },
     );
-    return BlocBuilder<CurrencyCubit, CurrencyState>(builder: (context, state) {
-      if (state is CurrenciesLoaded) allCurrList = state.currencisList;
+
       return Stack(
         alignment: Alignment.center,
         children: [
@@ -86,12 +80,12 @@ class _CurrencycardState extends State<Currencycard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: DropDownButtonComponent(
+                            child: MyDropDownButtonComponent(
                               key: const ValueKey(1),
                               base: true,
                               drop: dropDownCallBack,
                               size: size,
-                              allCurrList: allCurrList,
+                              allCurrList: widget.allCurrency,
                             ),
                           ),
                           const SizedBox(
@@ -126,11 +120,11 @@ class _CurrencycardState extends State<Currencycard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                              child: DropDownButtonComponent(
+                              child: MyDropDownButtonComponent(
                                   key: const ValueKey(2),
                                   base: false,
                                   size: size,
-                                  allCurrList: allCurrList,
+                                  allCurrList:widget.allCurrency,
                                   drop: dropDownCallBack)),
                           const SizedBox(
                             width: 4,
@@ -142,7 +136,7 @@ class _CurrencycardState extends State<Currencycard> {
                               controller: _toCurr_controller,
                               onChanged: (value) {
                                 value = _selectedValue;
-                                setState(() {});
+                               // setState(() {});
                               },
                               decoration: InputDecoration(
                                   labelStyle:
@@ -177,6 +171,6 @@ class _CurrencycardState extends State<Currencycard> {
           )
         ],
       );
-    });
+
   }
 }

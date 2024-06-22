@@ -7,18 +7,18 @@ class CurrencyWebService {
     BaseOptions options = BaseOptions(
         baseUrl: ApiLinks.apiLink,
         receiveDataWhenStatusError: true,
-        connectTimeout: 20 * 1000,
-        receiveTimeout: 20 * 1000);
+        connectTimeout:const Duration(seconds: 20*1000),
+        receiveTimeout: const Duration(seconds: 20*1000));
 
     dio = Dio(options);
   }
-  Future<List<dynamic>> getAllCurrencyData() async {
+  Future<dynamic> getAllCurrencyData() async {
     try {
-      var response = await dio.get('supported-currencies');
-      //print('web===========');
-      // print(response.data[1]);
+      var response = await dio.get(ApiLinks.currencyData);
       // print('web===========');
-      return response.data;
+      // print(response.data['supportedCurrenciesMap']);
+      // print('web===========');
+      return response.data['supportedCurrenciesMap'];
     } on Exception catch (e) {
       print('$e');
       return [];

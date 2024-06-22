@@ -21,15 +21,15 @@ class Card4 extends StatelessWidget {
         child: Text(label),
       );
     }
-String price(String curr){
-      if(curr.trim()!='') {
+
+    String price(String curr) {
+      if (curr.trim() != '') {
         bloc.getOneRates(curr);
         return bloc.price;
-      }
-      else
+      } else
         return '0';
-      
-}
+    }
+
     // buildList() {
     //   return Column(
     //     children: <Widget>[
@@ -38,19 +38,14 @@ String price(String curr){
     //   );
     // }
     buildList() {
+      return Center(
+        child: Column(children: [
+          Text('Cur.Name: ${Cur.currencyName}'),
 
-
-                 return Center(
-                   child: Column(children: [
-                    Text('${Cur.currencyName}'),
-                    Text('${Cur.currencyCode}'),
-                    Text('${Cur.countryName}'),
-                     Text(price(Cur.currencyCode??'')),
-
-            ]),
-                 );
-
-
+          Text('Cur.Country: ${Cur.countryName}'),
+          /*Text(price(Cur.currencyCode ?? '')),*/
+        ]),
+      );
     }
 
     return ExpandableNotifier(
@@ -89,23 +84,22 @@ String price(String curr){
                           child: Row(
                             children: [
                               SizedBox(
-                                height:50,
+                                height: 50,
                                 width: 50,
                                 child: Image.network(
                                   Cur.icon ?? '',
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
                               Expanded(
                                 child: Text(
-                                  "${Cur.countryName}",
+                                  Cur.countryName??'unknown',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
                                       .copyWith(color: Colors.white),
                                 ),
                               ),
-
                             ],
                           ),
                         ),
@@ -114,7 +108,7 @@ String price(String curr){
                   ),
                 ),
                 collapsed: Container(),
-                expanded: SizedBox(height: 100, child: buildList()),
+                expanded: SizedBox(height: 50, child: buildList()),
               ),
             ],
           ),

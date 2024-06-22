@@ -18,16 +18,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<CurrencyData> allCur = [];
   @override
   void initState() {
     // TODO: implement initState
-    BlocProvider.of<CurrencyCubit>(context, listen: false).getAllCurrData();
+    _currLoad();
     super.initState();
+  }
+
+  _currLoad() async {
+    await BlocProvider.of<CurrencyCubit>(context,listen: false).getAllCurrData();
   }
 
   @override
   Widget build(BuildContext context) {
+var allCur;
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -37,14 +41,23 @@ class _MyHomePageState extends State<MyHomePage> {
           fit: BoxFit.cover,
         ),
       ),
-      drawer:
-          BlocBuilder<CurrencyCubit, CurrencyState>(builder: (context, state) {
-        if (state is CurrenciesLoaded) allCur = state.currencisList;
-        return MyDrawer(
-          size: size,
-          allCur: allCur,
-        );
-      }),
+      drawer: BlocConsumer<CurrencyCubit, CurrencyState>(
+          listener: (context, state) {
+        if (state is CurrenciesLoaded) {
+
+          allCur = state.currencisList.cast<CurrencyData>();
+          print('drawer****************************');
+        }
+      }, builder: (context, state) {
+       if (allCur!= Null) {
+      return  MyDrawer(
+            size: size,
+            allCur: allCur,
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+     }),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Stack(
@@ -84,7 +97,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       color: MyColors.whiteColor),
                                   child: MyTextButton(
                                     index: index,
-                                    onPress: () {},
+                                    onPress: () {
+
+                                    },
                                   ),
                                 ),
                               ),
@@ -102,7 +117,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(
                   height: size.height * .03,
                 ),
-                Currencycard(),
+                BlocBuilder<CurrencyCubit, CurrencyState>(
+                  builder: (context, state)
+                    {
+
+                      if (state is CurrenciesLoaded)//{
+                        allCur = state.currencisList;
+                        return Currencycard(
+                          allCurrency: allCur,
+                        );
+                  //  }
+
+                        //return const Center(child:  CircularProgressIndicator());
+
+
+                },
+                ),
               ],
             ),
           ],

@@ -17,20 +17,23 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
   List<CurrencyData>? searchedList;
-
+String sArg="";
+var SearchedCurrList=[];
   TextEditingController _searchController = TextEditingController();
 
-  List<CurrencyData> searchedCurrency(String searchArg) {
-    if (searchArg.trim() != '') {
+  List<CurrencyData>? searchedCurrency(String searchArg) {
+    if(widget.allCur.isNotEmpty)
 
-      return searchedList = widget.allCur
-          .where((currency) {
-        String g=currency.countryName??'';
-            return g.toLowerCase().startsWith(searchArg);
-          })
-          .toList();
-    } else
-      return widget.allCur;}
+      if (searchArg.trim() != ''&&widget.allCur.isNotEmpty) {
+        return searchedList = widget.allCur.where((currency) {
+          String g = currency.countryName ?? '';
+          return g.toLowerCase().startsWith(searchArg);
+        }).toList();
+      }
+    return null;
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -65,7 +68,11 @@ class _MyDrawerState extends State<MyDrawer> {
                             .copyWith(color: Colors.black26),
                         hintText: 'Search Country',
                       ),
-                      onChanged: (val) => setState(() {}),
+                      onFieldSubmitted: (val) {
+                        sArg=val;
+                        SearchedCurrList=searchedCurrency(val)??[];
+
+                      },
                     ),
                   ),
                   Column(
@@ -101,23 +108,32 @@ class _MyDrawerState extends State<MyDrawer> {
                   iconColor: Colors.blue,
                   useInkWell: true,
                 ),
-                child: ListView.builder(
-                  itemCount: searchedCurrency(_searchController.text).length,
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Column(
-                      children: searchedCurrency(_searchController.text)
-                          .map((e) => Card4(
-                                Cur: e,
-                              ))
-                          .toList(),
+                child: Builder(
+                  builder: (context) {
+                    if(SearchedCurrList.length>0) {
+                      return ListView.builder(
+                      itemCount: SearchedCurrList.length,
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                          children: SearchedCurrList
+                              .map((e) => Card4(
+                                    Cur: e,
+                                  ))
+                              .toList(),
+                        );
+                      },
+                      /*  children: [
+                        Card4(
+                          Cur: allCur[0],
+                        )
+                      ],*/
                     );
-                  },
-                  /*  children: [
-                    Card4(
-                      Cur: allCur[0],
-                    )
-                  ],*/
+                    }else{
+                      return const Center(child: Text('ops no data'),);
+                    }
+                  }
                 ),
               ),
             ),

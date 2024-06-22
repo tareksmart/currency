@@ -9,13 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 void main() {
   runApp(BlocProvider(
       create: (context) =>
-          CurrencyCubit(CurrencyRepository(webService: CurrencyWebService())),
+          CurrencyCubit(),
       child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   late CurrencyRepository currRepo;
-  late CurrencyCubit cubit = CurrencyCubit(currRepo);
+  late CurrencyCubit cubit = CurrencyCubit();
   MyApp({super.key});
 
   // This widget is the root of your application.

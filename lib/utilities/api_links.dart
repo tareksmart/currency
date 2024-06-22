@@ -1,9 +1,9 @@
 class ApiLinks {
-  static const String apiLink = 'https://api.currencyfreaks.com/';
+  static const String apiLink = 'https://api.currencyfreaks.com/v2.0/';
 
-  static const String apiKey = '46ce13cd85314fe98e89f6e6615b3841';
+  static const String apiKey = '98cde01776bf4d4c9b484681f45b0ecc';
   static const String currencyData =
-      'https://api.currencyfreaks.com/supported-currencies';
-  static const String currencyRates = 'latest?apikey=$apiKey';
-  static const String currencyOneRates = 'latest?apikey=$apiKey&symbols=';
+      '${apiLink}supported-currencies';
+  static const String currencyRates = 'rates/latest?apikey=$apiKey';
+  static const String currencyOneRates = 'rates/latest?apikey=$apiKey&symbols=';
 }

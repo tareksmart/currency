@@ -1,34 +1,47 @@
 class CurrencyData {
-   String? currencyCode;
-   String? currencyName;
-   String? icon;
-   String? countryCode;
-   String? countryName;
+  String? currencyCode;
+  String? currencyName;
+  String? countryCode;
+  String? countryName;
+  String? status;
+  String? availableFrom;
+  String? availableUntil;
+  String? icon;
 
   CurrencyData(
-      { this.currencyCode,
-         this.currencyName,
-         this.icon,
-         this.countryCode,
-         this.countryName});
+      {this.currencyCode,
+      this.currencyName,
+      this.countryCode,
+      this.countryName,
+      this.status,
+      this.availableFrom,
+      this.availableUntil,
+      this.icon});
 
-  Map<String, dynamic> toMap() {
-    return {
-      'currencyCode': this.currencyCode,
-      'currencyName': this.currencyName,
-      'icon': this.icon,
-      'countryCode': this.countryCode,
-      'countryName': this.countryName,
-    };
+  factory CurrencyData.fromJson(Map<String, dynamic> json) {
+    // currencyCode = json['currencyCode'];
+    // currencyName = json['currencyName'];
+    // countryCode = json['countryCode'];
+    // countryName = json['countryName'];
+    // status = json['status'];
+    // availableFrom = json['availableFrom'];
+    // availableUntil = json['availableUntil'];
+    // icon = ;
+    return CurrencyData(
+        countryCode: json['currencyCode'], countryName: json['countryName'],currencyName:json['currencyName'],
+        currencyCode: json['countryCode'] ,icon: json['countryCode']);
   }
 
-  factory CurrencyData.fromMap(Map<String, dynamic> map) {
-    return CurrencyData(
-      currencyCode: map['currencyCode'] ,
-      currencyName: map['currencyName'] ,
-      icon: map['icon'] ,
-      countryCode: map['countryCode'] ,
-      countryName: map['countryName'] ,
-    );
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['currencyCode'] = this.currencyCode;
+    data['currencyName'] = this.currencyName;
+    data['countryCode'] = this.countryCode;
+    data['countryName'] = this.countryName;
+    data['status'] = this.status;
+    data['availableFrom'] = this.availableFrom;
+    data['availableUntil'] = this.availableUntil;
+    data['icon'] = this.icon;
+    return data;
   }
 }
