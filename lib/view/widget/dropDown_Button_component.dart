@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/controller/cubit/currency_states.dart';
+import 'package:currencypro/model/currency_rate.dart';
 import 'package:currencypro/model/one_rate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,10 +15,13 @@ class MyDropDownButtonComponent extends StatefulWidget {
       required this.size,
       required this.allCurrList,
       required this.drop,
-      required this.base})
+      required this.base,
+      required this.allRate})
       : super(key: key);
   final Size size;
   final List<CurrencyData> allCurrList;
+  final CurrencyRate allRate;
+
   // Function(String?, bool) drop;
   Function(String?, bool) drop;
 
@@ -35,11 +39,8 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<CurrencyCubit>(context);
-    return BlocBuilder<CurrencyCubit,CurrencyState>(
-        builder: (context, state) {
-      if (state is OneRateLoaded)
-        rate = state.rate;
-
+    return BlocBuilder<CurrencyCubit, CurrencyState>(builder: (context, state) {
+      if (state is OneRateLoaded) rate = state.rate;
 
       return DropdownButtonHideUnderline(
         child: DropdownButtonFormField<String>(
@@ -51,7 +52,11 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
                   SizedBox(
                     width: widget.size.width * .1,
                     height: widget.size.height * .05,
-                    child:CachedNetworkImage(imageUrl: e.icon??'') ,
+                    child: CachedNetworkImage(
+                      imageUrl: e.icon ?? '',
+                      placeholder: (context, url) =>
+                          Image.asset('Missing_flag.png'),
+                    ),
                   ),
                   const SizedBox(
                     width: 6,
@@ -68,8 +73,10 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
             );
           }).toList(),
           onChanged: (value) async {
-            await bloc.getOneRates(value!);
-            widget.drop(bloc.price, widget.base);
+            //   await bloc.getOneRates(value!);
+            var price = widget.allRate.toString();
+            print('price********$price');
+            // widget.drop(price], widget.base);
           },
           isExpanded: true,
           iconEnabledColor: MyColors.ButtonColor,

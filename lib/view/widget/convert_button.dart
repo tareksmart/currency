@@ -16,7 +16,7 @@ class ConvertButton extends StatelessWidget {
       width: size.width * .45,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              primary: MyColors.ButtonColor,
+           
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8))),
           onPressed: onTab,

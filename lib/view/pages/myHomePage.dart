@@ -21,18 +21,31 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     // TODO: implement initState
-    _currLoad();
+
     super.initState();
+    _currLoad();
+    _allRate();
   }
 
   _currLoad() async {
-    await BlocProvider.of<CurrencyCubit>(context,listen: false).getAllCurrData();
+    await BlocProvider.of<CurrencyCubit>(context, listen: false)
+        .getAllCurrData();
+  }
+
+  _allRate() async {
+    await BlocProvider.of<CurrencyCubit>(context).getRates();
   }
 
   @override
   Widget build(BuildContext context) {
-var allCur;
+    var allCur, allRate;
     final size = MediaQuery.of(context).size;
+    List<CurrencyData> defaultList = [
+      CurrencyData(
+          currencyCode: 'USD',
+          countryName: 'dollar',
+          icon: 'https://currencyfreaks.com/photos/flags/pkr.png?v=0.1')
+    ];
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -43,21 +56,22 @@ var allCur;
       ),
       drawer: BlocConsumer<CurrencyCubit, CurrencyState>(
           listener: (context, state) {
-        if (state is CurrenciesLoaded) {
-
-          allCur = state.currencisList.cast<CurrencyData>();
-          print('drawer****************************');
-        }
-      }, builder: (context, state) {
-       if (allCur!= Null) {
-      return  MyDrawer(
-            size: size,
-            allCur: allCur,
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-     }),
+            if (state is CurrenciesLoaded) {
+              allCur = state.currencisList.cast<CurrencyData>();
+              print('drawer****************************');
+            }
+          },
+          buildWhen: (previous, current) => current is CurrenciesLoaded,
+          builder: (context, state) {
+            if (allCur != Null) {
+              return MyDrawer(
+                size: size,
+                allCur: allCur ?? defaultList,
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Stack(
@@ -97,9 +111,7 @@ var allCur;
                                       color: MyColors.whiteColor),
                                   child: MyTextButton(
                                     index: index,
-                                    onPress: () {
-
-                                    },
+                                    onPress: () {},
                                   ),
                                 ),
                               ),
@@ -117,22 +129,41 @@ var allCur;
                 SizedBox(
                   height: size.height * .03,
                 ),
-                BlocBuilder<CurrencyCubit, CurrencyState>(
-                  builder: (context, state)
-                    {
-
-                      if (state is CurrenciesLoaded)//{
-                        allCur = state.currencisList;
+                BlocConsumer<CurrencyCubit, CurrencyState>(
+                  listener: (context, state) {
+                    if (state is CurrenciesLoaded) allCur = state.currencisList;
+                    if (state is RateLoaded) allRate = state.ratesList;
+                  },
+                  listenWhen: (previous, current) =>
+                      current is CurrenciesLoaded || current is RateLoaded,
+                  buildWhen: (previous, current) =>
+                      current is CurrenciesLoaded || current is RateLoaded,
+                  builder: (context, state) {
+                    print('satte isssssssss $state');
+                    if (state is CurrencyWaitingState) {
+                         print('satte isssssssss $state');
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is CurrenciesLoaded ||
+                        state is RateLoaded) {
+                      if (allRate != null && allCur != null) {
+                           print('satte isssssssss $state');
                         return Currencycard(
-                          allCurrency: allCur,
+                          allCurrency: allCur ?? defaultList,
+                          allRate: allRate,
                         );
-                  //  }
-
-                        //return const Center(child:  CircularProgressIndicator());
-
-
-                },
-                ),
+                      }
+                      else
+                      return const Center(
+                        child: Text('no data'),
+                      );
+                    } else
+                      return const Center(
+                        child: Text('no data'),
+                      );
+                  },
+                )
               ],
             ),
           ],

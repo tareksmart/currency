@@ -41,7 +41,6 @@ class Card4 extends StatelessWidget {
       return Center(
         child: Column(children: [
           Text('Cur.Name: ${Cur.currencyName}'),
-
           Text('Cur.Country: ${Cur.countryName}'),
           /*Text(price(Cur.currencyCode ?? '')),*/
         ]),
@@ -86,14 +85,14 @@ class Card4 extends StatelessWidget {
                               SizedBox(
                                 height: 50,
                                 width: 50,
-                                child: Image.network(
-                                  Cur.icon ?? '',
-                                  fit: BoxFit.contain,
-                                ),
+                                child: Cur.icon != null
+                                    ? Image.network(Cur.icon!,
+                                        fit: BoxFit.contain)
+                                    : Image.asset('assets/images/mis.png',fit:BoxFit.contain),
                               ),
                               Expanded(
                                 child: Text(
-                                  Cur.countryName??'unknown',
+                                  Cur.countryName ?? 'unknown',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!

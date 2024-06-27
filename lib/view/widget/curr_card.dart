@@ -9,8 +9,8 @@ import 'convert_button.dart';
 import 'dropDown_Button_component.dart';
 
 class Currencycard extends StatefulWidget {
-  Currencycard({Key? key,  required this.allCurrency}) : super(key: key);
-  var allCurrency;
+  Currencycard({Key? key,  required this.allCurrency,required this.allRate}) : super(key: key);
+  var allCurrency,allRate;
   @override
   State<Currencycard> createState() => _CurrencycardState();
 }
@@ -86,6 +86,7 @@ class _CurrencycardState extends State<Currencycard> {
                               drop: dropDownCallBack,
                               size: size,
                               allCurrList: widget.allCurrency,
+                              allRate: widget.allRate,
                             ),
                           ),
                           const SizedBox(
@@ -125,6 +126,7 @@ class _CurrencycardState extends State<Currencycard> {
                                   base: false,
                                   size: size,
                                   allCurrList:widget.allCurrency,
+                                  allRate:widget.allRate,
                                   drop: dropDownCallBack)),
                           const SizedBox(
                             width: 4,
