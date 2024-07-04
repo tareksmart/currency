@@ -14,7 +14,9 @@ class CurrencyCubit extends Cubit<CurrencyState> {
 
     var currList = await CurrencyRepository().getAllCurrency();
     emit(CurrencyWaitingState());
-    if (currList.isNotEmpty) emit(CurrenciesLoaded(currList));
+    if (currList.isNotEmpty) {
+      emit(CurrenciesLoaded(currList));
+    }
     //print(currList);
   }
 

@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/controller/cubit/currency_states.dart';
 import 'package:currencypro/model/currency_rate.dart';
 import 'package:currencypro/model/one_rate.dart';
+import 'package:currencypro/view/widget/drop_down_menu_item.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,7 +11,7 @@ import '../../controller/cubit/curency_cubit.dart';
 import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
 
-class MyDropDownButtonComponent extends StatefulWidget {
+class MyDropDownButtonComponent extends StatelessWidget {
   MyDropDownButtonComponent(
       {Key? key,
       required this.size,
@@ -27,63 +29,30 @@ class MyDropDownButtonComponent extends StatefulWidget {
 
   final bool base;
 
-  @override
-  State<MyDropDownButtonComponent> createState() =>
-      _MyDropDownButtonComponentState();
-}
-
-class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
   OneRate? rate;
+
   String? currCode;
+
   bool type = true;
+
+  List<CurrencyData>? searchedList;
+
+  List<CurrencyData>? searchedCurrency(String searchArg) {
+    if (allCurrList.isNotEmpty) if (searchArg.trim() != '' &&
+        allCurrList.isNotEmpty) {
+      return searchedList = allCurrList.where((currency) {
+        String g = currency.countryName ?? '';
+        return g.toLowerCase().startsWith(searchArg);
+      }).toList();
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<CurrencyCubit>(context);
-    return BlocBuilder<CurrencyCubit, CurrencyState>(builder: (context, state) {
-      if (state is OneRateLoaded) rate = state.rate;
 
-      return DropdownButtonHideUnderline(
-        child: DropdownButtonFormField<String>(
-          items: widget.allCurrList?.map((e) {
-            return DropdownMenuItem<String>(
-              value: e.currencyCode ?? '',
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: widget.size.width * .1,
-                    height: widget.size.height * .05,
-                    child: CachedNetworkImage(
-                      imageUrl: e.icon ?? '',
-                      placeholder: (context, url) =>
-                          Image.asset('Missing_flag.png'),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 6,
-                  ),
-                  Text(
-                    e.currencyCode ?? '',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline5!
-                        .copyWith(color: MyColors.ButtonColor),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
-          onChanged: (value) async {
-            //   await bloc.getOneRates(value!);
-            var price = widget.allRate.toString();
-            print('price********$price');
-            // widget.drop(price], widget.base);
-          },
-          isExpanded: true,
-          iconEnabledColor: MyColors.ButtonColor,
-          iconSize: 30,
-          elevation: 1,
-        ),
-      );
-    });
+
+      return MyDropDownMenuItem(currencyDataList: allCurrList,size:size);
+
   }
 }

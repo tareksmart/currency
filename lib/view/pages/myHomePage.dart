@@ -129,35 +129,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(
                   height: size.height * .03,
                 ),
-                BlocConsumer<CurrencyCubit, CurrencyState>(
-                  listener: (context, state) {
-                    if (state is CurrenciesLoaded) allCur = state.currencisList;
-                    if (state is RateLoaded) allRate = state.ratesList;
-                  },
-                  listenWhen: (previous, current) =>
-                      current is CurrenciesLoaded || current is RateLoaded,
+                BlocBuilder<CurrencyCubit, CurrencyState>(
                   buildWhen: (previous, current) =>
-                      current is CurrenciesLoaded || current is RateLoaded,
+                      current is CurrenciesLoaded && current is RateLoaded,
                   builder: (context, state) {
                     print('satte isssssssss $state');
                     if (state is CurrencyWaitingState) {
-                         print('satte isssssssss $state');
+                      print('satte isssssssss $state');
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
                     } else if (state is CurrenciesLoaded ||
                         state is RateLoaded) {
-                      if (allRate != null && allCur != null) {
-                           print('satte isssssssss $state');
+                      if (state is CurrenciesLoaded)
+                        allCur = state.currencisList;
+                      if (state is RateLoaded) allRate = state.ratesList;
+                      // if (allRate != null && allCur != null) {
+
                         return Currencycard(
                           allCurrency: allCur ?? defaultList,
                           allRate: allRate,
                         );
-                      }
-                      else
-                      return const Center(
-                        child: Text('no data'),
-                      );
+                      // } else
+                      //   return const Center(
+                      //     child: Text('no data allCur '),
+                      //   );
                     } else
                       return const Center(
                         child: Text('no data'),

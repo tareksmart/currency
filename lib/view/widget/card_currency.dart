@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/controller/cubit/curency_cubit.dart';
 import 'package:currencypro/controller/cubit/currency_states.dart';
 import 'package:expandable/expandable.dart';
@@ -85,11 +86,12 @@ class Card4 extends StatelessWidget {
                               SizedBox(
                                 height: 50,
                                 width: 50,
-                                child: Cur.icon != null
-                                    ? Image.network(Cur.icon!,
-                                        fit: BoxFit.contain)
-                                    : Image.asset('assets/images/mis.png',fit:BoxFit.contain),
-                              ),
+                                child: CachedNetworkImage(
+                      imageUrl: Cur.icon ?? '',
+                      placeholder: (context, url) =>
+                          Image.asset('assets/images/Missing_flag.png'),
+                          errorWidget: (context, url, error) => Image.asset('assets/images/Missing_flag.png') ,
+                    )),
                               Expanded(
                                 child: Text(
                                   Cur.countryName ?? 'unknown',

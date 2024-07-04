@@ -53,11 +53,11 @@ class _CurrencycardState extends State<Currencycard> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     String x = '0';
-    GestureDetector gestureDetector = GestureDetector(
-      onTap: () {
-        _baseCurrency_controller.text = x;
-      },
-    );
+    // GestureDetector gestureDetector = GestureDetector(
+    //   onTap: () {
+    //     _baseCurrency_controller.text = x;
+    //   },
+    // );
 
       return Stack(
         alignment: Alignment.center,
