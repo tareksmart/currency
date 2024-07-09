@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../currency_repository.dart';
+import '../../repo/currency_repository.dart';
 import 'currency_states.dart';
 import 'package:currencypro/model/currency_data.dart';
 

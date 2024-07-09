@@ -23,6 +23,7 @@ dependencies:
   flutter_animated_button:
   background_app_bar: ^2.0.1
   cached_network_image: ^3.3.1
+  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_test:
