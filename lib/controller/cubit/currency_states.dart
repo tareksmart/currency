@@ -6,18 +6,21 @@ import '../../model/currency_data.dart';
 abstract class CurrencyState {}
 
 class CurrencyIntial extends CurrencyState {}
-class CurrencyWaitingState extends CurrencyState{}
+
+class CurrencyWaitingState extends CurrencyState {}
+
 class CurrenciesLoaded extends CurrencyState {
   final List<CurrencyData> currencisList;
-
   CurrenciesLoaded(this.currencisList);
 }
 
-class RateLoaded extends CurrencyState {
-  final CurrencyRate ratesList;
+class FailurLoaded extends CurrencyState {
+  final String errorMessage;
 
-  RateLoaded(this.ratesList);
+  FailurLoaded({required this.errorMessage});
 }
+
+
 
 class OneRateLoaded extends CurrencyState {
   final OneRate rate;

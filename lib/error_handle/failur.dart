@@ -19,6 +19,10 @@ class ServerFailur extends Failur {
                 .errorMessage);
       case DioExceptionType.cancel:
         return ServerFailur(errorMessage: 'request is cancelled');
+          case DioExceptionType.connectionError:
+        return ServerFailur(errorMessage: 'no internet connection');
+         case DioExceptionType.unknown:
+        return ServerFailur(errorMessage: 'Oops thre was an error please try again');
       default:
         return ServerFailur(
             errorMessage: 'Oops thre was an error please try again');

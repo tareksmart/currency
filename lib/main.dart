@@ -1,4 +1,5 @@
 import 'package:currencypro/controller/cubit/curency_cubit.dart';
+import 'package:currencypro/controller/latest_currency/latest_curr_cubit_cubit.dart';
 import 'package:currencypro/repo/currency_repository.dart';
 import 'package:currencypro/services/wep_services.dart';
 import 'package:currencypro/view/pages/myHomePage.dart';
@@ -7,10 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(BlocProvider(
-      create: (context) =>
-          CurrencyCubit(),
-      child: MyApp()));
+  runApp(BlocProvider(create: (context) => CurrencyCubit(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -24,8 +22,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: mytheme(context),
-      home: MyHomePage(),
-
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context)=>CurrencyCubit()),
+          BlocProvider(create: (context)=>LatestCurrCubitCubit())
+        ],
+        child: MyHomePage(),
+      ),
     );
   }
 }

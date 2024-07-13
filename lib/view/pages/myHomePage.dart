@@ -1,5 +1,6 @@
 import 'package:currencypro/controller/cubit/curency_cubit.dart';
 import 'package:currencypro/controller/cubit/currency_states.dart';
+import 'package:currencypro/controller/latest_currency/latest_curr_cubit_cubit.dart';
 import 'package:currencypro/view/widget/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _allRate() async {
-    await BlocProvider.of<CurrencyCubit>(context).getRates();
+    await BlocProvider.of<LatestCurrCubitCubit>(context).getRates();
   }
 
   @override
@@ -131,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 BlocBuilder<CurrencyCubit, CurrencyState>(
                   buildWhen: (previous, current) =>
-                      current is CurrenciesLoaded && current is RateLoaded,
+                      current is CurrenciesLoaded ,
                   builder: (context, state) {
                     print('satte isssssssss $state');
                     if (state is CurrencyWaitingState) {
@@ -139,11 +140,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
-                    } else if (state is CurrenciesLoaded ||
-                        state is RateLoaded) {
+                    } else if (state is CurrenciesLoaded 
+                     ) {
                       if (state is CurrenciesLoaded)
                         allCur = state.currencisList;
-                      if (state is RateLoaded) allRate = state.ratesList;
+                     }
                       // if (allRate != null && allCur != null) {
 
                         return Currencycard(
