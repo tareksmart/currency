@@ -1,4 +1,4 @@
-import 'package:currencypro/controller/cubit/curency_cubit.dart';
+import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

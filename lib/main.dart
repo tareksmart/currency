@@ -1,5 +1,5 @@
-import 'package:currencypro/controller/cubit/curency_cubit.dart';
-import 'package:currencypro/controller/latest_currency/latest_curr_cubit_cubit.dart';
+import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
+import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
 import 'package:currencypro/repo/currency_repository.dart';
 import 'package:currencypro/services/wep_services.dart';
 import 'package:currencypro/view/pages/myHomePage.dart';

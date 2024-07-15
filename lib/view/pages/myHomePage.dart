@@ -1,11 +1,10 @@
-import 'package:currencypro/controller/cubit/curency_cubit.dart';
-import 'package:currencypro/controller/cubit/currency_states.dart';
-import 'package:currencypro/controller/latest_currency/latest_curr_cubit_cubit.dart';
+import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
+import 'package:currencypro/controller/cubit/all_currency_cubit/currency_states.dart';
+import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
 import 'package:currencypro/view/widget/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-
 import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
 import '../widget/curr_card.dart';
@@ -131,36 +130,28 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: size.height * .03,
                 ),
                 BlocBuilder<CurrencyCubit, CurrencyState>(
-                  buildWhen: (previous, current) =>
-                      current is CurrenciesLoaded ,
-                  builder: (context, state) {
-                    print('satte isssssssss $state');
-                    if (state is CurrencyWaitingState) {
+                    buildWhen: (previous, current) =>
+                        current is CurrenciesLoaded,
+                    builder: (context, state) {
                       print('satte isssssssss $state');
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is CurrenciesLoaded 
-                     ) {
-                      if (state is CurrenciesLoaded)
-                        allCur = state.currencisList;
-                     }
-                      // if (allRate != null && allCur != null) {
-
-                        return Currencycard(
-                          allCurrency: allCur ?? defaultList,
-                          allRate: allRate,
+                      if (state is CurrencyWaitingState) {
+                        print('satte isssssssss $state');
+                        return const Center(
+                          child: CircularProgressIndicator(),
                         );
-                      // } else
-                      //   return const Center(
-                      //     child: Text('no data allCur '),
-                      //   );
-                    } else
-                      return const Center(
-                        child: Text('no data'),
+                      } else if (state is CurrenciesLoaded) {
+                        allCur = state.currencisList;
+                      } else if (state is FailurLoaded) {
+                        showBottomSheet(
+                            context: context,
+                            builder: (context) => Text(state.errorMessage));
+                      }
+
+                      return     Currencycard(
+                        allCurrency: allCur ?? defaultList,
+                      
                       );
-                  },
-                )
+                    })
               ],
             ),
           ],

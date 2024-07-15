@@ -1,7 +1,7 @@
 import 'package:currencypro/model/currency_rate.dart';
 import 'package:currencypro/model/one_rate.dart';
 
-import '../../model/currency_data.dart';
+import '../../../model/currency_data.dart';
 
 abstract class CurrencyState {}
 
@@ -22,11 +22,7 @@ class FailurLoaded extends CurrencyState {
 
 
 
-class OneRateLoaded extends CurrencyState {
-  final OneRate rate;
 
-  OneRateLoaded(this.rate);
-}
 
 class PressedNumber extends CurrencyState {
   final String number;

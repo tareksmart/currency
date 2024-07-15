@@ -11,7 +11,7 @@ class MyDropDownMenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownMenu(
       label: Text('select currency'),
-      width: size.width*.5,
+      width: size.width*.4,
       menuHeight: size.height*.5,
       requestFocusOnTap: true,
       dropdownMenuEntries:  currencyDataList.map((e) {

@@ -19,10 +19,16 @@ class ServerFailur extends Failur {
                 .errorMessage);
       case DioExceptionType.cancel:
         return ServerFailur(errorMessage: 'request is cancelled');
-          case DioExceptionType.connectionError:
+      case DioExceptionType.connectionError:
         return ServerFailur(errorMessage: 'no internet connection');
-         case DioExceptionType.unknown:
-        return ServerFailur(errorMessage: 'Oops thre was an error please try again');
+      case DioExceptionType.unknown:
+        return ServerFailur(
+            errorMessage: 'Oops thre was an error please try again');
+      case DioExceptionType.receiveTimeout:
+        return ServerFailur(errorMessage: 'receive Timeout from server');
+
+      case DioExceptionType.badCertificate:
+        return ServerFailur(errorMessage: 'an incorrect certificate');
       default:
         return ServerFailur(
             errorMessage: 'Oops thre was an error please try again');

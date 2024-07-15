@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:currencypro/controller/cubit/curency_cubit.dart';
-import 'package:currencypro/controller/cubit/currency_states.dart';
+import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
+import 'package:currencypro/controller/cubit/all_currency_cubit/currency_states.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,13 +23,13 @@ class Card4 extends StatelessWidget {
       );
     }
 
-    String price(String curr) {
-      if (curr.trim() != '') {
-        bloc.getOneRates(curr);
-        return bloc.price;
-      } else
-        return '0';
-    }
+    // String price(String curr) {
+    //   if (curr.trim() != '') {
+    //     bloc.getOneRates(curr);
+    //     return bloc.price;
+    //   } else
+    //     return '0';
+    // }
 
     // buildList() {
     //   return Column(

@@ -12,6 +12,7 @@ class LatestCurrCubitCubit extends Cubit<LatestCurrCubitState> {
     emit(LatestCurrWaiting());
 
     var rates = await CurrencyRepository().getAllRates();
+    //fold دالة تبع باكج ايثر
     rates.fold(
         (failur) => emit(FailurLoadedLatest(errorMessage: failur.errorMessage)),
         (currencyRate) => emit(LatestRateSuccessLoaded(currencyRate)));

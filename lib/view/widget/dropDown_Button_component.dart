@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:currencypro/controller/cubit/currency_states.dart';
+import 'package:currencypro/controller/cubit/all_currency_cubit/currency_states.dart';
 import 'package:currencypro/model/currency_rate.dart';
 import 'package:currencypro/model/one_rate.dart';
 import 'package:currencypro/view/widget/drop_down_menu_item.dart';
@@ -7,7 +7,7 @@ import 'package:currencypro/view/widget/drop_down_menu_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../controller/cubit/curency_cubit.dart';
+import '../../controller/cubit/all_currency_cubit/curency_cubit.dart';
 import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
 
