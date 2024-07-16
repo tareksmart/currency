@@ -49,7 +49,7 @@ class _CurrencycardState extends State<Currencycard> {
   }
 
   _callLatestRate() async {
-    await BlocProvider.of<LatestCurrCubitCubit>(context).getRates();
+    await BlocProvider.of<LatestCurrCubit>(context).getRates();
   }
 
   @override
@@ -77,7 +77,7 @@ class _CurrencycardState extends State<Currencycard> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Form(
-                child: BlocBuilder<LatestCurrCubitCubit, LatestCurrCubitState>(
+                child: BlocBuilder<LatestCurrCubit, LatestCurrCubitState>(
                   buildWhen: (previous, current) =>
                       current is LatestRateSuccessLoaded,
                   builder: (context, state) {
@@ -115,7 +115,7 @@ class _CurrencycardState extends State<Currencycard> {
 ;
                                             print('value is $value and state.number is${state.number}');
                                         },
-                                        readOnly: true,
+                                       
                                         keyboardType: TextInputType.number,
                                         controller: _baseCurrency_controller,
                                         decoration: InputDecoration(
@@ -196,6 +196,7 @@ class _CurrencycardState extends State<Currencycard> {
               ConvertButton(
                 text: 'CONVERT',
                 onTab: () {
+                  print('result($_basePrice, $_toPrice, _baseCurrency_controller.text.trim());');
                   _toCurr_controller.text = result(_basePrice, _toPrice,
                       _baseCurrency_controller.text.trim());
                 },

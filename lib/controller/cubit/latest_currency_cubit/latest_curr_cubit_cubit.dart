@@ -5,8 +5,8 @@ import 'package:meta/meta.dart';
 
 part 'latest_curr_cubit_state.dart';
 
-class LatestCurrCubitCubit extends Cubit<LatestCurrCubitState> {
-  LatestCurrCubitCubit() : super(LatestCurrCubitInitial());
+class LatestCurrCubit extends Cubit<LatestCurrCubitState> {
+  LatestCurrCubit() : super(LatestCurrCubitInitial());
 
   Future<void> getRates() async {
     emit(LatestCurrWaiting());

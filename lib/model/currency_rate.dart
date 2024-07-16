@@ -1249,7 +1249,9 @@ class CurrencyRate {
     rAI = json['RAI'];
     cOTI = json['COTI'];
   }
-
+factory CurrencyRate.price(String currCode){
+return CurrencyRate();
+}
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['AGLD'] = this.aGLD;

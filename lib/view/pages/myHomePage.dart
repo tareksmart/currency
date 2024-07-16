@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _allRate() async {
-    await BlocProvider.of<LatestCurrCubitCubit>(context).getRates();
+    await BlocProvider.of<LatestCurrCubit>(context).getRates();
   }
 
   @override

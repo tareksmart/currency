@@ -52,7 +52,7 @@ class MyDropDownButtonComponent extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-      return MyDropDownMenuItem(currencyDataList: allCurrList,size:size);
+      return MyDropDownMenuItem(currencyDataList: allCurrList,size:size,allRate: allRate,);
 
   }
 }
