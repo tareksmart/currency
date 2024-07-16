@@ -24,7 +24,4 @@ class FailurLoaded extends CurrencyState {
 
 
 
-class PressedNumber extends CurrencyState {
-  final String number;
-  PressedNumber(this.number);
-}
+

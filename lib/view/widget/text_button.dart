@@ -1,17 +1,18 @@
 import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
+import 'package:currencypro/controller/cubit/press_number_cubit/press_number_cubit_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyTextButton extends StatelessWidget {
-  const MyTextButton({Key? key, required this.onPress, required this.index})
+  const MyTextButton({Key? key,  required this.index})
       : super(key: key);
 
-  final VoidCallback onPress;
+ 
   final int index;
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<CurrencyCubit>(context, listen: false);
+    final bloc = BlocProvider.of<PressNumberCubit>(context);
     if (index == 0) {
       return AnimatedButton(
         onPress: () => bloc.getNumber('7'),

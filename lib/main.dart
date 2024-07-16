@@ -1,5 +1,6 @@
 import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
+import 'package:currencypro/controller/cubit/press_number_cubit/press_number_cubit_cubit.dart';
 import 'package:currencypro/repo/currency_repository.dart';
 import 'package:currencypro/services/wep_services.dart';
 import 'package:currencypro/view/pages/myHomePage.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context)=>CurrencyCubit()),
-          BlocProvider(create: (context)=>LatestCurrCubitCubit())
+          BlocProvider(create: (context)=>LatestCurrCubitCubit()),
+          BlocProvider(create: (context)=>PressNumberCubit())
         ],
         child: MyHomePage(),
       ),

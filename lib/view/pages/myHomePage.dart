@@ -1,6 +1,7 @@
 import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
 import 'package:currencypro/controller/cubit/all_currency_cubit/currency_states.dart';
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
+import 'package:currencypro/controller/cubit/press_number_cubit/press_number_cubit_cubit.dart';
 import 'package:currencypro/view/widget/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -111,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       color: MyColors.whiteColor),
                                   child: MyTextButton(
                                     index: index,
-                                    onPress: () {},
+                                  
                                   ),
                                 ),
                               ),
@@ -147,9 +148,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             builder: (context) => Text(state.errorMessage));
                       }
 
-                      return     Currencycard(
+                      return Currencycard(
                         allCurrency: allCur ?? defaultList,
-                      
                       );
                     })
               ],

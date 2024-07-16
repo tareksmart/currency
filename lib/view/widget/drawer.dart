@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
-import 'card_currency.dart';
+import 'currency_selected_field.dart';
 
 class MyDrawer extends StatefulWidget {
   MyDrawer({Key? key, required this.size, required this.allCur})

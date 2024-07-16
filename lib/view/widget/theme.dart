@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 ThemeData mytheme(BuildContext context) {
   return ThemeData(
-useMaterial3: true,
+
     appBarTheme: const AppBarTheme(elevation: 2),
     cardTheme: CardTheme(
       shadowColor: MyColors.shadowColor,
@@ -14,7 +14,7 @@ useMaterial3: true,
     ),
     primaryColor: MyColors.whiteColor,
     buttonTheme: ButtonThemeData(
-      buttonColor: const Color(0xFF6391ff),
+      buttonColor: MyColors.ButtonColor,//Color(0xFF6391ff),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),

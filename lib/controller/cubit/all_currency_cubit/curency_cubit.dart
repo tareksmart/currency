@@ -24,7 +24,5 @@ class CurrencyCubit extends Cubit<CurrencyState> {
   //   });
   // }
 
-  void getNumber(String number) {
-    emit(PressedNumber(number));
-  }
+ 
 }
