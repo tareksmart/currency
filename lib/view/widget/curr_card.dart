@@ -26,18 +26,12 @@ class _CurrencycardState extends State<Currencycard> {
   String _toPrice = '0';
   final _globalKey = GlobalKey<FormState>();
 
-  void dropDownCallBack(String? selectedValue, bool base) {
-    if (selectedValue is String) {
-      _selectedValue = selectedValue;
-      if (base == true) {
-        _basePrice = selectedValue;
-        //_baseCurrency_controller.text = selectedValue;
-      } else {
-        _toPrice = selectedValue;
-        //_toCurr_controller.text = selectedValue;
-      }
-      //  setState(() {});
-    }
+  void basePriceCallBack(String baseCurr) {
+    _basePrice = baseCurr;
+  }
+
+  void localPriceCallBack(String localCurr) {
+    _toPrice = localCurr;
   }
 
   String result(String basePrice, String toPrice, String mony) {
@@ -77,11 +71,14 @@ class _CurrencycardState extends State<Currencycard> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Form(
-                child: BlocBuilder<LatestCurrCubit, LatestCurrCubitState>(
+                child: BlocConsumer<LatestCurrCubit, LatestCurrCubitState>(
+                  listener: (context, state) {},
                   buildWhen: (previous, current) =>
                       current is LatestRateSuccessLoaded,
                   builder: (context, state) {
                     if (state is LatestRateSuccessLoaded) {
+                      print(
+                          '*******count of currency${state.ratesList.length}');
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -93,10 +90,12 @@ class _CurrencycardState extends State<Currencycard> {
                                 child: MyDropDownButtonComponent(
                                   key: const ValueKey(1),
                                   base: true,
-                                  drop: dropDownCallBack,
+                                  basePriceFunc: basePriceCallBack,
+                                  localPriceFunc: localPriceCallBack,
                                   size: size,
                                   allCurrList: widget.allCurrency,
                                   allRate: state.ratesList,
+                                  typeOfCurrency: MyconstantName.base,
                                 ),
                               ),
                               const SizedBox(
@@ -106,16 +105,11 @@ class _CurrencycardState extends State<Currencycard> {
                                 child: BlocBuilder<PressNumberCubit,
                                     PressNumberCubitState>(
                                   builder: (context, state) {
-                                    print('state is insid pressed is***$state');
+                                  
                                     if (state is PressedNumber) {
+                                     
                                       return TextFormField(
-                                      
-                                        onChanged: (value) {
-                                          value =       _selectedValue;
-;
-                                            print('value is $value and state.number is${state.number}');
-                                        },
-                                       
+                                     onSaved: (newValue) => newValue=state.number,
                                         keyboardType: TextInputType.number,
                                         controller: _baseCurrency_controller,
                                         decoration: InputDecoration(
@@ -150,12 +144,15 @@ class _CurrencycardState extends State<Currencycard> {
                             children: [
                               Expanded(
                                   child: MyDropDownButtonComponent(
-                                      key: const ValueKey(2),
-                                      base: false,
-                                      size: size,
-                                      allCurrList: widget.allCurrency,
-                                      allRate: state.ratesList,
-                                      drop: dropDownCallBack)),
+                                key: const ValueKey(2),
+                                base: false,
+                                size: size,
+                                allCurrList: widget.allCurrency,
+                                allRate: state.ratesList,
+                                basePriceFunc: basePriceCallBack,
+                                localPriceFunc: localPriceCallBack,
+                                typeOfCurrency: MyconstantName.local,
+                              )),
                               const SizedBox(
                                 width: 4,
                               ),
@@ -164,10 +161,10 @@ class _CurrencycardState extends State<Currencycard> {
                                   keyboardType: TextInputType.number,
                                   readOnly: true,
                                   controller: _toCurr_controller,
-                                  onChanged: (value) {
-                                    value = _selectedValue;
-                                    // setState(() {});
-                                  },
+                                  // onChanged: (value) {
+                                  //   value = _selectedValue;
+                                  //   // setState(() {});
+                                  // },
                                   decoration: InputDecoration(
                                       labelStyle: Theme.of(context)
                                           .textTheme
@@ -196,7 +193,8 @@ class _CurrencycardState extends State<Currencycard> {
               ConvertButton(
                 text: 'CONVERT',
                 onTab: () {
-                  print('result($_basePrice, $_toPrice, _baseCurrency_controller.text.trim());');
+                  print(
+                      'result($_basePrice, $_toPrice, ${_baseCurrency_controller.text.trim()});');
                   _toCurr_controller.text = result(_basePrice, _toPrice,
                       _baseCurrency_controller.text.trim());
                 },

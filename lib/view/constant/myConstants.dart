@@ -8,3 +8,9 @@ class MyColors {
   static Color primaryColor = Color(0xfffafbff);
   static Color backGroundTextFieldColor = Color(0xffeef2fe);
 }
+
+class MyconstantName {
+  static String base = 'base';
+  static String local = 'local';
+
+}

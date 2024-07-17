@@ -35,11 +35,12 @@ class CurrencyRepository {
     }
   }
 
-  Future<Either<Failur, CurrencyRate>> getAllRates() async {
+  Future<Either<Failur, Map<String,dynamic>>> getAllRates() async {
     try {
       final rates = await CurrencyWebService().getLatestrates();
       var obj = CurrencyRate.fromJson(rates);
-      return right(obj);
+      Map<String, dynamic> data = obj.toJson();
+      return right(data);
     } catch (e) {
       if (e is DioException) {
         return left(ServerFailur.fromDioError(e));

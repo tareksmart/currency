@@ -25,11 +25,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     super.initState();
     _currLoad();
-    _allRate();
+   _allRate();
   }
 
   _currLoad() async {
-    await BlocProvider.of<CurrencyCubit>(context, listen: false)
+    await BlocProvider.of<CurrencyCubit>(context)
         .getAllCurrData();
   }
 

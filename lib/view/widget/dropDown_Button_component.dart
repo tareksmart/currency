@@ -16,16 +16,19 @@ class MyDropDownButtonComponent extends StatelessWidget {
       {Key? key,
       required this.size,
       required this.allCurrList,
-      required this.drop,
+      required this.basePriceFunc,
+      required this.localPriceFunc,
       required this.base,
-      required this.allRate})
+      required this.allRate, required this.typeOfCurrency})
       : super(key: key);
   final Size size;
   final List<CurrencyData> allCurrList;
-  final CurrencyRate allRate;
+  final Map<String, dynamic> allRate;
 
   // Function(String?, bool) drop;
-  Function(String?, bool) drop;
+  Function(String) basePriceFunc;
+  Function(String) localPriceFunc;
+
 
   final bool base;
 
@@ -34,25 +37,29 @@ class MyDropDownButtonComponent extends StatelessWidget {
   String? currCode;
 
   bool type = true;
-
+final String typeOfCurrency;
   List<CurrencyData>? searchedList;
 
-  List<CurrencyData>? searchedCurrency(String searchArg) {
-    if (allCurrList.isNotEmpty) if (searchArg.trim() != '' &&
-        allCurrList.isNotEmpty) {
-      return searchedList = allCurrList.where((currency) {
-        String g = currency.countryName ?? '';
-        return g.toLowerCase().startsWith(searchArg);
-      }).toList();
-    }
-    return null;
-  }
+  // List<CurrencyData>? searchedCurrency(String searchArg) {
+  //   if (allCurrList.isNotEmpty) if (searchArg.trim() != '' &&
+  //       allCurrList.isNotEmpty) {
+  //     return searchedList = allCurrList.where((currency) {
+  //       String g = currency.countryName ?? '';
+  //       return g.toLowerCase().startsWith(searchArg);
+  //     }).toList();
+  //   }
+  //   return null;
+  // }
 
   @override
   Widget build(BuildContext context) {
-
-
-      return MyDropDownMenuItem(currencyDataList: allCurrList,size:size,allRate: allRate,);
-
+    return MyDropDownMenuItem(
+      currencyDataList: allCurrList,
+      size: size,
+      allRate: allRate,
+      basePriceFun: basePriceFunc,
+      localPriceFun: localPriceFunc,
+      typeOfCurrency: typeOfCurrency,
+    );
   }
 }

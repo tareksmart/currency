@@ -11,7 +11,7 @@ class FailurLoadedLatest extends LatestCurrCubitState {
   FailurLoadedLatest({required this.errorMessage});
 }
 class LatestRateSuccessLoaded extends LatestCurrCubitState {
-  final CurrencyRate ratesList;
+  final Map<String,dynamic> ratesList;
 
   LatestRateSuccessLoaded(this.ratesList);
 }

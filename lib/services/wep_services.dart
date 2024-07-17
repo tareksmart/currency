@@ -31,6 +31,7 @@ class CurrencyWebService {
       return response.data["rates"];
    
   }
+ 
 
   Future<dynamic> getOneRates(String symbole) async {
     try {
