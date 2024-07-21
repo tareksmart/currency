@@ -79,37 +79,48 @@ class _CurrencycardState extends State<Currencycard> {
                     if (state is LatestRateSuccessLoaded) {
                       print(
                           '*******count of currency${state.ratesList.length}');
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: MyDropDownButtonComponent(
-                                  key: const ValueKey(1),
-                                  base: true,
-                                  basePriceFunc: basePriceCallBack,
-                                  localPriceFunc: localPriceCallBack,
-                                  size: size,
-                                  allCurrList: widget.allCurrency,
-                                  allRate: state.ratesList,
-                                  typeOfCurrency: MyconstantName.base,
+                      if (state.ratesList.length < 415) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: MyDropDownButtonComponent(
+                                    key: const ValueKey(1),
+                                    base: true,
+                                    basePriceFunc: basePriceCallBack,
+                                    localPriceFunc: localPriceCallBack,
+                                    size: size,
+                                    allCurrList: widget.allCurrency,
+                                    allRate: state.ratesList,
+                                    typeOfCurrency: MyconstantName.base,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Expanded(
-                                child: BlocBuilder<PressNumberCubit,
-                                    PressNumberCubitState>(
-                                  builder: (context, state) {
-                                  
-                                    if (state is PressedNumber) {
-                                     
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Expanded(
+                                  child: BlocConsumer<PressNumberCubit,
+                                      PressNumberCubitState>(
+                                    buildWhen: (previous, current) =>
+                                        current is PressedNumber,
+                                    listener: (context, state) {
+                                      if (state is PressedNumber) {
+                                        _baseCurrency_controller.text +=
+                                            state.number;
+                                        if (state.number == '')
+                                          _baseCurrency_controller.text = '';
+                                      //  _baseCurrency_controller.dispose();
+                                      }
+                                    },
+                                    builder: (context, state) {
                                       return TextFormField(
-                                     onSaved: (newValue) => newValue=state.number,
+                                        readOnly: true,
                                         keyboardType: TextInputType.number,
                                         controller: _baseCurrency_controller,
                                         decoration: InputDecoration(
@@ -117,64 +128,52 @@ class _CurrencycardState extends State<Currencycard> {
                                                 .textTheme
                                                 .subtitle2),
                                       );
-                                    }
-                                    return TextFormField(
-                                      onChanged: (value) {
-                                        value = '0';
-                                      },
-                                      readOnly: true,
-                                      keyboardType: TextInputType.number,
-                                      controller: _baseCurrency_controller,
-                                      decoration: InputDecoration(
-                                          labelStyle: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2),
-                                    );
-                                  },
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                    child: MyDropDownButtonComponent(
+                                  key: const ValueKey(2),
+                                  base: false,
+                                  size: size,
+                                  allCurrList: widget.allCurrency,
+                                  allRate: state.ratesList,
+                                  basePriceFunc: basePriceCallBack,
+                                  localPriceFunc: localPriceCallBack,
+                                  typeOfCurrency: MyconstantName.local,
+                                )),
+                                const SizedBox(
+                                  width: 4,
                                 ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                  child: MyDropDownButtonComponent(
-                                key: const ValueKey(2),
-                                base: false,
-                                size: size,
-                                allCurrList: widget.allCurrency,
-                                allRate: state.ratesList,
-                                basePriceFunc: basePriceCallBack,
-                                localPriceFunc: localPriceCallBack,
-                                typeOfCurrency: MyconstantName.local,
-                              )),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Expanded(
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  readOnly: true,
-                                  controller: _toCurr_controller,
-                                  // onChanged: (value) {
-                                  //   value = _selectedValue;
-                                  //   // setState(() {});
-                                  // },
-                                  decoration: InputDecoration(
-                                      labelStyle: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      );
+                                Expanded(
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    readOnly: true,
+                                    controller: _toCurr_controller,
+                                    // onChanged: (value) {
+                                    //   value = _selectedValue;
+                                    //   // setState(() {});
+                                    // },
+                                    decoration: InputDecoration(
+                                        labelStyle: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        );
+                      }
                     }
                     return Text('oops no data loadeed');
                   },

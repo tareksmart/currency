@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
 import 'package:currencypro/model/currency_data.dart';
@@ -26,7 +28,8 @@ class MyDropDownMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // var latestCubit=BlocProvider.of<LatestCurrCubit>(context);
-
+    String _selectedItem =
+        "https://currencyfreaks.com/photos/flags/pkr.png?v=0.1";
     print('******build');
     return DropdownMenu<String?>(
       label: Text('select $typeOfCurrency'),
@@ -35,29 +38,56 @@ class MyDropDownMenuItem extends StatelessWidget {
       requestFocusOnTap: true,
       dropdownMenuEntries: currencyDataList.map((e) {
         return DropdownMenuEntry(
-            leadingIcon: CachedNetworkImage(
-              imageUrl: e.icon!,
-              fit: BoxFit.contain,
-              width: 16,
-              height: 20,
-              placeholder: (context, url) =>
-                  Image.asset('assets/images/Missing_flag.png'),
-              errorWidget: (context, url, error) =>
-                  Image.asset('assets/images/Missing_flag.png'),
+            leadingIcon: SizedBox(
+              width: 20,
+              child: Image.network(
+                e.icon!,
+                width: 16,
+                height: 20,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) =>
+                    Image.asset('assets/images/Missing_flag.png'),
+              ),
             ),
+            // leadingIcon: CachedNetworkImage(
+            //   imageUrl: e.icon!,
+            //   fit: BoxFit.contain,
+            //   width: 16,
+            //   height: 20,
+            //   placeholder: (context, url) =>
+            //       Image.asset('assets/images/Missing_flag.png'),
+            //   errorWidget: (context, url, error) =>
+            //       Image.asset('assets/images/Missing_flag.png'),
+            // ),
             value: e.currencyCode,
             label: e.currencyName ?? 'dollar');
       }).toList(),
       enableSearch: true,
-     
       onSelected: (value) {
         var price = allRate[value];
 
         if (typeOfCurrency == MyconstantName.base)
-         basePriceFun(price);
+          basePriceFun(price);
         else
-        localPriceFun(price);
+          localPriceFun(price);
+        currencyDataList.map((e) {
+          if (value == e.currencyCode) {
+            _selectedItem = e.icon!;
+            return e.icon;
+          }
+        });
       },
+      leadingIcon: SizedBox(
+        width: 20,
+        child: Image.network(
+          _selectedItem,
+          width: 16,
+          height: 20,
+          fit: BoxFit.contain,
+          errorBuilder: (context, error, stackTrace) =>
+              Image.asset('assets/images/Missing_flag.png'),
+        ),
+      ),
     );
   }
 }
