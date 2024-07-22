@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
-import 'currency_selected_field.dart';
+import 'currency_list_drawer.dart';
 
 class MyDrawer extends StatefulWidget {
   MyDrawer({Key? key, required this.size, required this.allCur})
@@ -17,21 +17,19 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
   List<CurrencyData>? searchedList;
-String sArg="";
-var SearchedCurrList=[];
+  String sArg = "";
+  var SearchedCurrList = [];
   TextEditingController _searchController = TextEditingController();
 
   List<CurrencyData>? searchedCurrency(String searchArg) {
-    if(widget.allCur.isNotEmpty)
-
-      if (searchArg.trim() != ''&&widget.allCur.isNotEmpty) {
-        return searchedList = widget.allCur.where((currency) {
-          String g = currency.countryName ?? '';
-          return g.toLowerCase().startsWith(searchArg);
-        }).toList();
-      }
+    if (widget.allCur.isNotEmpty) if (searchArg.trim() != '' &&
+        widget.allCur.isNotEmpty) {
+      return searchedList = widget.allCur.where((currency) {
+        String g = currency.countryName ?? '';
+        return g.toLowerCase().startsWith(searchArg);
+      }).toList();
+    }
     return null;
-
   }
 
   @override
@@ -69,9 +67,8 @@ var SearchedCurrList=[];
                         hintText: 'Search Country',
                       ),
                       onFieldSubmitted: (val) {
-                        sArg=val;
-                        SearchedCurrList=searchedCurrency(val)??[];
-
+                        sArg = val;
+                        SearchedCurrList = searchedCurrency(val) ?? [];
                       },
                     ),
                   ),
@@ -108,20 +105,18 @@ var SearchedCurrList=[];
                   iconColor: Colors.blue,
                   useInkWell: true,
                 ),
-                child: Builder(
-                  builder: (context) {
-                    if(SearchedCurrList.length>0) {
-                      return ListView.builder(
+                child: Builder(builder: (context) {
+                  if (SearchedCurrList.length > 0) {
+                    return ListView.builder(
                       itemCount: SearchedCurrList.length,
                       shrinkWrap: true,
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
                         return Column(
-                          children: SearchedCurrList
-                              .map((e) => Card4(
+                          children:
+                              SearchedCurrList.map((e) => CurrencyListDrawer(
                                     Cur: e,
-                                  ))
-                              .toList(),
+                                  )).toList(),
                         );
                       },
                       /*  children: [
@@ -130,11 +125,12 @@ var SearchedCurrList=[];
                         )
                       ],*/
                     );
-                    }else{
-                      return const Center(child: Text('ops no data'),);
-                    }
+                  } else {
+                    return const Center(
+                      child: Text('ops no data'),
+                    );
                   }
-                ),
+                }),
               ),
             ),
           ],

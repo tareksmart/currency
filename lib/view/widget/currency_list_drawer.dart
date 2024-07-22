@@ -9,8 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../model/currency_data.dart';
 
-class Card4 extends StatelessWidget {
-  const Card4({super.key, required this.Cur});
+class CurrencyListDrawer extends StatelessWidget {
+  const CurrencyListDrawer({super.key, required this.Cur});
 
   final CurrencyData Cur;
   @override
@@ -84,14 +84,16 @@ class Card4 extends StatelessWidget {
                           child: Row(
                             children: [
                               SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: CachedNetworkImage(
-                      imageUrl: Cur.icon ?? '',
-                      placeholder: (context, url) =>
-                          Image.asset('assets/images/Missing_flag.png'),
-                          errorWidget: (context, url, error) => Image.asset('assets/images/Missing_flag.png') ,
-                    )),
+                                  height: 50,
+                                  width: 50,
+                                  child: CachedNetworkImage(
+                                    imageUrl: Cur.icon ?? '',
+                                    placeholder: (context, url) => Image.asset(
+                                        'assets/images/Missing_flag.png'),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset(
+                                            'assets/images/Missing_flag.png'),
+                                  )),
                               Expanded(
                                 child: Text(
                                   Cur.countryName ?? 'unknown',

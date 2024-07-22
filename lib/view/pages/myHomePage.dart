@@ -130,9 +130,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(
                   height: size.height * .03,
                 ),
-                BlocBuilder<CurrencyCubit, CurrencyState>(
+                BlocConsumer<CurrencyCubit, CurrencyState>(
                     buildWhen: (previous, current) =>
                         current is CurrenciesLoaded,
+                        listener: (context, state) {
+                          if (state is CurrenciesLoaded)
+                           allCur = state.currencisList;
+                        },
                     builder: (context, state) {
                       print('satte isssssssss $state');
                       if (state is CurrencyWaitingState) {
@@ -140,9 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
-                      } else if (state is CurrenciesLoaded) {
-                        allCur = state.currencisList;
-                      } else if (state is FailurLoaded) {
+                     } else if (state is FailurLoaded) {
                         showBottomSheet(
                             context: context,
                             builder: (context) => Text(state.errorMessage));

@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MyDropDownMenuItem extends StatelessWidget {
+class MyDropDownMenuItem extends StatefulWidget {
   MyDropDownMenuItem(
       {super.key,
       required this.currencyDataList,
@@ -26,68 +26,62 @@ class MyDropDownMenuItem extends StatelessWidget {
   Function(String) localPriceFun;
 
   @override
+  State<MyDropDownMenuItem> createState() => _MyDropDownMenuItemState();
+}
+
+class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
+  String _selectedItem = "EGP";
+  @override
   Widget build(BuildContext context) {
     // var latestCubit=BlocProvider.of<LatestCurrCubit>(context);
-    String _selectedItem =
-        "https://currencyfreaks.com/photos/flags/pkr.png?v=0.1";
+
     print('******build');
     return DropdownMenu<String?>(
-      label: Text('select $typeOfCurrency'),
-      width: size.width * .4,
-      menuHeight: size.height * .5,
-      requestFocusOnTap: true,
-      dropdownMenuEntries: currencyDataList.map((e) {
+      label: Text(
+        'select ${widget.typeOfCurrency}',
+        style: TextStyle(fontSize: 12, color: Colors.blue[700]),
+      ),
+      width: widget.size.width * .4,
+      menuHeight: widget.size.height * .2,
+      dropdownMenuEntries: widget.currencyDataList.map((e) {
         return DropdownMenuEntry(
-            leadingIcon: SizedBox(
-              width: 20,
-              child: Image.network(
-                e.icon!,
-                width: 16,
-                height: 20,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) =>
-                    Image.asset('assets/images/Missing_flag.png'),
-              ),
+            leadingIcon: CachedNetworkImage(
+              imageUrl: e.icon!,
+              fit: BoxFit.contain,
+              width: 16,
+              height: 20,
+              placeholder: (context, url) =>
+                  Image.asset('assets/images/Missing_flag.png'),
+              errorWidget: (context, url, error) =>
+                  Image.asset('assets/images/Missing_flag.png'),
             ),
-            // leadingIcon: CachedNetworkImage(
-            //   imageUrl: e.icon!,
-            //   fit: BoxFit.contain,
-            //   width: 16,
-            //   height: 20,
-            //   placeholder: (context, url) =>
-            //       Image.asset('assets/images/Missing_flag.png'),
-            //   errorWidget: (context, url, error) =>
-            //       Image.asset('assets/images/Missing_flag.png'),
-            // ),
             value: e.currencyCode,
             label: e.currencyName ?? 'dollar');
       }).toList(),
+      requestFocusOnTap: true,
       enableSearch: true,
       onSelected: (value) {
-        var price = allRate[value];
-
-        if (typeOfCurrency == MyconstantName.base)
-          basePriceFun(price);
-        else
-          localPriceFun(price);
-        currencyDataList.map((e) {
-          if (value == e.currencyCode) {
-            _selectedItem = e.icon!;
-            return e.icon;
-          }
+        var price = widget.allRate[value];
+        setState(() {
+          _selectedItem = value!;
         });
+        if (widget.typeOfCurrency == MyconstantName.base)
+          widget.basePriceFun(price);
+        else
+          widget.localPriceFun(price);
       },
-      leadingIcon: SizedBox(
-        width: 20,
-        child: Image.network(
-          _selectedItem,
-          width: 16,
-          height: 20,
-          fit: BoxFit.contain,
-          errorBuilder: (context, error, stackTrace) =>
-              Image.asset('assets/images/Missing_flag.png'),
-        ),
-      ),
+      leadingIcon:_icon(widget.currencyDataList, _selectedItem)!=null? Image.network(_icon(widget.currencyDataList, _selectedItem)):Image.network('https://currencyfreaks.com/photos/flags/egp.png'),
     );
+  }
+
+  _icon(List<CurrencyData> curList, var select) {
+    curList.map((e) {
+      if (e.currencyCode == select) {
+        print('*****************icon is ${e.icon}');
+        return e.icon;
+      } else {
+        return 'https://currencyfreaks.com/photos/flags/egp.png';
+      }
+    });
   }
 }
