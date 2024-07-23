@@ -15,7 +15,15 @@ class CurrencyCubit extends Cubit<CurrencyState> {
         (currencies) => emit(CurrenciesLoaded(currencies)));
     //print(currList);
   }
+  Future<void> getRates() async {
+    emit(CurrencyWaitingState());
 
+    var rates = await CurrencyRepository().getAllRates();
+    //fold دالة تبع باكج ايثر
+    rates.fold(
+        (failur) => emit(FailurLoadedLatest(errorMessage: failur.errorMessage)),
+        (currencyRate) => emit(LatestRateSuccessLoaded(currencyRate)));
+  }
   // String price = '0';
   // Future<void> getOneRates(String symbole) async {
   //   await CurrencyRepository().getOneRates(symbole).then((value) {

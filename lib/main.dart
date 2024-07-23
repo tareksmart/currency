@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context)=>CurrencyCubit()),
-          BlocProvider(create: (context)=>LatestCurrCubit()),
+          // BlocProvider(create: (context)=>LatestCurrCubit()),
           BlocProvider(create: (context)=>PressNumberCubit())
         ],
         child: MyHomePage(),

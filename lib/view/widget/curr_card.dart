@@ -11,8 +11,8 @@ import 'convert_button.dart';
 import 'dropDown_Button_component.dart';
 
 class Currencycard extends StatefulWidget {
-  Currencycard({Key? key, required this.allCurrency}) : super(key: key);
-  var allCurrency;
+  Currencycard({Key? key, required this.allCurrency, this.allRate}) : super(key: key);
+  final allCurrency,allRate;
   @override
   State<Currencycard> createState() => _CurrencycardState();
 }
@@ -42,15 +42,15 @@ class _CurrencycardState extends State<Currencycard> {
     return result.toString();
   }
 
-  _callLatestRate() async {
-    await BlocProvider.of<LatestCurrCubit>(context).getRates();
-  }
+  // _callLatestRate() async {
+  //   await BlocProvider.of<LatestCurrCubit>(context).getRates();
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _callLatestRate();
+   // _callLatestRate();
   }
 
   @override
@@ -71,18 +71,7 @@ class _CurrencycardState extends State<Currencycard> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Form(
-                child: BlocConsumer<LatestCurrCubit, LatestCurrCubitState>(
-                  listener: (context, state) {},
-                  buildWhen: (previous, current) =>
-                      current is LatestRateSuccessLoaded,
-                  builder: (context, state) {
-                    if (state is LatestRateSuccessLoaded) {
-                      print(
-                          '*******count of currency${state.ratesList.length}');
-                      if (state.ratesList.length < 415) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else {
-                        return Column(
+                child:  Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Row(
@@ -97,7 +86,7 @@ class _CurrencycardState extends State<Currencycard> {
                                     localPriceFunc: localPriceCallBack,
                                     size: size,
                                     allCurrList: widget.allCurrency,
-                                    allRate: state.ratesList,
+                                    allRate: widget.allRate,
                                     typeOfCurrency: MyconstantName.base,
                                   ),
                                 ),
@@ -146,7 +135,7 @@ class _CurrencycardState extends State<Currencycard> {
                                   base: false,
                                   size: size,
                                   allCurrList: widget.allCurrency,
-                                  allRate: state.ratesList,
+                                  allRate: widget.allRate,
                                   basePriceFunc: basePriceCallBack,
                                   localPriceFunc: localPriceCallBack,
                                   typeOfCurrency: MyconstantName.local,
@@ -172,16 +161,15 @@ class _CurrencycardState extends State<Currencycard> {
                               ],
                             )
                           ],
-                        );
-                      }
-                    }
-                    return Text('oops no data loadeed');
-                  },
+                        ),
+                    
+                  
                 ),
               ),
             ),
           ),
-        ),
+      
+        
         Align(
           alignment: Alignment.center,
           child: Column(

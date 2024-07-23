@@ -24,18 +24,25 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
 
     super.initState();
-    _currLoad();
-   _allRate();
+    //_currLoad();
+    _futureList();
+    //  _allRate();
   }
 
-  _currLoad() async {
-    await BlocProvider.of<CurrencyCubit>(context)
-        .getAllCurrData();
-  }
+  // _currLoad() async {
+  //   await BlocProvider.of<CurrencyCubit>(context).getAllCurrData();
+  //   await BlocProvider.of<CurrencyCubit>(context).getRates();
+  // }
 
-  _allRate() async {
-    await BlocProvider.of<LatestCurrCubit>(context).getRates();
+  _futureList() async {
+    Future.wait([
+      await BlocProvider.of<CurrencyCubit>(context).getAllCurrData(),
+      await BlocProvider.of<CurrencyCubit>(context).getRates()
+    ] as Iterable<Future> );
   }
+  // _allRate() async {
+  //   await BlocProvider.of<LatestCurrCubit>(context).getRates();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: BlocConsumer<CurrencyCubit, CurrencyState>(
           listener: (context, state) {
             if (state is CurrenciesLoaded) {
-              allCur = state.currencisList.cast<CurrencyData>();
+              allCur = state.currencisList;
               print('drawer****************************');
             }
           },
@@ -112,7 +119,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                       color: MyColors.whiteColor),
                                   child: MyTextButton(
                                     index: index,
-                                  
                                   ),
                                 ),
                               ),
@@ -132,11 +138,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 BlocConsumer<CurrencyCubit, CurrencyState>(
                     buildWhen: (previous, current) =>
-                        current is CurrenciesLoaded,
-                        listener: (context, state) {
-                          if (state is CurrenciesLoaded)
-                           allCur = state.currencisList;
-                        },
+                        current is CurrenciesLoaded&&current is LatestRateSuccessLoaded,
+                    listener: (context, state) {
+                      if (state is CurrenciesLoaded)
+                        allCur = state.currencisList;
+                      if (state is LatestRateSuccessLoaded)
+                        allRate = state.ratesList;
+                    },
                     builder: (context, state) {
                       print('satte isssssssss $state');
                       if (state is CurrencyWaitingState) {
@@ -144,15 +152,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
-                     } else if (state is FailurLoaded) {
+                      } else if (state is FailurLoaded) {
                         showBottomSheet(
                             context: context,
                             builder: (context) => Text(state.errorMessage));
                       }
 
                       return Currencycard(
-                        allCurrency: allCur ?? defaultList,
-                      );
+                          allCurrency: allCur ?? defaultList, allRate: allRate);
                     })
               ],
             ),

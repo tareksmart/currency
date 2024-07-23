@@ -39,10 +39,10 @@ class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
     return DropdownMenu<String?>(
       label: Text(
         'select ${widget.typeOfCurrency}',
-        style: TextStyle(fontSize: 12, color: Colors.blue[700]),
+        style: TextStyle(fontSize: 14, color: Colors.blue[700]),
       ),
       width: widget.size.width * .4,
-      menuHeight: widget.size.height * .2,
+      menuHeight: widget.size.height * .5,
       dropdownMenuEntries: widget.currencyDataList.map((e) {
         return DropdownMenuEntry(
             leadingIcon: CachedNetworkImage(
@@ -62,26 +62,15 @@ class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
       enableSearch: true,
       onSelected: (value) {
         var price = widget.allRate[value];
-        setState(() {
-          _selectedItem = value!;
-        });
+      
         if (widget.typeOfCurrency == MyconstantName.base)
           widget.basePriceFun(price);
         else
           widget.localPriceFun(price);
       },
-      leadingIcon:_icon(widget.currencyDataList, _selectedItem)!=null? Image.network(_icon(widget.currencyDataList, _selectedItem)):Image.network('https://currencyfreaks.com/photos/flags/egp.png'),
+      
     );
   }
 
-  _icon(List<CurrencyData> curList, var select) {
-    curList.map((e) {
-      if (e.currencyCode == select) {
-        print('*****************icon is ${e.icon}');
-        return e.icon;
-      } else {
-        return 'https://currencyfreaks.com/photos/flags/egp.png';
-      }
-    });
-  }
+
 }
