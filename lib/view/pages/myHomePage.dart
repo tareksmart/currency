@@ -35,10 +35,8 @@ class _MyHomePageState extends State<MyHomePage> {
   // }
 
   _futureList() async {
-    Future.wait([
-      await BlocProvider.of<CurrencyCubit>(context).getAllCurrData(),
-      await BlocProvider.of<CurrencyCubit>(context).getRates()
-    ] as Iterable<Future> );
+    await BlocProvider.of<CurrencyCubit>(context).getAllCurrData();
+    await BlocProvider.of<CurrencyCubit>(context).getRates();
   }
   // _allRate() async {
   //   await BlocProvider.of<LatestCurrCubit>(context).getRates();
@@ -54,6 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
           countryName: 'dollar',
           icon: 'https://currencyfreaks.com/photos/flags/pkr.png?v=0.1')
     ];
+    Map<String, dynamic> defAllRate = {'Egy':49,'Fiji Dollar':12};
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -138,12 +138,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 BlocConsumer<CurrencyCubit, CurrencyState>(
                     buildWhen: (previous, current) =>
-                        current is CurrenciesLoaded&&current is LatestRateSuccessLoaded,
+                        current is CurrenciesLoaded ||
+                        current is LatestRateSuccessLoaded,
                     listener: (context, state) {
-                      if (state is CurrenciesLoaded)
+                      if (state is CurrenciesLoaded) {
                         allCur = state.currencisList;
-                      if (state is LatestRateSuccessLoaded)
+                        print("allCur is $allCur");
+                      }
+
+                      if (state is LatestRateSuccessLoaded) {
                         allRate = state.ratesList;
+                        print('allRate is $allRate');
+                      }
                     },
                     builder: (context, state) {
                       print('satte isssssssss $state');
@@ -159,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       }
 
                       return Currencycard(
-                          allCurrency: allCur ?? defaultList, allRate: allRate);
+                          allCurrency: allCur ?? defaultList, allRate: allRate??defAllRate);
                     })
               ],
             ),

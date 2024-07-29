@@ -15,7 +15,7 @@ class CurrencyWebService {
   Future<dynamic> getAllCurrencyData() async {
     
       var response = await dio.get(ApiLinks.currencyData);
-       print('web===========');
+     //  print('web===========');
       // print(response.data['supportedCurrenciesMap']);
       // print('web===========');
       return response.data['supportedCurrenciesMap'];
@@ -26,7 +26,7 @@ class CurrencyWebService {
    
       var response = await dio.get(ApiLinks.currencyRates);
      // print('Rates web**********************************');
-      print(response.data["rates"]);
+    //  print(response.data["rates"]);
     //  print('Rates*********************************');
       return response.data["rates"];
    

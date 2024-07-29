@@ -61,16 +61,17 @@ class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
       requestFocusOnTap: true,
       enableSearch: true,
       onSelected: (value) {
-        var price = widget.allRate[value];
-      
-        if (widget.typeOfCurrency == MyconstantName.base)
-          widget.basePriceFun(price);
-        else
-          widget.localPriceFun(price);
+        if (value != null) {
+          var price = widget.allRate[value];
+
+          if (widget.typeOfCurrency == MyconstantName.base)
+            widget.basePriceFun(price);
+          else
+            widget.localPriceFun(price);
+        }
       },
+      
       
     );
   }
-
-
 }
