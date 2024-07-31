@@ -24,6 +24,8 @@ dependencies:
   background_app_bar: ^2.0.1
   cached_network_image: ^3.3.1
   dartz: ^0.10.1
+  hive:
+  hive_flutter:
 
 dev_dependencies:
   flutter_test:
@@ -32,6 +34,8 @@ dev_dependencies:
 
   flutter_lints: ^2.0.0
   expandable: ^5.0.1
+  hive_generator:
+  build_runner:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

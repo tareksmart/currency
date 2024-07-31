@@ -1,11 +1,22 @@
-class CurrencyData {
+import 'package:hive_flutter/adapters.dart';
+part 'currency_data.g.dart';
+@HiveType(typeId: 0)
+class CurrencyData extends HiveObject {
+  @HiveField(0)
   String? currencyCode;
+  @HiveField(1)
   String? currencyName;
+  @HiveField(2)
   String? countryCode;
+  @HiveField(3)
   String? countryName;
+  @HiveField(4)
   String? status;
+  @HiveField(5)
   String? availableFrom;
+  @HiveField(6)
   String? availableUntil;
+  @HiveField(7)
   String? icon;
 
   CurrencyData(
@@ -28,8 +39,11 @@ class CurrencyData {
     // availableUntil = json['availableUntil'];
     // icon = ;
     return CurrencyData(
-        countryCode: json['currencyCode'], countryName: json['countryName'],currencyName:json['currencyName'],
-        currencyCode: json['countryCode'] ,icon: json['countryCode']);
+        countryCode: json['currencyCode'],
+        countryName: json['countryName'],
+        currencyName: json['currencyName'],
+        currencyCode: json['countryCode'],
+        icon: json['countryCode']);
   }
 
   Map<String, dynamic> toJson() {

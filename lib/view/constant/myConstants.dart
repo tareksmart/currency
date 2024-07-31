@@ -12,5 +12,5 @@ class MyColors {
 class MyconstantName {
   static String base = 'base';
   static String local = 'local';
-
+  static String currencyDataBox = 'currency_box';
 }
