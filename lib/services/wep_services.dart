@@ -36,9 +36,9 @@ class CurrencyWebService {
   Future<dynamic> getOneRates(String symbole) async {
     try {
       var response = await dio.get(ApiLinks.currencyOneRates + symbole);
-      print('web**********************************');
-      print(response.data["rates"]);
-      print('web*********************************');
+      // print('web**********************************');
+      // print(response.data["rates"]);
+      // print('web*********************************');
       return response.data["rates"];
     } on Exception catch (e) {
       print('$e');

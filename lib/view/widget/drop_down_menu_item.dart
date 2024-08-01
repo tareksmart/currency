@@ -58,7 +58,7 @@ class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
             value: e.currencyCode,
             label: e.currencyName ?? 'dollar');
       }).toList(),
-      requestFocusOnTap: true,
+     // requestFocusOnTap: true,
       enableSearch: true,
       onSelected: (value) {
         if (value != null) {

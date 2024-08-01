@@ -1,3 +1,4 @@
+import 'package:currencypro/controller/cubit/add_currency_data_hive_cubit/add_currency_data_cubit.dart';
 import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
 import 'package:currencypro/controller/cubit/all_currency_cubit/currency_states.dart';
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
@@ -52,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
           countryName: 'dollar',
           icon: 'https://currencyfreaks.com/photos/flags/pkr.png?v=0.1')
     ];
-    Map<String, dynamic> defAllRate = {'Egy':49,'Fiji Dollar':12};
+    Map<String, dynamic> defAllRate = {'Egy': 49, 'Fiji Dollar': 12};
 
     return Scaffold(
       appBar: AppBar(
@@ -137,36 +138,41 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: size.height * .03,
                 ),
                 BlocConsumer<CurrencyCubit, CurrencyState>(
-                    buildWhen: (previous, current) =>
-                        current is CurrenciesLoaded ||
-                        current is LatestRateSuccessLoaded,
-                    listener: (context, state) {
-                      if (state is CurrenciesLoaded) {
-                        allCur = state.currencisList;
-                        print("allCur is $allCur");
-                      }
+                  buildWhen: (previous, current) => current is CurrenciesLoaded,
+                  listener: (context, state) {
+                    if (state is CurrenciesLoaded) {
+                      allCur = state.currencisList;
+                      List<CurrencyData> curList = state.currencisList;
+                      curList.map((currencyData) async {
+                        await BlocProvider.of<AddCurrencyDataCubit>(context)
+                            .addCurrencyData(currencyData);
+                        print('save to db');
+                      });
+                      print('save to db');
+                    }
 
-                      if (state is LatestRateSuccessLoaded) {
-                        allRate = state.ratesList;
-                        print('allRate is $allRate');
-                      }
-                    },
-                    builder: (context, state) {
+                    if (state is LatestRateSuccessLoaded) {
+                      allRate = state.ratesList;
+                
+                    }
+                  },
+                  builder: (context, state) {
+                    print('satte isssssssss $state');
+                    if (state is CurrencyWaitingState) {
                       print('satte isssssssss $state');
-                      if (state is CurrencyWaitingState) {
-                        print('satte isssssssss $state');
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (state is FailurLoaded) {
-                        showBottomSheet(
-                            context: context,
-                            builder: (context) => Text(state.errorMessage));
-                      }
-
-                      return Currencycard(
-                          allCurrency: allCur ?? defaultList, allRate: allRate??defAllRate);
-                    })
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is FailurLoaded) {
+                      showBottomSheet(
+                          context: context,
+                          builder: (context) => Text(state.errorMessage));
+                    }
+                    return Currencycard(
+                        allCurrency: allCur ?? defaultList,
+                        allRate: allRate ?? defAllRate);
+                  },
+                ),
               ],
             ),
           ],

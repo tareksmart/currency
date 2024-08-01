@@ -1,6 +1,8 @@
+import 'package:currencypro/controller/cubit/add_currency_data_hive_cubit/add_currency_data_cubit.dart';
 import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
 import 'package:currencypro/controller/cubit/press_number_cubit/press_number_cubit_cubit.dart';
+import 'package:currencypro/model/currency_data.dart';
 import 'package:currencypro/repo/currency_repository.dart';
 import 'package:currencypro/services/wep_services.dart';
 import 'package:currencypro/view/constant/myConstants.dart';
@@ -13,6 +15,7 @@ import 'package:hive_flutter/adapters.dart';
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox(MyconstantName.currencyDataBox);
+  Hive.registerAdapter(CurrencyDataAdapter());
   runApp(BlocProvider(create: (context) => CurrencyCubit(), child: MyApp()));
 }
 
@@ -31,7 +34,8 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(create: (context) => CurrencyCubit()),
           // BlocProvider(create: (context)=>LatestCurrCubit()),
-          BlocProvider(create: (context) => PressNumberCubit())
+          BlocProvider(create: (context) => PressNumberCubit()),
+          BlocProvider(create: (context)=>AddCurrencyDataCubit()),
         ],
         child: MyHomePage(),
       ),
