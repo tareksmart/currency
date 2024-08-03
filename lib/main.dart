@@ -1,3 +1,4 @@
+import 'package:currencypro/controller/bloc_observer.dart';
 import 'package:currencypro/controller/cubit/add_currency_data_hive_cubit/add_currency_data_cubit.dart';
 import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
@@ -14,8 +15,9 @@ import 'package:hive_flutter/adapters.dart';
 
 void main() async {
   await Hive.initFlutter();
+   Hive.registerAdapter(CurrencyDataAdapter());
   await Hive.openBox(MyconstantName.currencyDataBox);
-  Hive.registerAdapter(CurrencyDataAdapter());
+ Bloc.observer=WatchingObserver();
   runApp(BlocProvider(create: (context) => CurrencyCubit(), child: MyApp()));
 }
 

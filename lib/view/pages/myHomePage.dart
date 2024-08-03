@@ -148,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             .addCurrencyData(currencyData);
                         print('save to db');
                       });
-                      print('save to db');
+                     
                     }
 
                     if (state is LatestRateSuccessLoaded) {
