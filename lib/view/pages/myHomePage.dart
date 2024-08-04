@@ -1,4 +1,4 @@
-import 'package:currencypro/controller/cubit/add_currency_data_hive_cubit/add_currency_data_cubit.dart';
+import 'package:currencypro/controller/cubit/hive_cubit/add_currency_data_hive_cubit/add_currency_data_cubit.dart';
 import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
 import 'package:currencypro/controller/cubit/all_currency_cubit/currency_states.dart';
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
@@ -39,9 +39,14 @@ class _MyHomePageState extends State<MyHomePage> {
     await BlocProvider.of<CurrencyCubit>(context).getAllCurrData();
     await BlocProvider.of<CurrencyCubit>(context).getRates();
   }
+
   // _allRate() async {
   //   await BlocProvider.of<LatestCurrCubit>(context).getRates();
   // }
+  void triggerHiveCubit(var allCurrency) async {
+    await BlocProvider.of<AddCurrencyDataCubit>(context)
+        .addCurrencyData(allCurrency);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,18 +147,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   listener: (context, state) {
                     if (state is CurrenciesLoaded) {
                       allCur = state.currencisList;
-                      List<CurrencyData> curList = state.currencisList;
-                      curList.map((currencyData) async {
-                        await BlocProvider.of<AddCurrencyDataCubit>(context)
-                            .addCurrencyData(currencyData);
-                        print('save to db');
-                      });
-                     
+                      triggerHiveCubit(allCur);
                     }
-
                     if (state is LatestRateSuccessLoaded) {
                       allRate = state.ratesList;
-                
                     }
                   },
                   builder: (context, state) {
@@ -166,7 +163,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     } else if (state is FailurLoaded) {
                       showBottomSheet(
                           context: context,
-                          builder: (context) => Text(state.errorMessage));
+                          builder: (context) {
+                            return SizedBox(
+                                height: 200,
+                                child: Center(child: Text(state.errorMessage)));
+                          });
                     }
                     return Currencycard(
                         allCurrency: allCur ?? defaultList,

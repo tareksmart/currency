@@ -35,7 +35,6 @@ class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
   Widget build(BuildContext context) {
     // var latestCubit=BlocProvider.of<LatestCurrCubit>(context);
 
-    print('******build');
     return DropdownMenu<String?>(
       label: Text(
         'select ${widget.typeOfCurrency}',
@@ -58,20 +57,19 @@ class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
             value: e.currencyCode,
             label: e.currencyName ?? 'dollar');
       }).toList(),
-     // requestFocusOnTap: true,
+      requestFocusOnTap: true,
       enableSearch: true,
       onSelected: (value) {
         if (value != null) {
+          print('value is $value');
           var price = widget.allRate[value];
-
+ print('price is $price');
           if (widget.typeOfCurrency == MyconstantName.base)
             widget.basePriceFun(price);
           else
             widget.localPriceFun(price);
         }
       },
-      
-      
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/controller/cubit/all_currency_cubit/currency_states.dart';
+import 'package:currencypro/controller/cubit/hive_cubit/read_currency_hive_cubit/cubit/read_currency_cubit.dart';
 import 'package:currencypro/model/currency_rate.dart';
 import 'package:currencypro/model/one_rate.dart';
 import 'package:currencypro/view/widget/drop_down_menu_item.dart';
@@ -11,55 +12,62 @@ import '../../controller/cubit/all_currency_cubit/curency_cubit.dart';
 import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
 
-class MyDropDownButtonComponent extends StatelessWidget {
+class MyDropDownButtonComponent extends StatefulWidget {
   MyDropDownButtonComponent(
       {Key? key,
       required this.size,
-      required this.allCurrList,
       required this.basePriceFunc,
       required this.localPriceFunc,
       required this.base,
-      required this.allRate, required this.typeOfCurrency})
+      required this.allRate,
+      required this.typeOfCurrency})
       : super(key: key);
   final Size size;
-  final List<CurrencyData> allCurrList;
   final Map<String, dynamic> allRate;
-
   // Function(String?, bool) drop;
   Function(String) basePriceFunc;
   Function(String) localPriceFunc;
-
-
   final bool base;
-
-  OneRate? rate;
-
-  String? currCode;
-
-  bool type = true;
-final String typeOfCurrency;
-  List<CurrencyData>? searchedList;
-
-  // List<CurrencyData>? searchedCurrency(String searchArg) {
-  //   if (allCurrList.isNotEmpty) if (searchArg.trim() != '' &&
-  //       allCurrList.isNotEmpty) {
-  //     return searchedList = allCurrList.where((currency) {
-  //       String g = currency.countryName ?? '';
-  //       return g.toLowerCase().startsWith(searchArg);
-  //     }).toList();
-  //   }
-  //   return null;
-  // }
+  final String typeOfCurrency;
 
   @override
+  State<MyDropDownButtonComponent> createState() =>
+      _MyDropDownButtonComponentState();
+}
+
+class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
+  OneRate? rate;
+  String? currCode;
+  bool type = true;
+  List<CurrencyData>? searchedList;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BlocProvider.of<ReadCurrencyCubit>(context).readCurrency();
+  }
+
+  // List<CurrencyData>? searchedCurrency(String searchArg) {
+  @override
   Widget build(BuildContext context) {
-    return MyDropDownMenuItem(
-      currencyDataList: allCurrList,
-      size: size,
-      allRate: allRate,
-      basePriceFun: basePriceFunc,
-      localPriceFun: localPriceFunc,
-      typeOfCurrency: typeOfCurrency,
+    return BlocBuilder<ReadCurrencyCubit, ReadCurrencyState>(
+      builder: (context, state) {
+        if (state is ReadCurrencysuccessState) {
+          debugPrint('*************hive number${state.currencyList.length}');
+          return MyDropDownMenuItem(
+            currencyDataList: state.currencyList,
+            size: widget.size,
+            allRate: widget.allRate,
+            basePriceFun: widget.basePriceFunc,
+            localPriceFun: widget.localPriceFunc,
+            typeOfCurrency: widget.typeOfCurrency,
+          );
+        } else if (state is ReadCurrencyfailureState) {
+          return Text('error:${state.errorMessage}');
+        } else {
+          return Text('no data in hive');
+        }
+      },
     );
   }
 }

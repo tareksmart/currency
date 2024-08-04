@@ -9,11 +9,14 @@ part 'add_currency_data_cubit_state.dart';
 class AddCurrencyDataCubit extends Cubit<AddCurrencyDataState> {
   AddCurrencyDataCubit() : super(AddCurrencyDataInitial());
 
-  addCurrencyData(CurrencyData currencyData) async {
+  addCurrencyData(List<CurrencyData> currencyDataList) async {
     try {
       var currBox = Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
       emit(AddCurrencyDataWaitingState());
-      await currBox.add(currencyData);
+      for (int i = 0; i < currencyDataList.length; i++) {
+        await currBox.add(currencyDataList[i]);
+      }
+
       emit(AddCurrencyDataSuccess());
     } catch (e) {
       emit(AddCurrencyDataFailure(errorMessage: e.toString()));
