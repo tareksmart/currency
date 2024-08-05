@@ -61,7 +61,7 @@ class _CurrencycardState extends State<Currencycard> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    String x = '0';
+   // String x = '0';
 
     return Stack(
       alignment: Alignment.center,
@@ -76,107 +76,91 @@ class _CurrencycardState extends State<Currencycard> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Form(
-                child: BlocBuilder<AddCurrencyDataCubit, AddCurrencyDataState>(
-                  buildWhen: (previous, current) =>
-                      current is AddCurrencyDataSuccess,
-                  builder: (context, state) {
-                    if (state is AddCurrencyDataSuccess) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: MyDropDownButtonComponent(
-                                  key: const ValueKey(1),
-                                  base: true,
-                                  basePriceFunc: basePriceCallBack,
-                                  localPriceFunc: localPriceCallBack,
-                                  size: size,
-                                  allRate: widget.allRate,
-                                  typeOfCurrency: MyconstantName.base,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Expanded(
-                                child: BlocConsumer<PressNumberCubit,
-                                    PressNumberCubitState>(
-                                  buildWhen: (previous, current) =>
-                                      current is PressedNumber,
-                                  listener: (context, state) {
-                                    if (state is PressedNumber) {
-                                      _baseCurrency_controller.text +=
-                                          state.number;
-                                      if (state.number == '')
-                                        _baseCurrency_controller.text = '';
-                                      //  _baseCurrency_controller.dispose();
-                                    }
-                                  },
-                                  builder: (context, state) {
-                                    return TextFormField(
-                                      readOnly: true,
-                                      keyboardType: TextInputType.number,
-                                      controller: _baseCurrency_controller,
-                                      decoration: InputDecoration(
-                                          labelStyle: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2),
-                                    );
-                                  },
-                                ),
-                              )
-                            ],
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: MyDropDownButtonComponent(
+                            key: const ValueKey(1),
+                            base: true,
+                            basePriceFunc: basePriceCallBack,
+                            localPriceFunc: localPriceCallBack,
+                            size: size,
+                         
+                            typeOfCurrency: MyconstantName.base,
                           ),
-                          const SizedBox(
-                            height: 16,
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Expanded(
+                          child: BlocConsumer<PressNumberCubit,
+                              PressNumberCubitState>(
+                            buildWhen: (previous, current) =>
+                                current is PressedNumber,
+                            listener: (context, state) {
+                              if (state is PressedNumber) {
+                                _baseCurrency_controller.text += state.number;
+                                if (state.number == '')
+                                  _baseCurrency_controller.text = '';
+                                //  _baseCurrency_controller.dispose();
+                              }
+                            },
+                            builder: (context, state) {
+                              return TextFormField(
+                                readOnly: true,
+                                keyboardType: TextInputType.number,
+                                controller: _baseCurrency_controller,
+                                decoration: InputDecoration(
+                                    labelStyle:
+                                        Theme.of(context).textTheme.subtitle2),
+                              );
+                            },
                           ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                  child: MyDropDownButtonComponent(
-                                key: const ValueKey(2),
-                                base: false,
-                                size: size,
-                                allRate: widget.allRate,
-                                basePriceFunc: basePriceCallBack,
-                                localPriceFunc: localPriceCallBack,
-                                typeOfCurrency: MyconstantName.local,
-                              )),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Expanded(
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  readOnly: true,
-                                  controller: _toCurr_controller,
-                                  // onChanged: (value) {
-                                  //   value = _selectedValue;
-                                  //   // setState(() {});
-                                  // },
-                                  decoration: InputDecoration(
-                                      labelStyle: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      );
-                    } else if (state is AddCurrencyDataFailure) {
-                      return Text(state.errorMessage);
-                    } else {
-                    return Text('no data');
-                    }
-                   
-                  },
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                            child: MyDropDownButtonComponent(
+                          key: const ValueKey(2),
+                          base: false,
+                          size: size,
+                      
+                          basePriceFunc: basePriceCallBack,
+                          localPriceFunc: localPriceCallBack,
+                          typeOfCurrency: MyconstantName.local,
+                        )),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            readOnly: true,
+                            controller: _toCurr_controller,
+                            // onChanged: (value) {
+                            //   value = _selectedValue;
+                            //   // setState(() {});
+                            // },
+                            decoration: InputDecoration(
+                                labelStyle:
+                                    Theme.of(context).textTheme.subtitle2),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),

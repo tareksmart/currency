@@ -13,4 +13,8 @@ class MyconstantName {
   static String base = 'base';
   static String local = 'local';
   static String currencyDataBox = 'currency_box';
+  static String dateAddHiveBox = 'dateAddHive_box';
+  static String addDateKeyName = 'addDatekey';
+
+
 }

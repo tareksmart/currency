@@ -19,11 +19,11 @@ class MyDropDownButtonComponent extends StatefulWidget {
       required this.basePriceFunc,
       required this.localPriceFunc,
       required this.base,
-      required this.allRate,
+  
       required this.typeOfCurrency})
       : super(key: key);
   final Size size;
-  final Map<String, dynamic> allRate;
+ // final Map<String, dynamic> allRate;
   // Function(String?, bool) drop;
   Function(String) basePriceFunc;
   Function(String) localPriceFunc;
@@ -51,13 +51,14 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ReadCurrencyCubit, ReadCurrencyState>(
+      buildWhen: (previous, current) => current is ReadCurrencysuccessState,
       builder: (context, state) {
         if (state is ReadCurrencysuccessState) {
           debugPrint('*************hive number${state.currencyList.length}');
           return MyDropDownMenuItem(
             currencyDataList: state.currencyList,
             size: widget.size,
-            allRate: widget.allRate,
+           
             basePriceFun: widget.basePriceFunc,
             localPriceFun: widget.localPriceFunc,
             typeOfCurrency: widget.typeOfCurrency,

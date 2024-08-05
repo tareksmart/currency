@@ -16,9 +16,10 @@ import 'package:hive_flutter/adapters.dart';
 
 void main() async {
   await Hive.initFlutter();
-   Hive.registerAdapter(CurrencyDataAdapter());
+  Hive.registerAdapter(CurrencyDataAdapter());
   await Hive.openBox<CurrencyData>(MyconstantName.currencyDataBox);
- Bloc.observer=WatchingObserver();
+  Bloc.observer = WatchingObserver();
+  await Hive.openBox<String>(MyconstantName.dateAddHiveBox);
   runApp(BlocProvider(create: (context) => CurrencyCubit(), child: MyApp()));
 }
 
@@ -38,9 +39,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => CurrencyCubit()),
           // BlocProvider(create: (context)=>LatestCurrCubit()),
           BlocProvider(create: (context) => PressNumberCubit()),
-          BlocProvider(create: (context)=>AddCurrencyDataCubit()),
-          BlocProvider(create: (context)=>ReadCurrencyCubit()),
-
+          BlocProvider(create: (context) => AddCurrencyDataCubit()),
+          BlocProvider(create: (context) => ReadCurrencyCubit()),
         ],
         child: MyHomePage(),
       ),

@@ -7,6 +7,7 @@ import 'package:currencypro/view/widget/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:hive_flutter/adapters.dart';
 import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
 import '../widget/curr_card.dart';
@@ -36,8 +37,14 @@ class _MyHomePageState extends State<MyHomePage> {
   // }
 
   _futureList() async {
-    await BlocProvider.of<CurrencyCubit>(context).getAllCurrData();
-    await BlocProvider.of<CurrencyCubit>(context).getRates();
+    var dateBox = Hive.box<String>(MyconstantName.dateAddHiveBox);
+    var date = dateBox.get(MyconstantName.addDateKeyName);
+    var addCubit = BlocProvider.of<AddCurrencyDataCubit>(context);
+    if (date != addCubit.dateFormat(DateTime.now())) {
+      debugPrint('***************trigger$date == ${ addCubit.dateFormat(DateTime.now())}');
+      await BlocProvider.of<CurrencyCubit>(context).getAllCurrData();
+      await BlocProvider.of<CurrencyCubit>(context).getRates();
+    }
   }
 
   // _allRate() async {
