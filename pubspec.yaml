@@ -26,6 +26,7 @@ dependencies:
   dartz: ^0.10.1
   hive:
   hive_flutter:
+  dropdown_search:
 
 dev_dependencies:
   flutter_test:

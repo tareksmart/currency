@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 ThemeData mytheme(BuildContext context) {
   return ThemeData(
-useMaterial3: true,
+
     appBarTheme: const AppBarTheme(elevation: 2),
     cardTheme: CardTheme(
       shadowColor: MyColors.shadowColor,
