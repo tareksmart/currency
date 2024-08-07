@@ -7,6 +7,7 @@ import 'package:currencypro/controller/cubit/press_number_cubit/press_number_cub
 import 'package:currencypro/model/currency_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 
 import '../constant/myConstants.dart';
 import 'convert_button.dart';
@@ -61,7 +62,7 @@ class _CurrencycardState extends State<Currencycard> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-   // String x = '0';
+    // String x = '0';
 
     return Stack(
       alignment: Alignment.center,
@@ -70,9 +71,9 @@ class _CurrencycardState extends State<Currencycard> {
           height: size.height * .35,
           width: size.width * .9,
           child: Card(
-            shadowColor: MyColors.shadowColor,
-            color: MyColors.primaryColor,
             elevation: 12,
+            color: MyColors.whiteColor,
+           
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Form(
@@ -90,7 +91,6 @@ class _CurrencycardState extends State<Currencycard> {
                             basePriceFunc: basePriceCallBack,
                             localPriceFunc: localPriceCallBack,
                             size: size,
-                         
                             typeOfCurrency: MyconstantName.base,
                           ),
                         ),
@@ -116,8 +116,9 @@ class _CurrencycardState extends State<Currencycard> {
                                 keyboardType: TextInputType.number,
                                 controller: _baseCurrency_controller,
                                 decoration: InputDecoration(
-                                    labelStyle:
-                                        Theme.of(context).textTheme.subtitle2),
+                                    labelStyle: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2),
                               );
                             },
                           ),
@@ -136,7 +137,6 @@ class _CurrencycardState extends State<Currencycard> {
                           key: const ValueKey(2),
                           base: false,
                           size: size,
-                      
                           basePriceFunc: basePriceCallBack,
                           localPriceFunc: localPriceCallBack,
                           typeOfCurrency: MyconstantName.local,
@@ -175,7 +175,9 @@ class _CurrencycardState extends State<Currencycard> {
               ),
               ConvertButton(
                 text: 'CONVERT',
-                onTab: () {
+                onTab: () async{
+                   var currBox = Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
+      await currBox.deleteFromDisk();
                   print(
                       'result($_basePrice, $_toPrice, ${_baseCurrency_controller.text.trim()});');
                   _toCurr_controller.text = result(_basePrice, _toPrice,

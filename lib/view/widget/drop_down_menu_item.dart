@@ -5,6 +5,7 @@ import 'package:currencypro/view/constant/myConstants.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class MyDropDownMenuItem extends StatelessWidget {
   MyDropDownMenuItem(
@@ -29,14 +30,20 @@ class MyDropDownMenuItem extends StatelessWidget {
       width: size.width * .4,
       child: DropdownSearch<CurrencyData>(
         items: currencyDataList,
-        itemAsString: (item) => item.countryName ?? 'known',
+        dropdownDecoratorProps: const DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(gapPadding: 2)),
+        ),
+        itemAsString: (item) => item.countryName ?? 'select country',
         dropdownBuilder: (context, selectedItem) {
           if (selectedItem != null) {
             return SizedBox(
               height: size.height * .05,
               //  width: size.width * .6,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 2),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -50,17 +57,22 @@ class MyDropDownMenuItem extends StatelessWidget {
                       errorWidget: (context, url, error) =>
                           Image.asset('assets/images/Missing_flag.png'),
                     ),
-                    Text(selectedItem.countryName ?? 'knwon',
+                    Flexible(
+                      child: Text(
+                        selectedItem.countryName ?? 'select country',
                         style: Theme.of(context)
                             .textTheme
                             .labelLarge!
-                            .copyWith(color: MyColors.dropDownSearchfontColor)),
+                            .copyWith(color: MyColors.dropDownSearchfontColor),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
               ),
             );
           } else
-            return Text('known');
+            return  Text('select country',style: TextStyle(color:MyColors.dropDownSearchfontColor),);
         },
         onChanged: (value) {
           debugPrint(value?.countryCode!);
@@ -70,8 +82,11 @@ class MyDropDownMenuItem extends StatelessWidget {
             showSearchBox: true,
             itemBuilder: (context, item, isSelected) {
               return ListTile(
-                title: Text(item.countryName ?? 'knwon',
-                    style: const TextStyle(color: Colors.blue, fontSize: 12)),
+                title: Text(
+                  item.countryName ?? 'knwon',
+                  style: const TextStyle(color: Colors.blue, fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
                 leading: CachedNetworkImage(
                   imageUrl: item.icon!,
                   fit: BoxFit.contain,

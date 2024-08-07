@@ -12,20 +12,20 @@ class ConvertButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: size.height * .09,
+      height: size.height * .07,
       width: size.width * .45,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-           
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8))),
+                  borderRadius: BorderRadius.circular(8)),
+              backgroundColor: MyColors.dropDownSearchfontColor),
           onPressed: onTab,
           child: Text(
             text,
             style: Theme.of(context)
                 .textTheme
-                .headline5!
-                .copyWith(color: MyColors.primaryColor),
+                .bodyLarge!
+                .copyWith(color: MyColors.whiteColor),
           )),
     );
   }

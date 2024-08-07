@@ -3,29 +3,30 @@ import 'package:flutter/material.dart';
 
 ThemeData mytheme(BuildContext context) {
   return ThemeData(
-
-    appBarTheme: const AppBarTheme(elevation: 2),
+    useMaterial3: false,
+    appBarTheme: const AppBarTheme(elevation: 0),
     cardTheme: CardTheme(
-      shadowColor: MyColors.shadowColor,
+      shadowColor: MyColors.dropDownSearchfontColor,
       color: MyColors.whiteColor,
       shape: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: Colors.white)),
     ),
-    primaryColor: MyColors.whiteColor,
+    primaryColor:Colors.white,// MyColors.whiteColor,
+    
     buttonTheme: ButtonThemeData(
-      buttonColor: MyColors.ButtonColor,//Color(0xFF6391ff),
+      buttonColor: MyColors.dropDownSearchfontColor, //Color(0xFF6391ff),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
     ),
-    scaffoldBackgroundColor: const Color(0xfffafbff),
+    scaffoldBackgroundColor: MyColors.whiteColor,
     inputDecorationTheme: InputDecorationTheme(
-      fillColor: MyColors.backGroundTextFieldColor,
+      fillColor: MyColors.dropDownSearchfontColor,
       labelStyle: Theme.of(context).textTheme.subtitle1,
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6.0),
-        borderSide:  BorderSide(color: MyColors.ButtonColor),
+        borderSide: BorderSide(color: MyColors.ButtonColor),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
@@ -33,7 +34,7 @@ ThemeData mytheme(BuildContext context) {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
-        borderSide:  BorderSide(color: MyColors.backGroundTextFieldColor),
+        borderSide: BorderSide(color: MyColors.backGroundTextFieldColor),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
