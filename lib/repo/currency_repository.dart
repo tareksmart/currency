@@ -1,4 +1,5 @@
 import 'package:currencypro/error_handle/failur.dart';
+import 'package:currencypro/model/currency_rates_model.dart';
 import 'package:currencypro/services/wep_services.dart';
 import 'package:currencypro/model/currency_rate.dart';
 import 'package:currencypro/model/one_rate.dart';
@@ -35,11 +36,13 @@ class CurrencyRepository {
     }
   }
 
-  Future<Either<Failur, Map<String,dynamic>>> getAllRates() async {
+  Future<Either<Failur, Map<String, dynamic>>> getAllRates() async {
     try {
       final rates = await CurrencyWebService().getLatestrates();
-      var obj = CurrencyRate.fromJson(rates);
-      Map<String, dynamic> data = obj.toJson();
+      var obj = CurrencyRatesModel.fromJson(rates['rates']);
+      //  CurrencyRate.fromJson(rates);//تحويلها الى ماب
+      Map<String, dynamic> data = obj.rates;
+      print('*************data rates $data');
       return right(data);
     } catch (e) {
       if (e is DioException) {

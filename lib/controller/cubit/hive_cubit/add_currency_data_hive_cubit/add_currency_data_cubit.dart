@@ -11,6 +11,10 @@ class AddCurrencyDataCubit extends Cubit<AddCurrencyDataState> {
 
   addCurrencyData(List<CurrencyData> currencyDataList) async {
     try {
+   //   if(Hive.box(MyconstantName.currencyDataBox).isOpen==false)
+      await Hive.openBox<CurrencyData>(MyconstantName.currencyDataBox);
+     // if(Hive.box(MyconstantName.dateAddHiveBox).isOpen!=true)
+  await Hive.openBox<String>(MyconstantName.dateAddHiveBox);
       var currBox = Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
       emit(AddCurrencyDataWaitingState());
       for (int i = 0; i < currencyDataList.length; i++) {

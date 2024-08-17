@@ -20,19 +20,19 @@ class FailurLoaded extends CurrencyState {
   FailurLoaded({required this.errorMessage});
 }
 
-class LatestCurrCubitInitial extends CurrencyState {}
+// class LatestCurrCubitInitial extends CurrencyState {}
 
-class LatestCurrWaiting extends CurrencyState {}
+// class LatestCurrWaiting extends CurrencyState {}
 
-class FailurLoadedLatest extends CurrencyState {
-  final String errorMessage;
-  FailurLoadedLatest({required this.errorMessage});
-}
-class LatestRateSuccessLoaded extends CurrencyState {
-  final Map<String,dynamic> ratesList;
+// class FailurLoadedLatest extends CurrencyState {
+//   final String errorMessage;
+//   FailurLoadedLatest({required this.errorMessage});
+// }
+// class LatestRateSuccessLoaded extends CurrencyState {
+//   final Map<String,dynamic> ratesList;
 
-  LatestRateSuccessLoaded(this.ratesList);
-}
+//   LatestRateSuccessLoaded(this.ratesList);
+// }
 
 
 

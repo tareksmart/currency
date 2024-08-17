@@ -19,11 +19,10 @@ class MyDropDownButtonComponent extends StatefulWidget {
       required this.basePriceFunc,
       required this.localPriceFunc,
       required this.base,
-  
       required this.typeOfCurrency})
       : super(key: key);
   final Size size;
- // final Map<String, dynamic> allRate;
+  // final Map<String, dynamic> allRate;
   // Function(String?, bool) drop;
   Function(String) basePriceFunc;
   Function(String) localPriceFunc;
@@ -44,6 +43,14 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    readHive();
+  }
+
+  readHive() async {
+    //تم تاخير القراءة من ال
+    //hive for 2second
+    //لحل مشكلة ان ستايت القراءة بيجى قبل ستايت الكتابة
+    await Future.delayed(const Duration(seconds: 10));
     BlocProvider.of<ReadCurrencyCubit>(context).readCurrency();
   }
 
@@ -58,15 +65,16 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
           return MyDropDownMenuItem(
             currencyDataList: state.currencyList,
             size: widget.size,
-           
             basePriceFun: widget.basePriceFunc,
             localPriceFun: widget.localPriceFunc,
             typeOfCurrency: widget.typeOfCurrency,
           );
         } else if (state is ReadCurrencyfailureState) {
           return Text('error:${state.errorMessage}');
+        } else if (state is ReadCurrencyWaitingState) {
+          return const LinearProgressIndicator();
         } else {
-          return Text('no data in hive');
+          return const LinearProgressIndicator();
         }
       },
     );

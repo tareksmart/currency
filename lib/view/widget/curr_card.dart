@@ -73,7 +73,6 @@ class _CurrencycardState extends State<Currencycard> {
           child: Card(
             elevation: 12,
             color: MyColors.whiteColor,
-           
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Form(
@@ -116,9 +115,8 @@ class _CurrencycardState extends State<Currencycard> {
                                 keyboardType: TextInputType.number,
                                 controller: _baseCurrency_controller,
                                 decoration: InputDecoration(
-                                    labelStyle: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2),
+                                    labelStyle:
+                                        Theme.of(context).textTheme.subtitle2),
                               );
                             },
                           ),
@@ -159,6 +157,24 @@ class _CurrencycardState extends State<Currencycard> {
                           ),
                         )
                       ],
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    BlocBuilder<AddCurrencyDataCubit, AddCurrencyDataState>(
+                      builder: (context, state) {
+                        if (state is AddCurrencyDataWaitingState) {
+                          return const LinearProgressIndicator(
+                            color: Colors.green,
+                          );
+                        } else if (state is AddCurrencyDataSuccess) {
+                        } else if (state is AddCurrencyDataFailure){
+                          return const LinearProgressIndicator(
+                            color: Colors.red,
+                          );
+                        }
+                        return const Text('');
+                      },
                     )
                   ],
                 ),
@@ -175,9 +191,13 @@ class _CurrencycardState extends State<Currencycard> {
               ),
               ConvertButton(
                 text: 'CONVERT',
-                onTab: () async{
-                   var currBox = Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
-      await currBox.deleteFromDisk();
+                onTab: () async {
+                  var currBox =
+                      Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
+                  var dateBox = Hive.box<String>(MyconstantName.dateAddHiveBox);
+                  await currBox.deleteFromDisk();
+
+                  await dateBox.deleteFromDisk();
                   print(
                       'result($_basePrice, $_toPrice, ${_baseCurrency_controller.text.trim()});');
                   _toCurr_controller.text = result(_basePrice, _toPrice,

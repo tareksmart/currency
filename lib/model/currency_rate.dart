@@ -1,4 +1,7 @@
+import 'package:hive_flutter/adapters.dart';
+
 class CurrencyRate {
+
   String? aGLD;
   String? fJD;
   String? mXN;

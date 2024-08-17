@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     //_currLoad();
     _futureList();
-    //  _allRate();
+      _allRate();
   }
 
   // _currLoad() async {
@@ -38,24 +38,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _futureList() async {
     var dateBox = Hive.box<String>(MyconstantName.dateAddHiveBox);
+    var currBox = Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
     var date = dateBox.get(MyconstantName.addDateKeyName);
-    //var addCubit = BlocProvider.of<AddCurrencyDataCubit>(context);
-   // if (date != addCubit.dateFormat(DateTime.now())) {
-    //  var currBox = Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
-      //await currBox.deleteFromDisk();
-      // debugPrint(
-      //     '***************trigger$date == ${addCubit.dateFormat(DateTime.now())}');
+    var addCubit = BlocProvider.of<AddCurrencyDataCubit>(context);
+    var datenow = addCubit.dateFormat(DateTime.now());
+    if (date != addCubit.dateFormat(DateTime.now())) {
+      await currBox.deleteFromDisk();
+      await dateBox.deleteFromDisk();
+   
       await BlocProvider.of<CurrencyCubit>(context).getAllCurrData();
-     // await BlocProvider.of<CurrencyCubit>(context).getRates();
-  //  } 
+     
+    }
   }
 
-  // _allRate() async {
-  //   await BlocProvider.of<LatestCurrCubit>(context).getRates();
-  // }
+  _allRate() async {
+    await BlocProvider.of<LatestCurrCubit>(context).getRates();
+  }
   void triggerHiveCubit(var allCurrency) async {
     await BlocProvider.of<AddCurrencyDataCubit>(context)
         .addCurrencyData(allCurrency);
+    print('*********triggerHiveCubit');
   }
 
   @override
@@ -154,15 +156,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 BlocConsumer<CurrencyCubit, CurrencyState>(
                   buildWhen: (previous, current) => current is CurrenciesLoaded,
-                  listener: (context, state)  {
-                    if (state is CurrenciesLoaded)  {
+                  listener: (context, state) {
+                    if (state is CurrenciesLoaded) {
                       allCur = state.currencisList;
-                      debugPrint()
-                        triggerHiveCubit(allCur);
+                      //   debugPrint(allCur);
+                      triggerHiveCubit(allCur);
                     }
-                    if (state is LatestRateSuccessLoaded) {
-                      allRate = state.ratesList;
-                    }
+                    // if (state is LatestRateSuccessLoaded) {
+                    //   allRate = state.ratesList;
+                    // }
                   },
                   builder: (context, state) {
                     print('satte isssssssss $state');
@@ -180,9 +182,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child: Center(child: Text(state.errorMessage)));
                           });
                     }
-                    return Currencycard(
-                        allCurrency: allCur ?? defaultList,
-                        allRate: allRate ?? defAllRate);
+                      return Currencycard(
+                          allCurrency: allCur ?? defaultList,
+                          allRate: allRate ?? defAllRate);
+                    
+                    
                   },
                 ),
               ],

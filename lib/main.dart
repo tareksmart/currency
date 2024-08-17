@@ -18,8 +18,9 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(CurrencyDataAdapter());
   await Hive.openBox<CurrencyData>(MyconstantName.currencyDataBox);
-  Bloc.observer = WatchingObserver();
   await Hive.openBox<String>(MyconstantName.dateAddHiveBox);
+  Bloc.observer = WatchingObserver();
+  
   runApp(BlocProvider(create: (context) => CurrencyCubit(), child: MyApp()));
 }
 
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => CurrencyCubit()),
-          // BlocProvider(create: (context)=>LatestCurrCubit()),
+          BlocProvider(create: (context)=>LatestCurrCubit()),
           BlocProvider(create: (context) => PressNumberCubit()),
           BlocProvider(create: (context) => AddCurrencyDataCubit()),
           BlocProvider(create: (context) => ReadCurrencyCubit()),
