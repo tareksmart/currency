@@ -7,6 +7,7 @@ import 'package:currencypro/view/widget/drop_down_menu_item.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import '../../controller/cubit/all_currency_cubit/curency_cubit.dart';
 import '../../model/currency_data.dart';
@@ -39,11 +40,13 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
   String? currCode;
   bool type = true;
   List<CurrencyData>? searchedList;
+  var latestRate;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     readHive();
+    latestRate = readLatestRate();
   }
 
   readHive() async {
@@ -52,6 +55,17 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
     //لحل مشكلة ان ستايت القراءة بيجى قبل ستايت الكتابة
     await Future.delayed(const Duration(seconds: 10));
     BlocProvider.of<ReadCurrencyCubit>(context).readCurrency();
+  }
+
+  Map<String, dynamic>? readLatestRate() {
+    var rateBox = Hive.box<Map<String, dynamic>>(MyconstantName.latestRateBox);
+    try {
+      Map<String, dynamic>? rates = rateBox.get('latesRate');
+      return rates;
+    } catch (e) {
+      print('read rates error${e.toString()}');
+    }
+    return {};
   }
 
   // List<CurrencyData>? searchedCurrency(String searchArg) {
@@ -68,6 +82,7 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
             basePriceFun: widget.basePriceFunc,
             localPriceFun: widget.localPriceFunc,
             typeOfCurrency: widget.typeOfCurrency,
+            latestRate: latestRate,
           );
         } else if (state is ReadCurrencyfailureState) {
           return Text('error:${state.errorMessage}');

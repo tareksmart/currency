@@ -17,6 +17,8 @@ class MyconstantName {
   static String currencyDataBox = 'currency_box';
   static String dateAddHiveBox = 'dateAddHive_box';
   static String addDateKeyName = 'addDatekey';
+  static String latestRateBox = 'latestRateBox';
+
 
 
 }

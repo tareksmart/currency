@@ -14,14 +14,15 @@ class MyDropDownMenuItem extends StatelessWidget {
       required this.size,
       required this.basePriceFun,
       required this.localPriceFun,
-      required this.typeOfCurrency});
+      required this.typeOfCurrency,
+      this.latestRate});
   final List<CurrencyData> currencyDataList;
   final Size size;
   // final Map<String, dynamic> allRate;
   final String typeOfCurrency;
   Function(String) basePriceFun;
   Function(String) localPriceFun;
-
+  final latestRate;
   String _selectedItem = "EGP";
 
   @override
@@ -72,10 +73,14 @@ class MyDropDownMenuItem extends StatelessWidget {
               ),
             );
           } else
-            return  Text('select country',style: TextStyle(color:MyColors.dropDownSearchfontColor),);
+            return Text(
+              'select country',
+              style: TextStyle(color: MyColors.dropDownSearchfontColor),
+            );
         },
         onChanged: (value) {
-          debugPrint(value?.countryCode!);
+          //debugPrint(value?.countryCode!);
+          print('latest rate is ${latestRate[value?.countryCode!]}for curr code ${value?.countryCode!}');
         },
         popupProps: PopupProps.menu(
             fit: FlexFit.loose,

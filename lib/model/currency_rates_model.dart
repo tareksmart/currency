@@ -9,7 +9,7 @@ class CurrencyRatesModel extends HiveObject{
   final String date;
   @HiveField(2)
 
-  final Map<String, double> rates;
+  final Map<String, dynamic> rates;
 
   CurrencyRatesModel({
     required this.base,
@@ -22,7 +22,7 @@ class CurrencyRatesModel extends HiveObject{
       base: json['base'] as String,
       date: json['date'] as String,
       rates: Map.from(json['rates'])
-          .map((key, value) => MapEntry(key, value as dynamic)),
+          .map((key, value) => MapEntry(key, value)),
     );
   }
 }

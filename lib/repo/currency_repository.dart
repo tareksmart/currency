@@ -36,12 +36,12 @@ class CurrencyRepository {
     }
   }
 
-  Future<Either<Failur, Map<String, dynamic>>> getAllRates() async {
+  Future<Either<Failur, CurrencyRatesModel>> getAllRates() async {
     try {
       final rates = await CurrencyWebService().getLatestrates();
-      var obj = CurrencyRatesModel.fromJson(rates['rates']);
+      var data = CurrencyRatesModel.fromJson(rates);
       //  CurrencyRate.fromJson(rates);//تحويلها الى ماب
-      Map<String, dynamic> data = obj.rates;
+     // Map<String, dynamic> data = obj.rates;
       print('*************data rates $data');
       return right(data);
     } catch (e) {

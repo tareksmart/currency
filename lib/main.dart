@@ -19,6 +19,8 @@ void main() async {
   Hive.registerAdapter(CurrencyDataAdapter());
   await Hive.openBox<CurrencyData>(MyconstantName.currencyDataBox);
   await Hive.openBox<String>(MyconstantName.dateAddHiveBox);
+  await Hive.openBox<Map<String,dynamic>>(MyconstantName.latestRateBox);
+
   Bloc.observer = WatchingObserver();
   
   runApp(BlocProvider(create: (context) => CurrencyCubit(), child: MyApp()));

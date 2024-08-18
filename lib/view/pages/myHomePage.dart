@@ -28,7 +28,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     //_currLoad();
     _futureList();
-      _allRate();
   }
 
   // _currLoad() async {
@@ -39,25 +38,35 @@ class _MyHomePageState extends State<MyHomePage> {
   _futureList() async {
     var dateBox = Hive.box<String>(MyconstantName.dateAddHiveBox);
     var currBox = Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
+    var rateBox = Hive.box<Map<String, dynamic>>(MyconstantName.latestRateBox);
+
     var date = dateBox.get(MyconstantName.addDateKeyName);
     var addCubit = BlocProvider.of<AddCurrencyDataCubit>(context);
     var datenow = addCubit.dateFormat(DateTime.now());
     if (date != addCubit.dateFormat(DateTime.now())) {
       await currBox.deleteFromDisk();
       await dateBox.deleteFromDisk();
-   
+      await rateBox.deleteFromDisk();
+
       await BlocProvider.of<CurrencyCubit>(context).getAllCurrData();
-     
+      await BlocProvider.of<LatestCurrCubit>(context).getRates();
     }
   }
 
-  _allRate() async {
-    await BlocProvider.of<LatestCurrCubit>(context).getRates();
-  }
   void triggerHiveCubit(var allCurrency) async {
     await BlocProvider.of<AddCurrencyDataCubit>(context)
         .addCurrencyData(allCurrency);
     print('*********triggerHiveCubit');
+  }
+
+  saveRate(Map<String, dynamic> ratesMap) async {
+    try {
+      var latestBox =
+          Hive.box<Map<String, dynamic>>(MyconstantName.latestRateBox);
+      await latestBox.put('latesRate', ratesMap);
+    } catch (e) {
+      print('*****saving rate to hive${e.toString()}');
+    }
   }
 
   @override
@@ -182,13 +191,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child: Center(child: Text(state.errorMessage)));
                           });
                     }
-                      return Currencycard(
-                          allCurrency: allCur ?? defaultList,
-                          allRate: allRate ?? defAllRate);
-                    
-                    
+                    return Currencycard(
+                        allCurrency: allCur ?? defaultList,
+                        allRate: allRate ?? defAllRate);
                   },
                 ),
+                BlocConsumer<LatestCurrCubit, LatestCurrCubitState>(
+                  listener: (context, state) {
+                    // TODO: implement listener
+                    if (state is LatestRateSuccessLoaded) {
+                      saveRate(state.currencyRatesModel.rates);
+                    }
+                  },
+                  builder: (context, state) {
+                    return Container();
+                  },
+                )
               ],
             ),
           ],
