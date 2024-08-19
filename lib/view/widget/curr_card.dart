@@ -168,7 +168,7 @@ class _CurrencycardState extends State<Currencycard> {
                             color: Colors.green,
                           );
                         } else if (state is AddCurrencyDataSuccess) {
-                        } else if (state is AddCurrencyDataFailure){
+                        } else if (state is AddCurrencyDataFailure) {
                           return const LinearProgressIndicator(
                             color: Colors.red,
                           );
@@ -198,6 +198,10 @@ class _CurrencycardState extends State<Currencycard> {
                   await currBox.deleteFromDisk();
 
                   await dateBox.deleteFromDisk();
+                  var rateBox = Hive.box<Map<String, dynamic>>(
+                      MyconstantName.latestRateBox);
+
+                  await rateBox.deleteFromDisk();
                   print(
                       'result($_basePrice, $_toPrice, ${_baseCurrency_controller.text.trim()});');
                   _toCurr_controller.text = result(_basePrice, _toPrice,

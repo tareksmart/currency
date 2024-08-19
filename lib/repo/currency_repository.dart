@@ -42,7 +42,7 @@ class CurrencyRepository {
       var data = CurrencyRatesModel.fromJson(rates);
       //  CurrencyRate.fromJson(rates);//تحويلها الى ماب
      // Map<String, dynamic> data = obj.rates;
-      print('*************data rates $data');
+     // print('*************data rates $data');
       return right(data);
     } catch (e) {
       if (e is DioException) {

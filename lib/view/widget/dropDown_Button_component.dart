@@ -57,15 +57,30 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
     BlocProvider.of<ReadCurrencyCubit>(context).readCurrency();
   }
 
-  Map<String, dynamic>? readLatestRate() {
+  readLatestRate() async {
+    await Hive.openBox<Map<String, dynamic>>(MyconstantName.latestRateBox);
+    await Future.delayed(const Duration(seconds: 10));
     var rateBox = Hive.box<Map<String, dynamic>>(MyconstantName.latestRateBox);
-    try {
-      Map<String, dynamic>? rates = rateBox.get('latesRate');
-      return rates;
-    } catch (e) {
-      print('read rates error${e.toString()}');
-    }
-    return {};
+   
+    Map<String, dynamic> rates =
+        Map<String, dynamic>.from(rateBox.values.first);
+         print('*** latest rate number $rates');
+    // convertMap(rateBox.get('latesRate')!.entries.first);
+    // return rates;
+  }
+
+  Map<String, dynamic> convertMap(Map<dynamic, dynamic> inputMap) {
+    Map<String, dynamic> outputMap = {};
+    inputMap.forEach((key, value) {
+      if (key is String) {
+        outputMap[key] = value;
+      } else {
+        // Handle non-string keys here, e.g., throw an exception, log a warning, or ignore
+        print('Warning: Non-string key encountered: $key');
+      }
+    });
+
+    return outputMap;
   }
 
   // List<CurrencyData>? searchedCurrency(String searchArg) {

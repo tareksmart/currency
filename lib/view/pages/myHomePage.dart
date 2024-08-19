@@ -61,9 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   saveRate(Map<String, dynamic> ratesMap) async {
     try {
+       await Hive.openBox<Map<String,dynamic>>(MyconstantName.latestRateBox);
       var latestBox =
           Hive.box<Map<String, dynamic>>(MyconstantName.latestRateBox);
       await latestBox.put('latesRate', ratesMap);
+       print('*****saving rate to hive');
     } catch (e) {
       print('*****saving rate to hive${e.toString()}');
     }
