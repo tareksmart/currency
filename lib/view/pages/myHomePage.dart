@@ -59,12 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
     print('*********triggerHiveCubit');
   }
 
-  saveRate(Map<String, dynamic> ratesMap) async {
+  saveRate(Map<dynamic, dynamic> ratesMap) async {
     try {
-       await Hive.openBox<Map<String,dynamic>>(MyconstantName.latestRateBox);
-      var latestBox =
-          Hive.box<Map<String, dynamic>>(MyconstantName.latestRateBox);
-      await latestBox.put('latesRate', ratesMap);
+       var latestBox =await Hive.openBox<Map<dynamic,dynamic>>(MyconstantName.latestRateBox);
+      
+         // Hive.box<Map<dynamic, dynamic>>(MyconstantName.latestRateBox);
+      await latestBox.put('latestRate', ratesMap);
        print('*****saving rate to hive');
     } catch (e) {
       print('*****saving rate to hive${e.toString()}');
