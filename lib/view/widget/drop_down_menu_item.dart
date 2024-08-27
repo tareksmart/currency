@@ -15,14 +15,14 @@ class MyDropDownMenuItem extends StatelessWidget {
       required this.basePriceFun,
       required this.localPriceFun,
       required this.typeOfCurrency,
-      this.latestRate});
+      required this.latestRate});
   final List<CurrencyData> currencyDataList;
   final Size size;
   // final Map<String, dynamic> allRate;
   final String typeOfCurrency;
   Function(String) basePriceFun;
   Function(String) localPriceFun;
-  final latestRate;
+  final List latestRate;
   String _selectedItem = "EGP";
 
   @override
@@ -79,8 +79,15 @@ class MyDropDownMenuItem extends StatelessWidget {
             );
         },
         onChanged: (value) {
-          //debugPrint(value?.countryCode!);
-          print('latest rate is ${latestRate[value?.countryCode!]}for curr code ${value?.countryCode!}');
+          print(
+              'latest rate is ${latestRate[0][value?.currencyCode!]}for curr code ${value?.countryCode!}');
+          if (value != null) {
+            var price = latestRate[0][value?.currencyCode!];
+            if (typeOfCurrency == MyconstantName.base)
+              basePriceFun(price);
+            else
+              localPriceFun(price);
+          }
         },
         popupProps: PopupProps.menu(
             fit: FlexFit.loose,

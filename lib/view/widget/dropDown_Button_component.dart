@@ -46,7 +46,7 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
     // TODO: implement initState
     super.initState();
     readHive();
-    latestRate = readLatestRate();
+    readLatestRate();
   }
 
   readHive() async {
@@ -57,43 +57,26 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
     BlocProvider.of<ReadCurrencyCubit>(context).readCurrency();
   }
 
-  readLatestRate() async {
+  void readLatestRate() async {
     //var rateBox = await Hive.openBox<Map<String, dynamic>>(MyconstantName.latestRateBox);
     //await Future.delayed(const Duration(seconds: 10));
     //var rateBox = Hive.box(MyconstantName.latestRateBox);
 
-    var rates = await readFromHive();
-    print('*** latest rate number $rates');
-    // convertMap(rateBox.get('latesRate')!.entries.first);
-    return rates[0];
+    latestRate = await readFromHive();
   }
 
   Future<List<Map<String, dynamic>>> readFromHive() async {
     final box =
         await Hive.openBox<Map<dynamic, dynamic>>(MyconstantName.latestRateBox);
-    final r = box.toMap(); //.cast<Map<String, dynamic>>();
+
     final result = box.toMap().map(
           (k, e) => MapEntry(
             k.toString(),
             Map<String, dynamic>.from(e),
           ),
         );
-
+    print('hive rate number is **${result.values.toList()[0].length}');
     return result.values.toList();
-  }
-
-  Map<String, dynamic> convertMap(Map<dynamic, dynamic> inputMap) {
-    Map<String, dynamic> outputMap = {};
-    inputMap.forEach((key, value) {
-      if (key is String) {
-        outputMap[key] = value;
-      } else {
-        // Handle non-string keys here, e.g., throw an exception, log a warning, or ignore
-        print('Warning: Non-string key encountered: $key');
-      }
-    });
-
-    return outputMap;
   }
 
   // List<CurrencyData>? searchedCurrency(String searchArg) {

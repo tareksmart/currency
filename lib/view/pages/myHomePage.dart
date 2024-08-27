@@ -38,12 +38,12 @@ class _MyHomePageState extends State<MyHomePage> {
   _futureList() async {
     var dateBox = Hive.box<String>(MyconstantName.dateAddHiveBox);
     var currBox = Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
-    var rateBox = Hive.box<Map<String, dynamic>>(MyconstantName.latestRateBox);
+    var rateBox = Hive.box<Map<dynamic, dynamic>>(MyconstantName.latestRateBox);
 
     var date = dateBox.get(MyconstantName.addDateKeyName);
     var addCubit = BlocProvider.of<AddCurrencyDataCubit>(context);
     var datenow = addCubit.dateFormat(DateTime.now());
-    if (date != addCubit.dateFormat(DateTime.now())) {
+    if (date != addCubit.dateFormat(DateTime.now()) || rateBox.length <= 0||currBox.length<=0) {
       await currBox.deleteFromDisk();
       await dateBox.deleteFromDisk();
       await rateBox.deleteFromDisk();
@@ -61,11 +61,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   saveRate(Map<dynamic, dynamic> ratesMap) async {
     try {
-       var latestBox =await Hive.openBox<Map<dynamic,dynamic>>(MyconstantName.latestRateBox);
-      
-         // Hive.box<Map<dynamic, dynamic>>(MyconstantName.latestRateBox);
+      var latestBox = await Hive.openBox<Map<dynamic, dynamic>>(
+          MyconstantName.latestRateBox);
+
+      // Hive.box<Map<dynamic, dynamic>>(MyconstantName.latestRateBox);
+     await Future.delayed(const Duration(seconds: 10));
       await latestBox.put('latestRate', ratesMap);
-       print('*****saving rate to hive');
+      print('*****saving rate to hive');
     } catch (e) {
       print('*****saving rate to hive${e.toString()}');
     }
@@ -81,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
           countryName: 'dollar',
           icon: 'https://currencyfreaks.com/photos/flags/pkr.png?v=0.1')
     ];
-    Map<String, dynamic> defAllRate = {'Egy': 49, 'Fiji Dollar': 12};
+    Map<dynamic, dynamic> defAllRate = {'Egy': 49, 'Fiji Dollar': 12};
 
     return Scaffold(
       appBar: AppBar(
@@ -203,6 +205,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     // TODO: implement listener
                     if (state is LatestRateSuccessLoaded) {
                       saveRate(state.currencyRatesModel.rates);
+                      print(
+                          '=*******rate number is ${state.currencyRatesModel.rates.length}');
                     }
                   },
                   builder: (context, state) {

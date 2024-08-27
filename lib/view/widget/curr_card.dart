@@ -192,16 +192,16 @@ class _CurrencycardState extends State<Currencycard> {
               ConvertButton(
                 text: 'CONVERT',
                 onTab: () async {
-                  var currBox =
-                      Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
-                  var dateBox = Hive.box<String>(MyconstantName.dateAddHiveBox);
-                  await currBox.deleteFromDisk();
+                  // var currBox =
+                  //     Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
+                  // var dateBox = Hive.box<String>(MyconstantName.dateAddHiveBox);
+                  // await currBox.deleteFromDisk();
 
-                  await dateBox.deleteFromDisk();
-                  var rateBox = Hive.box<Map<String, dynamic>>(
-                      MyconstantName.latestRateBox);
+                  // await dateBox.deleteFromDisk();
+                  // var rateBox = Hive.box<Map<dynamic, dynamic>>(
+                  //     MyconstantName.latestRateBox);
 
-                  await rateBox.deleteFromDisk();
+                  // await rateBox.deleteFromDisk();
                   print(
                       'result($_basePrice, $_toPrice, ${_baseCurrency_controller.text.trim()});');
                   _toCurr_controller.text = result(_basePrice, _toPrice,
