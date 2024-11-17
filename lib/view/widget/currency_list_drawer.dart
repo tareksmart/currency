@@ -99,7 +99,7 @@ class CurrencyListDrawer extends StatelessWidget {
                                   Cur.countryName ?? 'unknown',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyMedium!
                                       .copyWith(color: Colors.white),
                                 ),
                               ),

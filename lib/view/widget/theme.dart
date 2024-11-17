@@ -23,7 +23,7 @@ ThemeData mytheme(BuildContext context) {
     scaffoldBackgroundColor: MyColors.whiteColor,
     inputDecorationTheme: InputDecorationTheme(
       fillColor: MyColors.dropDownSearchfontColor,
-      labelStyle: Theme.of(context).textTheme.subtitle1,
+      labelStyle: Theme.of(context).textTheme.bodyMedium,
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6.0),
         borderSide: BorderSide(color: MyColors.ButtonColor),

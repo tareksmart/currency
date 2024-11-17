@@ -62,7 +62,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       decoration: InputDecoration(
                         hintStyle: Theme.of(context)
                             .textTheme
-                            .headline6!
+                            .bodyLarge!
                             .copyWith(color: Colors.black26),
                         hintText: 'Search Country',
                       ),

@@ -116,7 +116,7 @@ class _CurrencycardState extends State<Currencycard> {
                                 controller: _baseCurrency_controller,
                                 decoration: InputDecoration(
                                     labelStyle:
-                                        Theme.of(context).textTheme.subtitle2),
+                                        Theme.of(context).textTheme.bodyMedium),
                               );
                             },
                           ),
@@ -153,7 +153,7 @@ class _CurrencycardState extends State<Currencycard> {
                             // },
                             decoration: InputDecoration(
                                 labelStyle:
-                                    Theme.of(context).textTheme.subtitle2),
+                                    Theme.of(context).textTheme.bodyMedium),
                           ),
                         )
                       ],
