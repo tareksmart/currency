@@ -75,8 +75,8 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
             Map<String, dynamic>.from(e),
           ),
         );
-    print('hive rate number is **${result.values.toList()[0].length}');
-    return result.values.toList();
+    //print('hive rate number is **${result.values.toList()[0].length}');
+    return result.values.toList()??[];
   }
 
   // List<CurrencyData>? searchedCurrency(String searchArg) {

@@ -1,6 +1,7 @@
 import 'package:currencypro/controller/cubit/hive_cubit/add_currency_data_hive_cubit/add_currency_data_cubit.dart';
 import 'package:currencypro/controller/cubit/all_currency_cubit/curency_cubit.dart';
 import 'package:currencypro/controller/cubit/all_currency_cubit/currency_states.dart';
+import 'package:currencypro/controller/cubit/hive_cubit/read_currency_hive_cubit/cubit/read_currency_cubit.dart';
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
 import 'package:currencypro/controller/cubit/press_number_cubit/press_number_cubit_cubit.dart';
 import 'package:currencypro/view/widget/drawer.dart';
@@ -93,24 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
           fit: BoxFit.cover,
         ),
       ),
-      drawer: BlocConsumer<CurrencyCubit, CurrencyState>(
-          listener: (context, state) {
-            if (state is CurrenciesLoaded) {
-              allCur = state.currencisList;
-              print('drawer****************************');
-            }
-          },
-          buildWhen: (previous, current) => current is CurrenciesLoaded,
-          builder: (context, state) {
-            if (allCur != Null) {
-              return MyDrawer(
-                size: size,
-                allCur: allCur ?? defaultList,
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          }),
+      drawer: MyDrawer(size: size),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Stack(

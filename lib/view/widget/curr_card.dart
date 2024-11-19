@@ -60,6 +60,13 @@ class _CurrencycardState extends State<Currencycard> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _baseCurrency_controller.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     // String x = '0';
@@ -131,14 +138,15 @@ class _CurrencycardState extends State<Currencycard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                            child: MyDropDownButtonComponent(
-                          key: const ValueKey(2),
-                          base: false,
-                          size: size,
-                          basePriceFunc: basePriceCallBack,
-                          localPriceFunc: localPriceCallBack,
-                          typeOfCurrency: MyconstantName.local,
-                        )),
+                          child: MyDropDownButtonComponent(
+                            key: const ValueKey(2),
+                            base: false,
+                            size: size,
+                            basePriceFunc: basePriceCallBack,
+                            localPriceFunc: localPriceCallBack,
+                            typeOfCurrency: MyconstantName.local,
+                          ),
+                        ),
                         const SizedBox(
                           width: 4,
                         ),
@@ -168,6 +176,7 @@ class _CurrencycardState extends State<Currencycard> {
                             color: Colors.green,
                           );
                         } else if (state is AddCurrencyDataSuccess) {
+                        
                         } else if (state is AddCurrencyDataFailure) {
                           return const LinearProgressIndicator(
                             color: Colors.red,

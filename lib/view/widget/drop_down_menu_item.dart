@@ -37,7 +37,7 @@ class MyDropDownMenuItem extends StatelessWidget {
               fillColor: Colors.white,
               border: OutlineInputBorder(gapPadding: 2)),
         ),
-        itemAsString: (item) => item.countryName ?? 'select country',
+        itemAsString: (item) => item.countryName ?? 'select currency',
         dropdownBuilder: (context, selectedItem) {
           if (selectedItem != null) {
             return SizedBox(
@@ -60,7 +60,7 @@ class MyDropDownMenuItem extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                        selectedItem.countryName ?? 'select country',
+                        selectedItem.countryName ?? 'select currency',
                         style: Theme.of(context)
                             .textTheme
                             .labelLarge!
@@ -74,7 +74,7 @@ class MyDropDownMenuItem extends StatelessWidget {
             );
           } else
             return Text(
-              'select country',
+              'select currency',
               style: TextStyle(color: MyColors.dropDownSearchfontColor),
             );
         },
@@ -95,7 +95,7 @@ class MyDropDownMenuItem extends StatelessWidget {
             itemBuilder: (context, item, isSelected) {
               return ListTile(
                 title: Text(
-                  item.countryName ?? 'knwon',
+                  item.currencyName ?? 'knwon',
                   style: const TextStyle(color: Colors.blue, fontSize: 12),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -112,7 +112,7 @@ class MyDropDownMenuItem extends StatelessWidget {
               );
             },
             title: const Text(
-              'search country',
+              'search currency',
               style: TextStyle(color: Colors.blue, fontSize: 10),
             )),
       ),

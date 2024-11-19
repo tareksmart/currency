@@ -15,7 +15,7 @@ class CurrencyListDrawer extends StatelessWidget {
   final CurrencyData Cur;
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<CurrencyCubit>(context, listen: false);
+    // final bloc = BlocProvider.of<CurrencyCubit>(context, listen: false);
     buildItem(String label) {
       return Padding(
         padding: const EdgeInsets.all(10.0),
