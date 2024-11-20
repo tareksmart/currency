@@ -19,9 +19,9 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  List<CurrencyData>? searchedList;
+  List<CurrencyData> searchedList=[];
   String sArg = "";
-  var SearchedCurrList = [];
+  List<CurrencyData> SearchedCurrList = [];
   TextEditingController _searchController = TextEditingController();
 
   List<CurrencyData>? searchedCurrency(
@@ -122,7 +122,7 @@ class _MyDrawerState extends State<MyDrawer> {
                             onFieldSubmitted: (val) {
                               sArg = val;
                               SearchedCurrList =
-                                  searchedCurrency(val, state.currencyList) ??
+                                  searchedCurrency(_searchController.text, state.currencyList) ??
                                       [];
                             },
                           ),
@@ -162,7 +162,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                       child: Builder(builder: (context) {
                         return ListView.separated(
-                          itemCount: state.currencyList.length,
+                          itemCount:SearchedCurrList.isNotEmpty?SearchedCurrList.length: state.currencyList.length,
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
@@ -173,11 +173,10 @@ class _MyDrawerState extends State<MyDrawer> {
                             //     .toList(),
                             return  ListTile(
                               title: Text(
-                                  state.currencyList[index].countryName ??
-                                      'known'),
+                                  SearchedCurrList.isNotEmpty?(SearchedCurrList[index].countryName!):state.currencyList[index].countryName!
+                                      ),
                               subtitle: Text(
-                                  state.currencyList[index].currencyName ??
-                                      'known'),
+                                 SearchedCurrList.isNotEmpty?(SearchedCurrList[index].currencyName!):state.currencyList[index].currencyName!),
                               leading:    CachedNetworkImage(
                       imageUrl: state.currencyList[index].icon!,
                       fit: BoxFit.contain,
