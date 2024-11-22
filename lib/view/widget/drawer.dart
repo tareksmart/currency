@@ -19,7 +19,7 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  List<CurrencyData> searchedList=[];
+  List<CurrencyData> searchedList = [];
   String sArg = "";
   List<CurrencyData> SearchedCurrList = [];
   TextEditingController _searchController = TextEditingController();
@@ -79,6 +79,13 @@ class _MyDrawerState extends State<MyDrawer> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _searchController.dispose();
+    super.dispose();
+  }
+
 //////////////////////
   var currList;
   @override
@@ -110,7 +117,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       children: [
                         SizedBox(
                           width: widget.size.width * .8,
-                          child: TextFormField(
+                          child: TextField(
                             controller: _searchController,
                             decoration: InputDecoration(
                               hintStyle: Theme.of(context)
@@ -119,11 +126,14 @@ class _MyDrawerState extends State<MyDrawer> {
                                   .copyWith(color: Colors.black26),
                               hintText: 'Search Country',
                             ),
-                            onFieldSubmitted: (val) {
-                              sArg = val;
-                              SearchedCurrList =
-                                  searchedCurrency(_searchController.text, state.currencyList) ??
-                                      [];
+                            onChanged: (val) {
+                              SearchedCurrList.clear();
+                              SearchedCurrList = searchedCurrency(
+                                      _searchController.text,
+                                      state.currencyList) ??
+                                  [];
+                            
+                              setState(() {});
                             },
                           ),
                         ),
@@ -153,8 +163,8 @@ class _MyDrawerState extends State<MyDrawer> {
                     ),
                   ),
                   SizedBox(
-                    height: 500,
-                    width: 300,
+                    height: widget.size.height * 0.8,
+                    // width: 300,
                     child: ExpandableTheme(
                       data: const ExpandableThemeData(
                         iconColor: Colors.blue,
@@ -162,7 +172,9 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                       child: Builder(builder: (context) {
                         return ListView.separated(
-                          itemCount:SearchedCurrList.isNotEmpty?SearchedCurrList.length: state.currencyList.length,
+                          itemCount: SearchedCurrList.isNotEmpty
+                              ? SearchedCurrList.length
+                              : state.currencyList.length,
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
@@ -171,22 +183,26 @@ class _MyDrawerState extends State<MyDrawer> {
                             //           Cur: e,
                             //         ))
                             //     .toList(),
-                            return  ListTile(
-                              title: Text(
-                                  SearchedCurrList.isNotEmpty?(SearchedCurrList[index].countryName!):state.currencyList[index].countryName!
-                                      ),
-                              subtitle: Text(
-                                 SearchedCurrList.isNotEmpty?(SearchedCurrList[index].currencyName!):state.currencyList[index].currencyName!),
-                              leading:    CachedNetworkImage(
-                      imageUrl: state.currencyList[index].icon!,
-                      fit: BoxFit.contain,
-                      width: 30,
-                      height: 30,
-                      placeholder: (context, url) =>
-                          Image.asset('assets/images/Missing_flag.png'),
-                      errorWidget: (context, url, error) =>
-                          Image.asset('assets/images/Missing_flag.png'),
-                    ),
+                            return ExpansionTile(
+                              title: Text(SearchedCurrList.isNotEmpty
+                                  ? (SearchedCurrList[index].countryName!)
+                                  : state.currencyList[index].countryName ??
+                                      ''),
+                              subtitle: Text(SearchedCurrList.isNotEmpty
+                                  ? (SearchedCurrList[index].currencyName!)
+                                  : state.currencyList[index].currencyName ??
+                                      ''),
+                              leading: CachedNetworkImage(
+                                imageUrl: state.currencyList[index].icon!,
+                                fit: BoxFit.contain,
+                                width: 30,
+                                height: 30,
+                                placeholder: (context, url) => Image.asset(
+                                    'assets/images/Missing_flag.png'),
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                        'assets/images/Missing_flag.png'),
+                              ),
                             );
                             // CurrencyListDrawer(
                             //   Cur: state.currencyList[index],
