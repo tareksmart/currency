@@ -15,22 +15,26 @@ class WatchingObserver implements BlocObserver {
 
   @override
   void onCreate(BlocBase bloc) {
+    debugPrint('onCreate $bloc');
     // TODO: implement onCreate
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     // TODO: implement onError
+    debugPrint('onError $bloc');
   }
 
   @override
   void onEvent(Bloc bloc, Object? event) {
     // TODO: implement onEvent
+     debugPrint('onEvent $bloc');
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
     // TODO: implement onTransition
+     debugPrint('onTransition $bloc');
   }
   
 }

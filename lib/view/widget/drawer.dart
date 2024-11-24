@@ -58,17 +58,21 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Future<List<Map<String, dynamic>>> readFromHive() async {
-    final box =
-        await Hive.openBox<Map<dynamic, dynamic>>(MyconstantName.latestRateBox);
+    try {
+      final box = await Hive.openBox<Map<dynamic, dynamic>>(
+          MyconstantName.latestRateBox);
 
-    final result = box.toMap().map(
-          (k, e) => MapEntry(
-            k.toString(),
-            Map<String, dynamic>.from(e),
-          ),
-        );
-    //print('hive rate number is **${result.values.toList()[0].length}');
-    return result.values.toList() ?? [];
+      final result = box.toMap().map(
+            (k, e) => MapEntry(
+              k.toString(),
+              Map<String, dynamic>.from(e),
+            ),
+          );
+      //print('hive rate number is **${result.values.toList()[0].length}');
+      return result.values.toList();
+    } on Exception catch (e) {
+      throw ('rate exceptio $e');
+    }
   }
 
   @override
@@ -132,7 +136,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                       _searchController.text,
                                       state.currencyList) ??
                                   [];
-                            
+
                               setState(() {});
                             },
                           ),
@@ -172,9 +176,8 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                       child: Builder(builder: (context) {
                         return ListView.separated(
-                          itemCount: SearchedCurrList.isNotEmpty
-                              ? SearchedCurrList.length
-                              : state.currencyList.length,
+                          itemCount:
+                              checkCurrList(state, SearchedCurrList).length,
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
@@ -184,13 +187,9 @@ class _MyDrawerState extends State<MyDrawer> {
                             //         ))
                             //     .toList(),
                             return ExpansionTile(
-                              title: Text(SearchedCurrList.isNotEmpty
-                                  ? (SearchedCurrList[index].countryName!)
-                                  : state.currencyList[index].countryName ??
-                                      ''),
-                              subtitle: Text(SearchedCurrList.isNotEmpty
-                                  ? (SearchedCurrList[index].currencyName!)
-                                  : state.currencyList[index].currencyName ??
+                              title: Text(
+                                  checkCurrList(state, SearchedCurrList)[index]
+                                          .countryName ??
                                       ''),
                               leading: CachedNetworkImage(
                                 imageUrl: state.currencyList[index].icon!,
@@ -203,6 +202,21 @@ class _MyDrawerState extends State<MyDrawer> {
                                     Image.asset(
                                         'assets/images/Missing_flag.png'),
                               ),
+                              children: [
+                                Text(checkCurrList(
+                                        state, SearchedCurrList)[index]
+                                    .currencyName
+                                    .toString()),
+                                    if(latestRate !=null)
+                                Text(latestRate[0][checkCurrList(
+                                            state, SearchedCurrList)[index]
+                                        .currencyCode
+                                        .toString()] ??
+                                    'KNOWN')
+                                    else
+                                    LinearProgressIndicator()
+                                  
+                              ],
                             );
                             // CurrencyListDrawer(
                             //   Cur: state.currencyList[index],
@@ -229,5 +243,14 @@ class _MyDrawerState extends State<MyDrawer> {
         }
       },
     );
+  }
+
+  List<CurrencyData> checkCurrList(
+      ReadCurrencysuccessState state, List<CurrencyData> SearchedCurrList) {
+    if (SearchedCurrList.isNotEmpty) {
+      return searchedList;
+    } else {
+      return state.currencyList;
+    }
   }
 }

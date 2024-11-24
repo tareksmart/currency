@@ -79,8 +79,7 @@ class MyDropDownMenuItem extends StatelessWidget {
             );
         },
         onChanged: (value) {
-          print(
-              'latest rate is ${latestRate[0][value?.currencyCode!]}for curr code ${value?.countryCode!}');
+       //   print('latest rate is ${latestRate[0][value?.currencyCode!]}for curr code ${value?.countryCode!}');
           if (value != null) {
             var price = latestRate[0][value?.currencyCode!];
             if (typeOfCurrency == MyconstantName.base)

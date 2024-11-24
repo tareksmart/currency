@@ -25,10 +25,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     // TODO: implement initState
-
+ _futureList();
     super.initState();
     //_currLoad();
-    _futureList();
+   
   }
 
   // _currLoad() async {
