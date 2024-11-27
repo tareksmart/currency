@@ -122,8 +122,9 @@ class _CurrencycardState extends State<Currencycard> {
                                 keyboardType: TextInputType.number,
                                 controller: _baseCurrency_controller,
                                 decoration: InputDecoration(
-                                    labelStyle:
-                                        Theme.of(context).textTheme.bodyMedium),
+                                    labelStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium),
                               );
                             },
                           ),
@@ -176,7 +177,6 @@ class _CurrencycardState extends State<Currencycard> {
                             color: Colors.green,
                           );
                         } else if (state is AddCurrencyDataSuccess) {
-                        
                         } else if (state is AddCurrencyDataFailure) {
                           return const LinearProgressIndicator(
                             color: Colors.red,
@@ -205,11 +205,11 @@ class _CurrencycardState extends State<Currencycard> {
                   //     Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
                   // var dateBox = Hive.box<String>(MyconstantName.dateAddHiveBox);
                   // await currBox.deleteFromDisk();
-
+    
                   // await dateBox.deleteFromDisk();
                   // var rateBox = Hive.box<Map<dynamic, dynamic>>(
                   //     MyconstantName.latestRateBox);
-
+    
                   // await rateBox.deleteFromDisk();
                   print(
                       'result($_basePrice, $_toPrice, ${_baseCurrency_controller.text.trim()});');

@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => CurrencyCubit()),
           BlocProvider(create: (context)=>LatestCurrCubit()),
           BlocProvider(create: (context) => PressNumberCubit()),
-          BlocProvider(create: (context) => AddCurrencyDataCubit()),
+         BlocProvider(create: (context) => AddCurrencyDataCubit()),
           BlocProvider(create: (context) => ReadCurrencyCubit()),
         ],
         child: MyHomePage(),

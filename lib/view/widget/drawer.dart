@@ -44,8 +44,10 @@ class _MyDrawerState extends State<MyDrawer> {
     //تم تاخير القراءة من ال
     //hive for 2second
     //لحل مشكلة ان ستايت القراءة بيجى قبل ستايت الكتابة
-    await Future.delayed(const Duration(seconds: 10));
-    BlocProvider.of<ReadCurrencyCubit>(context).readCurrency();
+    if (mounted) {
+      await Future.delayed(const Duration(seconds: 10));
+      BlocProvider.of<ReadCurrencyCubit>(context).readCurrency();
+    }
   }
 
   var latestRate;
@@ -53,8 +55,7 @@ class _MyDrawerState extends State<MyDrawer> {
     //var rateBox = await Hive.openBox<Map<String, dynamic>>(MyconstantName.latestRateBox);
     //await Future.delayed(const Duration(seconds: 10));
     //var rateBox = Hive.box(MyconstantName.latestRateBox);
-
-    latestRate = await readFromHive();
+    if (mounted) latestRate = await readFromHive();
   }
 
   Future<List<Map<String, dynamic>>> readFromHive() async {
@@ -86,6 +87,7 @@ class _MyDrawerState extends State<MyDrawer> {
   @override
   void dispose() {
     // TODO: implement dispose
+    debugPrint('dezposing**************************************');
     _searchController.dispose();
     super.dispose();
   }
@@ -97,7 +99,7 @@ class _MyDrawerState extends State<MyDrawer> {
     return BlocBuilder<ReadCurrencyCubit, ReadCurrencyState>(
       buildWhen: (previous, current) => current is ReadCurrencysuccessState,
       builder: (context, state) {
-        if (state is ReadCurrencysuccessState) {
+        if (state is ReadCurrencysuccessState && mounted) {
           return Drawer(
             backgroundColor: MyColors.backGroundTextFieldColor,
             child: SafeArea(
@@ -207,15 +209,14 @@ class _MyDrawerState extends State<MyDrawer> {
                                         state, SearchedCurrList)[index]
                                     .currencyName
                                     .toString()),
-                                    if(latestRate !=null)
-                                Text(latestRate[0][checkCurrList(
-                                            state, SearchedCurrList)[index]
-                                        .currencyCode
-                                        .toString()] ??
-                                    'KNOWN')
-                                    else
-                                    LinearProgressIndicator()
-                                  
+                                if (latestRate != null)
+                                  Text(latestRate[0][checkCurrList(
+                                              state, SearchedCurrList)[index]
+                                          .currencyCode
+                                          .toString()] ??
+                                      'KNOWN')
+                                else
+                                  LinearProgressIndicator()
                               ],
                             );
                             // CurrencyListDrawer(

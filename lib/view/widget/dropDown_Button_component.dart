@@ -76,7 +76,7 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
           ),
         );
     //print('hive rate number is **${result.values.toList()[0].length}');
-    return result.values.toList()??[];
+    return result.values.toList() ?? [];
   }
 
   // List<CurrencyData>? searchedCurrency(String searchArg) {

@@ -25,10 +25,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     // TODO: implement initState
- _futureList();
+    _futureList();
     super.initState();
     //_currLoad();
-   
   }
 
   // _currLoad() async {
@@ -44,7 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
     var date = dateBox.get(MyconstantName.addDateKeyName);
     var addCubit = BlocProvider.of<AddCurrencyDataCubit>(context);
     var datenow = addCubit.dateFormat(DateTime.now());
-    if (date != addCubit.dateFormat(DateTime.now()) || rateBox.length <= 0||currBox.length<=0) {
+    if (date != addCubit.dateFormat(DateTime.now()) ||
+        rateBox.length <= 0 ||
+        currBox.length <= 0) {
       await currBox.deleteFromDisk();
       await dateBox.deleteFromDisk();
       await rateBox.deleteFromDisk();
@@ -66,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
           MyconstantName.latestRateBox);
 
       // Hive.box<Map<dynamic, dynamic>>(MyconstantName.latestRateBox);
-     await Future.delayed(const Duration(seconds: 10));
+      await Future.delayed(const Duration(seconds: 10));
       await latestBox.put('latestRate', ratesMap);
       print('*****saving rate to hive');
     } catch (e) {
@@ -152,7 +153,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: size.height * .03,
                 ),
                 BlocConsumer<CurrencyCubit, CurrencyState>(
-                  buildWhen: (previous, current) => current is CurrenciesLoaded,
+                  buildWhen: (previous, current) =>
+                      current is CurrenciesLoaded,
                   listener: (context, state) {
                     if (state is CurrenciesLoaded) {
                       allCur = state.currencisList;
@@ -176,7 +178,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           builder: (context) {
                             return SizedBox(
                                 height: 200,
-                                child: Center(child: Text(state.errorMessage)));
+                                child:
+                                    Center(child: Text(state.errorMessage)));
                           });
                     }
                     return Currencycard(
