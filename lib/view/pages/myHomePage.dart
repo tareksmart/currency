@@ -76,6 +76,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var allCur, allRate;
     final size = MediaQuery.of(context).size;
@@ -153,8 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: size.height * .03,
                 ),
                 BlocConsumer<CurrencyCubit, CurrencyState>(
-                  buildWhen: (previous, current) =>
-                      current is CurrenciesLoaded,
+                  buildWhen: (previous, current) => current is CurrenciesLoaded,
                   listener: (context, state) {
                     if (state is CurrenciesLoaded) {
                       allCur = state.currencisList;
@@ -177,9 +183,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           context: context,
                           builder: (context) {
                             return SizedBox(
-                                height: 200,
-                                child:
-                                    Center(child: Text(state.errorMessage)));
+                              height: 200,
+                              child: Center(
+                                child: Text(state.errorMessage),
+                              ),
+                            );
                           });
                     }
                     return Currencycard(

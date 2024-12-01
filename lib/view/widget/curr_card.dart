@@ -5,6 +5,7 @@ import 'package:currencypro/controller/cubit/hive_cubit/read_currency_hive_cubit
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
 import 'package:currencypro/controller/cubit/press_number_cubit/press_number_cubit_cubit.dart';
 import 'package:currencypro/model/currency_data.dart';
+import 'package:currencypro/view/widget/waiting_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
@@ -173,14 +174,10 @@ class _CurrencycardState extends State<Currencycard> {
                     BlocBuilder<AddCurrencyDataCubit, AddCurrencyDataState>(
                       builder: (context, state) {
                         if (state is AddCurrencyDataWaitingState) {
-                          return const LinearProgressIndicator(
-                            color: Colors.green,
-                          );
+                          return  WaitingAlertDialog(title: 'please wait',progressColor: Colors.green,);
                         } else if (state is AddCurrencyDataSuccess) {
                         } else if (state is AddCurrencyDataFailure) {
-                          return const LinearProgressIndicator(
-                            color: Colors.red,
-                          );
+                          return WaitingAlertDialog(title: 'Fail loading',progressColor: Colors.red,);
                         }
                         return const Text('');
                       },
@@ -225,3 +222,5 @@ class _CurrencycardState extends State<Currencycard> {
     );
   }
 }
+
+

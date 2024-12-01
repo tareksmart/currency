@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/controller/cubit/hive_cubit/read_currency_hive_cubit/cubit/read_currency_cubit.dart';
+import 'package:currencypro/view/widget/waiting_alert_dialog.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,12 +46,12 @@ class _MyDrawerState extends State<MyDrawer> {
     //hive for 2second
     //لحل مشكلة ان ستايت القراءة بيجى قبل ستايت الكتابة
     if (mounted) {
-      await Future.delayed(const Duration(seconds: 10));
+      await Future.delayed(const Duration(milliseconds: 300));
       BlocProvider.of<ReadCurrencyCubit>(context).readCurrency();
     }
   }
 
-  var latestRate;
+  List<Map<String,dynamic>> latestRate=[];
   void readLatestRate() async {
     //var rateBox = await Hive.openBox<Map<String, dynamic>>(MyconstantName.latestRateBox);
     //await Future.delayed(const Duration(seconds: 10));
@@ -89,22 +90,34 @@ class _MyDrawerState extends State<MyDrawer> {
     // TODO: implement dispose
     debugPrint('dezposing**************************************');
     _searchController.dispose();
+    closeCubit();
     super.dispose();
   }
 
+  void closeCubit() async {
+    await ReadCurrencyCubit().close();
+  }
+
 //////////////////////
-  var currList;
+  List<CurrencyData> currList = [];
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ReadCurrencyCubit, ReadCurrencyState>(
       buildWhen: (previous, current) => current is ReadCurrencysuccessState,
       builder: (context, state) {
+        if(state is ReadCurrencyWaitingState)
+           WaitingAlertDialog(
+            title: 'please wait',
+          );
         if (state is ReadCurrencysuccessState && mounted) {
+        
+          currList = state.currencyList;
           return Drawer(
             backgroundColor: MyColors.backGroundTextFieldColor,
             child: SafeArea(
               child: Column(
                 children: [
+                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -135,8 +148,7 @@ class _MyDrawerState extends State<MyDrawer> {
                             onChanged: (val) {
                               SearchedCurrList.clear();
                               SearchedCurrList = searchedCurrency(
-                                      _searchController.text,
-                                      state.currencyList) ??
+                                      _searchController.text, currList) ??
                                   [];
 
                               setState(() {});
@@ -179,7 +191,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       child: Builder(builder: (context) {
                         return ListView.separated(
                           itemCount:
-                              checkCurrList(state, SearchedCurrList).length,
+                              checkCurrList(currList, SearchedCurrList).length,
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
@@ -189,10 +201,10 @@ class _MyDrawerState extends State<MyDrawer> {
                             //         ))
                             //     .toList(),
                             return ExpansionTile(
-                              title: Text(
-                                  checkCurrList(state, SearchedCurrList)[index]
-                                          .countryName ??
-                                      ''),
+                              title: Text(checkCurrList(
+                                          currList, SearchedCurrList)[index]
+                                      .countryName ??
+                                  ''),
                               leading: CachedNetworkImage(
                                 imageUrl: state.currencyList[index].icon!,
                                 fit: BoxFit.contain,
@@ -206,17 +218,17 @@ class _MyDrawerState extends State<MyDrawer> {
                               ),
                               children: [
                                 Text(checkCurrList(
-                                        state, SearchedCurrList)[index]
+                                        currList, SearchedCurrList)[index]
                                     .currencyName
                                     .toString()),
-                                if (latestRate != null)
+                                if (latestRate.length>0 && mounted)
                                   Text(latestRate[0][checkCurrList(
-                                              state, SearchedCurrList)[index]
+                                              currList, SearchedCurrList)[index]
                                           .currencyCode
                                           .toString()] ??
                                       'KNOWN')
                                 else
-                                  LinearProgressIndicator()
+                                  const LinearProgressIndicator(),
                               ],
                             );
                             // CurrencyListDrawer(
@@ -247,11 +259,11 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   List<CurrencyData> checkCurrList(
-      ReadCurrencysuccessState state, List<CurrencyData> SearchedCurrList) {
+      List<CurrencyData> allCurrList, List<CurrencyData> SearchedCurrList) {
     if (SearchedCurrList.isNotEmpty) {
       return searchedList;
     } else {
-      return state.currencyList;
+      return allCurrList;
     }
   }
 }
