@@ -27,6 +27,7 @@ dependencies:
   hive:
   hive_flutter:
   dropdown_search: ^5.0.6
+  speech_to_text: ^7.0.0
 
 dev_dependencies:
   flutter_test:
