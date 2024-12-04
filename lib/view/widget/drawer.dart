@@ -26,9 +26,10 @@ class _MyDrawerState extends State<MyDrawer> {
   String sArg = "";
   List<CurrencyData> SearchedCurrList = [];
   TextEditingController searchController = TextEditingController();
-  SpeechToText _speechToText = SpeechToText();
+  late SpeechToText _speechToText;
   bool _speechEnabled = false;
-  String _lastWords = '';
+  String lastWords = '';
+  List<LocaleName> _localeNames = [];
   List<CurrencyData>? searchedCurrency(
       String searchArg, List<CurrencyData> currList) {
     if (currList.isNotEmpty) {
@@ -86,20 +87,26 @@ class _MyDrawerState extends State<MyDrawer> {
     // TODO: implement initState
     readHive();
     readLatestRate();
+    _speechToText = SpeechToText();
     super.initState();
     _initSpeech();
+    // searchController.addListener((){
+    //   setState(() {
+    //     searchController.text=_speechToText.isListening ? lastWords : '';
+    //   });
+    // });
   }
 
   /// This has to happen only once per app
   void _initSpeech() async {
     _speechEnabled = await _speechToText.initialize();
-
+    _localeNames = await _speechToText.locales();
     setState(() {});
   }
 
   /// Each time to start a speech recognition session
   void _startListening() async {
-    await _speechToText.listen(onResult: _onSpeechResult);
+    await _speechToText.listen(onResult: _onSpeechResult, localeId: "en_US");
     setState(() {});
   }
 
@@ -116,7 +123,7 @@ class _MyDrawerState extends State<MyDrawer> {
   /// the platform returns recognized words.
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
-      _lastWords = result.recognizedWords;
+      lastWords = result.recognizedWords;
     });
   }
 
@@ -203,30 +210,22 @@ class _MyDrawerState extends State<MyDrawer> {
                                   onPressed: () {
                                     //excute
                                     _speechToText.isNotListening
-                                        ? _startListening
-                                        : _stopListening;
-//show words
-                                    if (_speechToText.isListening) {
-                                      SearchedCurrList.clear();
+                                        ? _startListening()
+                                        : _stopListening();
+                                    setState(() {
+                                      print('*******$lastWords');
+                                         SearchedCurrList.clear();
                                       SearchedCurrList = searchedCurrency(
-                                              _lastWords, currList) ??
+                                              lastWords, currList) ??
                                           [];
-                                      debugPrint(_lastWords);
-                                      setState(() {});
-                                    } else if (_speechEnabled &&
-                                        _speechToText.isListening)
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) =>
-                                              WaitingAlertDialog(
-                                                title:
-                                                    'Tap the microphone to start listening...',
-                                              ));
-                                    else
-                                      WaitingAlertDialog(
-                                          title: 'Speech not available');
+                                      searchController.value =
+                                          TextEditingValue(text: lastWords);
+                                   
+                                    });
+                                    setState(() {
+                                      
+                                    });
 
-                                    print(searchController.text);
                                   },
                                   icon: Icon(
                                     _speechToText.isNotListening
