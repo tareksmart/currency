@@ -90,23 +90,34 @@ class _MyDrawerState extends State<MyDrawer> {
     _speechToText = SpeechToText();
     super.initState();
     _initSpeech();
-    // searchController.addListener((){
-    //   setState(() {
-    //     searchController.text=_speechToText.isListening ? lastWords : '';
-    //   });
-    // });
+    searchController.addListener(() {
+      setState(() {
+        SearchedCurrList.clear();
+        SearchedCurrList =
+            searchedCurrency(searchController.text.toLowerCase(), currList) ??
+                [];
+      });
+      print('************** listener');
+    });
   }
 
   /// This has to happen only once per app
   void _initSpeech() async {
-    _speechEnabled = await _speechToText.initialize();
-    _localeNames = await _speechToText.locales();
+    _speechEnabled = await _speechToText.initialize(
+      onStatus: (val) => print('onStatus: $val'),
+      onError: (val) => print('onError: $val'),
+    );
+   // _localeNames = await _speechToText.locales();
     setState(() {});
   }
 
   /// Each time to start a speech recognition session
   void _startListening() async {
-    await _speechToText.listen(onResult: _onSpeechResult, localeId: "en_US");
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      localeId: "en_US",
+    );
+    print('**********listn start');
     setState(() {});
   }
 
@@ -116,6 +127,8 @@ class _MyDrawerState extends State<MyDrawer> {
   /// listen method.
   void _stopListening() async {
     await _speechToText.stop();
+    print('**********listn stop');
+
     setState(() {});
   }
 
@@ -124,7 +137,9 @@ class _MyDrawerState extends State<MyDrawer> {
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       lastWords = result.recognizedWords;
+         searchController.value = TextEditingValue(text: lastWords.toLowerCase());
     });
+   
   }
 
   @override
@@ -207,28 +222,16 @@ class _MyDrawerState extends State<MyDrawer> {
                                   width: widget.size.width * .5,
                                 ),
                                 IconButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     //excute
                                     _speechToText.isNotListening
                                         ? _startListening()
                                         : _stopListening();
-                                    setState(() {
-                                      print('*******$lastWords');
-                                         SearchedCurrList.clear();
-                                      SearchedCurrList = searchedCurrency(
-                                              lastWords, currList) ??
-                                          [];
-                                      searchController.value =
-                                          TextEditingValue(text: lastWords);
-                                   
-                                    });
-                                    setState(() {
-                                      
-                                    });
-
+                                
+                                    setState(() {});
                                   },
                                   icon: Icon(
-                                    _speechToText.isNotListening
+                                    (_speechToText.isNotListening||_speechToText.hasError)
                                         ? Icons.mic_off
                                         : Icons.mic,
                                     color: Colors.black26,
