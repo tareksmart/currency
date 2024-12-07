@@ -39,7 +39,9 @@ class MyDropDownMenuItem extends StatelessWidget {
         ),
         itemAsString: (item) => item.countryName ?? 'select currency',
         dropdownBuilder: (context, selectedItem) {
+        
           if (selectedItem != null) {
+              print('**************selected item${selectedItem!.countryName??'eg'}');
             return SizedBox(
               height: size.height * .05,
               //  width: size.width * .6,

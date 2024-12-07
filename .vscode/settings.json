@@ -1,7 +1,8 @@
 {
-    "editor.fontFamily": "Menlo",
+    "editor.fontFamily": "Menlo Nerd Font Mono",
     "editor.fontSize": 12,
     "editor.lineHeight": 2.5,
    "window.zoomLevel":0,
+   "editor.fontWeight": "normal"
     
 }

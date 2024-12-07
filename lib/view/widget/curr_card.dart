@@ -93,7 +93,7 @@ class _CurrencycardState extends State<Currencycard> {
                       children: [
                         Expanded(
                           child: MyDropDownButtonComponent(
-                            key: const ValueKey(1),
+                            key:  ValueKey(1),
                             base: true,
                             basePriceFunc: basePriceCallBack,
                             localPriceFunc: localPriceCallBack,
@@ -141,7 +141,7 @@ class _CurrencycardState extends State<Currencycard> {
                       children: [
                         Expanded(
                           child: MyDropDownButtonComponent(
-                            key: const ValueKey(2),
+                            key:  ValueKey(2),
                             base: false,
                             size: size,
                             basePriceFunc: basePriceCallBack,
@@ -210,6 +210,7 @@ class _CurrencycardState extends State<Currencycard> {
                   // await rateBox.deleteFromDisk();
                   print(
                       'result($_basePrice, $_toPrice, ${_baseCurrency_controller.text.trim()});');
+
                   _toCurr_controller.text = result(_basePrice, _toPrice,
                       _baseCurrency_controller.text.trim());
                 },

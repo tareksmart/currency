@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/controller/cubit/hive_cubit/read_currency_hive_cubit/cubit/read_currency_cubit.dart';
+import 'package:currencypro/services/hive_services.dart';
 import 'package:currencypro/view/widget/waiting_alert_dialog.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,9 @@ class _MyDrawerState extends State<MyDrawer> {
   bool _speechEnabled = false;
   String lastWords = '';
   List<LocaleName> _localeNames = [];
-  List<CurrencyData>? searchedCurrency(
+   HiveSevices hiveSevices=HiveSevices();
+  List<Map<dynamic, dynamic>> latestRate = [];
+    List<CurrencyData>? searchedCurrency(
       String searchArg, List<CurrencyData> currList) {
     if (currList.isNotEmpty) {
       if (searchArg.trim() != '' && currList.isNotEmpty) {
@@ -45,50 +48,21 @@ class _MyDrawerState extends State<MyDrawer> {
     return null;
   }
 /////////////////////
-
-  readHive() async {
-    //تم تاخير القراءة من ال
-    //hive for 2second
-    //لحل مشكلة ان ستايت القراءة بيجى قبل ستايت الكتابة
-    if (mounted) {
-      await Future.delayed(const Duration(milliseconds: 300));
-      BlocProvider.of<ReadCurrencyCubit>(context).readCurrency();
-    }
-  }
-
-  List<Map<String, dynamic>> latestRate = [];
-  void readLatestRate() async {
-    //var rateBox = await Hive.openBox<Map<String, dynamic>>(MyconstantName.latestRateBox);
-    //await Future.delayed(const Duration(seconds: 10));
-    //var rateBox = Hive.box(MyconstantName.latestRateBox);
-    if (mounted) latestRate = await readFromHive();
-  }
-
-  Future<List<Map<String, dynamic>>> readFromHive() async {
-    try {
-      final box = await Hive.openBox<Map<dynamic, dynamic>>(
-          MyconstantName.latestRateBox);
-
-      final result = box.toMap().map(
-            (k, e) => MapEntry(
-              k.toString(),
-              Map<String, dynamic>.from(e),
-            ),
-          );
-      //print('hive rate number is **${result.values.toList()[0].length}');
-      return result.values.toList();
-    } on Exception catch (e) {
-      throw ('rate exceptio $e');
-    }
-  }
-
+readLatestRate()async{
+latestRate=await hiveSevices.readLatestRate();
+}
   @override
   void initState() {
     // TODO: implement initState
-    readHive();
-    readLatestRate();
+   
+   hiveSevices.readHive(context);
+ 
+   readLatestRate();
+
     _speechToText = SpeechToText();
+    
     super.initState();
+    
     _initSpeech();
     searchController.addListener(() {
       setState(() {
@@ -182,7 +156,9 @@ class _MyDrawerState extends State<MyDrawer> {
                           height: widget.size.height * .06,
                         ),
                       ),
-                      const Icon(Icons.close)
+                      IconButton(icon:const Icon(Icons.close),onPressed: (){
+                        Scaffold.of(context).closeDrawer();
+                      },),
                     ],
                   ),
                   Padding(
