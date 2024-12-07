@@ -96,6 +96,7 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
             latestRate: latestRate,
           );
         } else if (state is ReadCurrencyfailureState) {
+          
           return Text('error:${state.errorMessage}');
         } else if (state is ReadCurrencyWaitingState) {
           return const LinearProgressIndicator();

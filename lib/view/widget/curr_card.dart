@@ -30,7 +30,8 @@ class _CurrencycardState extends State<Currencycard> {
   String _basePrice = '0';
   String _toPrice = '0';
   final _globalKey = GlobalKey<FormState>();
-
+final Key baseKey=UniqueKey();
+final Key localeKey=UniqueKey();
   void basePriceCallBack(String baseCurr) {
     _basePrice = baseCurr;
   }
@@ -66,7 +67,26 @@ class _CurrencycardState extends State<Currencycard> {
     _baseCurrency_controller.clear();
     super.dispose();
   }
-
+Widget _baseDropDownWidget(Size size){
+  return MyDropDownButtonComponent(
+                            key:  baseKey,
+                            base: true,
+                            basePriceFunc: basePriceCallBack,
+                            localPriceFunc: localPriceCallBack,
+                            size: size,
+                            typeOfCurrency: MyconstantName.base,
+                          );
+}
+Widget _localDropDownWidget(Size size){
+  return MyDropDownButtonComponent(
+                            key:  localeKey,
+                            base: false,
+                            size: size,
+                            basePriceFunc: basePriceCallBack,
+                            localPriceFunc: localPriceCallBack,
+                            typeOfCurrency: MyconstantName.local,
+  );
+}
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -93,7 +113,7 @@ class _CurrencycardState extends State<Currencycard> {
                       children: [
                         Expanded(
                           child: MyDropDownButtonComponent(
-                            key:  ValueKey(1),
+                            key:  baseKey,
                             base: true,
                             basePriceFunc: basePriceCallBack,
                             localPriceFunc: localPriceCallBack,
@@ -141,7 +161,7 @@ class _CurrencycardState extends State<Currencycard> {
                       children: [
                         Expanded(
                           child: MyDropDownButtonComponent(
-                            key:  ValueKey(2),
+                            key:  localeKey,
                             base: false,
                             size: size,
                             basePriceFunc: basePriceCallBack,

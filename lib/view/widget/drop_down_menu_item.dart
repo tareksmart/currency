@@ -23,7 +23,7 @@ class MyDropDownMenuItem extends StatelessWidget {
   Function(String) basePriceFun;
   Function(String) localPriceFun;
   final List latestRate;
-  String _selectedItem = "EGP";
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +38,13 @@ class MyDropDownMenuItem extends StatelessWidget {
               border: OutlineInputBorder(gapPadding: 2)),
         ),
         itemAsString: (item) => item.countryName ?? 'select currency',
+
         dropdownBuilder: (context, selectedItem) {
         
           if (selectedItem != null) {
-              print('**************selected item${selectedItem!.countryName??'eg'}');
+          
+         
+
             return SizedBox(
               height: size.height * .05,
               //  width: size.width * .6,
@@ -81,7 +84,7 @@ class MyDropDownMenuItem extends StatelessWidget {
             );
         },
         onChanged: (value) {
-       //   print('latest rate is ${latestRate[0][value?.currencyCode!]}for curr code ${value?.countryCode!}');
+            
           if (value != null) {
             var price = latestRate[0][value?.currencyCode!];
             if (typeOfCurrency == MyconstantName.base)
@@ -118,43 +121,6 @@ class MyDropDownMenuItem extends StatelessWidget {
             )),
       ),
     );
-//     return DropdownMenu<String?>(
-//       label: Text(
-//         'select $typeOfCurrency',
-//         style: TextStyle(fontSize: 14, color: Colors.blue[700]),
-//       ),
-//       width: size.width * .4,
-//       menuHeight: size.height * .5,
-//       dropdownMenuEntries: currencyDataList.map((e) {
-//         debugPrint('********************loop');
 
-//         return DropdownMenuEntry(
-//             // leadingIcon: CachedNetworkImage(
-//             //   imageUrl: e.icon!,
-//             //   fit: BoxFit.contain,
-//             //   width: 16,
-//             //   height: 20,
-//             //   placeholder: (context, url) =>
-//             //       Image.asset('assets/images/Missing_flag.png'),
-//             //   errorWidget: (context, url, error) =>
-//             //       Image.asset('assets/images/Missing_flag.png'),
-//             // ),
-//             value: e.currencyCode,
-//             label: e.currencyName ?? 'dollar');
-//       }).toList(),
-//       requestFocusOnTap: true,
-//       enableSearch: true,
-//       onSelected: (value) {
-//         if (value != null) {
-//           print('value is $value');
-//           // var price = widget.allRate[value];
-// //  print('price is $price');
-//           // if (widget.typeOfCurrency == MyconstantName.base)
-//           //   widget.basePriceFun(price);
-//           // else
-//           //   widget.localPriceFun(price);
-//         }
-//       },
-//     );
   }
 }
