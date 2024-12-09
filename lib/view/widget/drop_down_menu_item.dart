@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class MyDropDownMenuItem extends StatelessWidget {
+class MyDropDownMenuItem extends StatefulWidget {
   MyDropDownMenuItem(
       {super.key,
       required this.currencyDataList,
@@ -15,22 +15,35 @@ class MyDropDownMenuItem extends StatelessWidget {
       required this.basePriceFun,
       required this.localPriceFun,
       required this.typeOfCurrency,
-      required this.latestRate});
+      required this.latestRate,
+      required this.currBaseDataCallback,
+      required this.currLocalDataCallback,
+      required this.exchange});
   final List<CurrencyData> currencyDataList;
   final Size size;
   // final Map<String, dynamic> allRate;
   final String typeOfCurrency;
   Function(String) basePriceFun;
   Function(String) localPriceFun;
+  Function(CurrencyData) currBaseDataCallback;
+  Function(CurrencyData) currLocalDataCallback;
   final List latestRate;
+  final bool exchange;
+  List<CurrencyData> selectedItems = [];
+  @override
+  State<MyDropDownMenuItem> createState() => _MyDropDownMenuItemState();
+}
 
+class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
+  late CurrencyData _baseCur;
+  late CurrencyData _localCur;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: size.width * .4,
+      width: widget.size.width * .4,
       child: DropdownSearch<CurrencyData>(
-        items: currencyDataList,
+        items: widget.currencyDataList,
         dropdownDecoratorProps: const DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
               filled: true,
@@ -38,15 +51,19 @@ class MyDropDownMenuItem extends StatelessWidget {
               border: OutlineInputBorder(gapPadding: 2)),
         ),
         itemAsString: (item) => item.countryName ?? 'select currency',
-
+        // onBeforeChange: (prevItem, nextItem) async {
+        //   if (prevItem != null)
+        //     debugPrint('pre item***********${prevItem!.countryName}');
+        //   if (nextItem != null) {
+        //     debugPrint('nextItem***********${nextItem!.countryName}');
+        //     debugPrint('pre item***********${prevItem!.countryName}');
+        //   }
+        //   return true;
+        // },
         dropdownBuilder: (context, selectedItem) {
-        
           if (selectedItem != null) {
-          
-         
-
             return SizedBox(
-              height: size.height * .05,
+              height: widget.size.height * .05,
               //  width: size.width * .6,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -84,20 +101,35 @@ class MyDropDownMenuItem extends StatelessWidget {
             );
         },
         onChanged: (value) {
-            
           if (value != null) {
-            var price = latestRate[0][value?.currencyCode!];
-            if (typeOfCurrency == MyconstantName.base)
-              basePriceFun(price);
-            else
-              localPriceFun(price);
+            widget.selectedItems.add(value);
+            debugPrint(
+                '********selectedItems   ${widget.selectedItems.length}');
+            if (widget.selectedItems.length > 2) {
+              debugPrint(
+                  '********selectedItems   ${widget.selectedItems[0].countryName}');
+              debugPrint(
+                  '********selectedItems   ${widget.selectedItems[1].countryName}');
+            }
+
+            var price = widget.latestRate[0][value?.currencyCode!];
+            if (widget.typeOfCurrency == MyconstantName.base) {
+              widget.basePriceFun(price);
+              widget.currBaseDataCallback(value);
+              _baseCur = value;
+            } else {
+              widget.localPriceFun(price);
+              widget.currLocalDataCallback(value);
+              _localCur = value;
+            }
           }
         },
         popupProps: PopupProps.menu(
             fit: FlexFit.loose,
             showSearchBox: true,
             itemBuilder: (context, item, isSelected) {
-              return ListTile(
+              if(widget.exchange) {
+                return ListTile(
                 title: Text(
                   item.currencyName ?? 'knwon',
                   style: const TextStyle(color: Colors.blue, fontSize: 12),
@@ -114,6 +146,25 @@ class MyDropDownMenuItem extends StatelessWidget {
                       Image.asset('assets/images/Missing_flag.png'),
                 ),
               );
+              }else{
+                  return ListTile(
+                title: Text(
+                  _localCur.currencyName ?? 'knwon',
+                  style: const TextStyle(color: Colors.blue, fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                leading: CachedNetworkImage(
+                  imageUrl: _localCur.icon!,
+                  fit: BoxFit.contain,
+                  width: 30,
+                  height: 30,
+                  placeholder: (context, url) =>
+                      Image.asset('assets/images/Missing_flag.png'),
+                  errorWidget: (context, url, error) =>
+                      Image.asset('assets/images/Missing_flag.png'),
+                ),
+              );
+              }
             },
             title: const Text(
               'search currency',
@@ -121,6 +172,5 @@ class MyDropDownMenuItem extends StatelessWidget {
             )),
       ),
     );
-
   }
 }

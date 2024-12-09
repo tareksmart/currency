@@ -29,15 +29,28 @@ class _CurrencycardState extends State<Currencycard> {
   String _selectedValue = '0';
   String _basePrice = '0';
   String _toPrice = '0';
+  CurrencyData _baseCurrData = CurrencyData();
+  CurrencyData _localCurrData = CurrencyData();
   final _globalKey = GlobalKey<FormState>();
-final Key baseKey=UniqueKey();
-final Key localeKey=UniqueKey();
+  final Key baseKey = UniqueKey();
+  final Key localeKey = UniqueKey();
+   bool exchange = true;
   void basePriceCallBack(String baseCurr) {
     _basePrice = baseCurr;
   }
 
   void localPriceCallBack(String localCurr) {
     _toPrice = localCurr;
+  }
+
+  currBaseDataCallback(CurrencyData baseCurD) {
+    _baseCurrData = baseCurD;
+    debugPrint('******currBaseDataCallback ${baseCurD.countryName}');
+  }
+
+  currLocalDataCallback(CurrencyData localCurrD) {
+    _localCurrData = localCurrD;
+    debugPrint('******currLocalDataCallback ${localCurrD.countryName}');
   }
 
   String result(String basePrice, String toPrice, String mony) {
@@ -67,26 +80,7 @@ final Key localeKey=UniqueKey();
     _baseCurrency_controller.clear();
     super.dispose();
   }
-Widget _baseDropDownWidget(Size size){
-  return MyDropDownButtonComponent(
-                            key:  baseKey,
-                            base: true,
-                            basePriceFunc: basePriceCallBack,
-                            localPriceFunc: localPriceCallBack,
-                            size: size,
-                            typeOfCurrency: MyconstantName.base,
-                          );
-}
-Widget _localDropDownWidget(Size size){
-  return MyDropDownButtonComponent(
-                            key:  localeKey,
-                            base: false,
-                            size: size,
-                            basePriceFunc: basePriceCallBack,
-                            localPriceFunc: localPriceCallBack,
-                            typeOfCurrency: MyconstantName.local,
-  );
-}
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -113,12 +107,15 @@ Widget _localDropDownWidget(Size size){
                       children: [
                         Expanded(
                           child: MyDropDownButtonComponent(
-                            key:  baseKey,
+                            key: baseKey,
                             base: true,
                             basePriceFunc: basePriceCallBack,
                             localPriceFunc: localPriceCallBack,
                             size: size,
                             typeOfCurrency: MyconstantName.base,
+                            currBaseDataCallback: currBaseDataCallback,
+                            currLocalDataCallback: currLocalDataCallback,
+                            exchange: exchange,
                           ),
                         ),
                         const SizedBox(
@@ -143,9 +140,8 @@ Widget _localDropDownWidget(Size size){
                                 keyboardType: TextInputType.number,
                                 controller: _baseCurrency_controller,
                                 decoration: InputDecoration(
-                                    labelStyle: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium),
+                                    labelStyle:
+                                        Theme.of(context).textTheme.bodyMedium),
                               );
                             },
                           ),
@@ -161,12 +157,15 @@ Widget _localDropDownWidget(Size size){
                       children: [
                         Expanded(
                           child: MyDropDownButtonComponent(
-                            key:  localeKey,
+                            key: localeKey,
                             base: false,
                             size: size,
                             basePriceFunc: basePriceCallBack,
                             localPriceFunc: localPriceCallBack,
                             typeOfCurrency: MyconstantName.local,
+                            currBaseDataCallback: currBaseDataCallback,
+                            currLocalDataCallback: currLocalDataCallback,
+                            exchange: exchange,
                           ),
                         ),
                         const SizedBox(
@@ -194,10 +193,16 @@ Widget _localDropDownWidget(Size size){
                     BlocBuilder<AddCurrencyDataCubit, AddCurrencyDataState>(
                       builder: (context, state) {
                         if (state is AddCurrencyDataWaitingState) {
-                          return  WaitingAlertDialog(title: 'please wait',progressColor: Colors.green,);
+                          return WaitingAlertDialog(
+                            title: 'please wait',
+                            progressColor: Colors.green,
+                          );
                         } else if (state is AddCurrencyDataSuccess) {
                         } else if (state is AddCurrencyDataFailure) {
-                          return WaitingAlertDialog(title: 'Fail loading',progressColor: Colors.red,);
+                          return WaitingAlertDialog(
+                            title: 'Fail loading',
+                            progressColor: Colors.red,
+                          );
                         }
                         return const Text('');
                       },
@@ -215,22 +220,20 @@ Widget _localDropDownWidget(Size size){
               SizedBox(
                 height: size.height * .37,
               ),
+              ElevatedButton.icon(
+                onPressed: () {
+                  debugPrint(
+                      '******currBaseDataCallback ${_baseCurrData.countryName}');
+                  debugPrint(
+                      '******currLocalDataCallback ${_localCurrData.countryName}');
+                  exchange = false;
+                },
+                label: Text('exchange'),
+                icon: Icon(Icons.currency_exchange_rounded),
+              ),
               ConvertButton(
                 text: 'CONVERT',
                 onTab: () async {
-                  // var currBox =
-                  //     Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
-                  // var dateBox = Hive.box<String>(MyconstantName.dateAddHiveBox);
-                  // await currBox.deleteFromDisk();
-    
-                  // await dateBox.deleteFromDisk();
-                  // var rateBox = Hive.box<Map<dynamic, dynamic>>(
-                  //     MyconstantName.latestRateBox);
-    
-                  // await rateBox.deleteFromDisk();
-                  print(
-                      'result($_basePrice, $_toPrice, ${_baseCurrency_controller.text.trim()});');
-
                   _toCurr_controller.text = result(_basePrice, _toPrice,
                       _baseCurrency_controller.text.trim());
                 },
@@ -243,5 +246,3 @@ Widget _localDropDownWidget(Size size){
     );
   }
 }
-
-

@@ -20,15 +20,20 @@ class MyDropDownButtonComponent extends StatefulWidget {
       required this.basePriceFunc,
       required this.localPriceFunc,
       required this.base,
-      required this.typeOfCurrency})
+      required this.typeOfCurrency,
+      required this.currBaseDataCallback,
+      required this.currLocalDataCallback, required this.exchange})
       : super(key: key);
   final Size size;
   // final Map<String, dynamic> allRate;
   // Function(String?, bool) drop;
   Function(String) basePriceFunc;
   Function(String) localPriceFunc;
+   Function(CurrencyData) currBaseDataCallback;
+   Function(CurrencyData) currLocalDataCallback;
   final bool base;
   final String typeOfCurrency;
+   final bool exchange;
 
   @override
   State<MyDropDownButtonComponent> createState() =>
@@ -86,7 +91,7 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
       buildWhen: (previous, current) => current is ReadCurrencysuccessState,
       builder: (context, state) {
         if (state is ReadCurrencysuccessState) {
-          debugPrint('*************hive number${state.currencyList.length}');
+          //debugPrint('*************hive number${state.currencyList.length}');
           return MyDropDownMenuItem(
             currencyDataList: state.currencyList,
             size: widget.size,
@@ -94,9 +99,11 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
             localPriceFun: widget.localPriceFunc,
             typeOfCurrency: widget.typeOfCurrency,
             latestRate: latestRate,
+            currBaseDataCallback:widget.currBaseDataCallback ,
+            currLocalDataCallback: widget.currLocalDataCallback,
+             exchange: widget.exchange,
           );
         } else if (state is ReadCurrencyfailureState) {
-          
           return Text('error:${state.errorMessage}');
         } else if (state is ReadCurrencyWaitingState) {
           return const LinearProgressIndicator();
