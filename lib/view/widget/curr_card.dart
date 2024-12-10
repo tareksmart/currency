@@ -34,7 +34,7 @@ class _CurrencycardState extends State<Currencycard> {
   final _globalKey = GlobalKey<FormState>();
   final Key baseKey = UniqueKey();
   final Key localeKey = UniqueKey();
-   bool exchange = true;
+  bool exchange = true;
   void basePriceCallBack(String baseCurr) {
     _basePrice = baseCurr;
   }
@@ -116,6 +116,8 @@ class _CurrencycardState extends State<Currencycard> {
                             currBaseDataCallback: currBaseDataCallback,
                             currLocalDataCallback: currLocalDataCallback,
                             exchange: exchange,
+                            baseCurrFromHome: _localCurrData,
+                          localCurrFromHome: _baseCurrData,
                           ),
                         ),
                         const SizedBox(
@@ -166,6 +168,9 @@ class _CurrencycardState extends State<Currencycard> {
                             currBaseDataCallback: currBaseDataCallback,
                             currLocalDataCallback: currLocalDataCallback,
                             exchange: exchange,
+                            baseCurrFromHome: _localCurrData,
+                            localCurrFromHome: _baseCurrData,
+
                           ),
                         ),
                         const SizedBox(

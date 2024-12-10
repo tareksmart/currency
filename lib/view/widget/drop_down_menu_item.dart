@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/model/currency_data.dart';
 import 'package:currencypro/view/constant/myConstants.dart';
+import 'package:currencypro/view/widget/selected_item_widget.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,9 @@ class MyDropDownMenuItem extends StatefulWidget {
       required this.latestRate,
       required this.currBaseDataCallback,
       required this.currLocalDataCallback,
-      required this.exchange});
+      required this.exchange,
+      this.baseCurrFromHome,
+      this.localCurrFromHome});
   final List<CurrencyData> currencyDataList;
   final Size size;
   // final Map<String, dynamic> allRate;
@@ -28,15 +31,23 @@ class MyDropDownMenuItem extends StatefulWidget {
   Function(CurrencyData) currBaseDataCallback;
   Function(CurrencyData) currLocalDataCallback;
   final List latestRate;
-  final bool exchange;
+   bool exchange;
+  CurrencyData? baseCurrFromHome;
+  CurrencyData? localCurrFromHome;
   List<CurrencyData> selectedItems = [];
   @override
   State<MyDropDownMenuItem> createState() => _MyDropDownMenuItemState();
 }
 
 class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
-  late CurrencyData _baseCur;
-  late CurrencyData _localCur;
+  late CurrencyData _baseCur = CurrencyData();
+  late CurrencyData _localCur = CurrencyData();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    widget.exchange = true;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,67 +62,40 @@ class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
               border: OutlineInputBorder(gapPadding: 2)),
         ),
         itemAsString: (item) => item.countryName ?? 'select currency',
-        // onBeforeChange: (prevItem, nextItem) async {
-        //   if (prevItem != null)
-        //     debugPrint('pre item***********${prevItem!.countryName}');
-        //   if (nextItem != null) {
-        //     debugPrint('nextItem***********${nextItem!.countryName}');
-        //     debugPrint('pre item***********${prevItem!.countryName}');
-        //   }
-        //   return true;
-        // },
         dropdownBuilder: (context, selectedItem) {
           if (selectedItem != null) {
-            return SizedBox(
-              height: widget.size.height * .05,
-              //  width: size.width * .6,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl: selectedItem.icon!,
-                      fit: BoxFit.contain,
-                      width: 30,
-                      height: 30,
-                      placeholder: (context, url) =>
-                          Image.asset('assets/images/Missing_flag.png'),
-                      errorWidget: (context, url, error) =>
-                          Image.asset('assets/images/Missing_flag.png'),
-                    ),
-                    Flexible(
-                      child: Text(
-                        selectedItem.countryName ?? 'select currency',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge!
-                            .copyWith(color: MyColors.dropDownSearchfontColor),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            if (widget.exchange)
+              return SelectedItemWidget(
+                widget: widget,
+                selectedItem: selectedItem,
+              );
+            else if (widget.localCurrFromHome!.countryCode!.isNotEmpty &&
+                widget.exchange == false)
+              return SelectedItemWidget(
+                widget: widget,
+                selectedItem: widget.localCurrFromHome,
+              );
+            else {
+              if (widget.exchange == false &&
+                  widget.baseCurrFromHome!.countryCode!.isNotEmpty)
+                return SelectedItemWidget(
+                  widget: widget,
+                  selectedItem: widget.baseCurrFromHome,
+                );
+            }
+            return SelectedItemWidget(
+              widget: widget,
+              selectedItem: selectedItem,
             );
-          } else
+          } else {
             return Text(
               'select currency',
               style: TextStyle(color: MyColors.dropDownSearchfontColor),
             );
+          }
         },
         onChanged: (value) {
           if (value != null) {
-            widget.selectedItems.add(value);
-            debugPrint(
-                '********selectedItems   ${widget.selectedItems.length}');
-            if (widget.selectedItems.length > 2) {
-              debugPrint(
-                  '********selectedItems   ${widget.selectedItems[0].countryName}');
-              debugPrint(
-                  '********selectedItems   ${widget.selectedItems[1].countryName}');
-            }
-
             var price = widget.latestRate[0][value?.currencyCode!];
             if (widget.typeOfCurrency == MyconstantName.base) {
               widget.basePriceFun(price);
@@ -128,8 +112,7 @@ class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
             fit: FlexFit.loose,
             showSearchBox: true,
             itemBuilder: (context, item, isSelected) {
-              if(widget.exchange) {
-                return ListTile(
+              return ListTile(
                 title: Text(
                   item.currencyName ?? 'knwon',
                   style: const TextStyle(color: Colors.blue, fontSize: 12),
@@ -146,25 +129,6 @@ class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
                       Image.asset('assets/images/Missing_flag.png'),
                 ),
               );
-              }else{
-                  return ListTile(
-                title: Text(
-                  _localCur.currencyName ?? 'knwon',
-                  style: const TextStyle(color: Colors.blue, fontSize: 12),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                leading: CachedNetworkImage(
-                  imageUrl: _localCur.icon!,
-                  fit: BoxFit.contain,
-                  width: 30,
-                  height: 30,
-                  placeholder: (context, url) =>
-                      Image.asset('assets/images/Missing_flag.png'),
-                  errorWidget: (context, url, error) =>
-                      Image.asset('assets/images/Missing_flag.png'),
-                ),
-              );
-              }
             },
             title: const Text(
               'search currency',

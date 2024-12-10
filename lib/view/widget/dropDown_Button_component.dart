@@ -22,18 +22,22 @@ class MyDropDownButtonComponent extends StatefulWidget {
       required this.base,
       required this.typeOfCurrency,
       required this.currBaseDataCallback,
-      required this.currLocalDataCallback, required this.exchange})
+      required this.currLocalDataCallback,
+      required this.exchange,this.baseCurrFromHome,this.localCurrFromHome})
       : super(key: key);
   final Size size;
   // final Map<String, dynamic> allRate;
   // Function(String?, bool) drop;
   Function(String) basePriceFunc;
   Function(String) localPriceFunc;
-   Function(CurrencyData) currBaseDataCallback;
-   Function(CurrencyData) currLocalDataCallback;
+  Function(CurrencyData) currBaseDataCallback;
+  Function(CurrencyData) currLocalDataCallback;
   final bool base;
   final String typeOfCurrency;
-   final bool exchange;
+  final bool exchange;
+  CurrencyData? baseCurrFromHome;
+  CurrencyData? localCurrFromHome;
+
 
   @override
   State<MyDropDownButtonComponent> createState() =>
@@ -99,9 +103,11 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
             localPriceFun: widget.localPriceFunc,
             typeOfCurrency: widget.typeOfCurrency,
             latestRate: latestRate,
-            currBaseDataCallback:widget.currBaseDataCallback ,
+            currBaseDataCallback: widget.currBaseDataCallback,
             currLocalDataCallback: widget.currLocalDataCallback,
-             exchange: widget.exchange,
+            exchange: widget.exchange,
+            baseCurrFromHome:widget.baseCurrFromHome,
+            localCurrFromHome: widget.localCurrFromHome,
           );
         } else if (state is ReadCurrencyfailureState) {
           return Text('error:${state.errorMessage}');
