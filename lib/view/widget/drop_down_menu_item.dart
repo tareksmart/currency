@@ -31,7 +31,7 @@ class MyDropDownMenuItem extends StatefulWidget {
   Function(CurrencyData) currBaseDataCallback;
   Function(CurrencyData) currLocalDataCallback;
   final List latestRate;
-   bool exchange;
+  bool exchange;
   CurrencyData? baseCurrFromHome;
   CurrencyData? localCurrFromHome;
   List<CurrencyData> selectedItems = [];
@@ -64,35 +64,41 @@ class _MyDropDownMenuItemState extends State<MyDropDownMenuItem> {
         itemAsString: (item) => item.countryName ?? 'select currency',
         dropdownBuilder: (context, selectedItem) {
           if (selectedItem != null) {
-            if (widget.exchange)
+            if (widget.exchange) {
               return SelectedItemWidget(
                 widget: widget,
                 selectedItem: selectedItem,
               );
-            else if (widget.localCurrFromHome!.countryCode!.isNotEmpty &&
-                widget.exchange == false)
-              return SelectedItemWidget(
-                widget: widget,
-                selectedItem: widget.localCurrFromHome,
-              );
-            else {
-              if (widget.exchange == false &&
-                  widget.baseCurrFromHome!.countryCode!.isNotEmpty)
+            } else {
+              if (widget.baseCurrFromHome!.countryCode!.isNotEmpty) {
+                widget.exchange=true;
                 return SelectedItemWidget(
                   widget: widget,
                   selectedItem: widget.baseCurrFromHome,
                 );
-            }
-            return SelectedItemWidget(
-              widget: widget,
-              selectedItem: selectedItem,
+             
+              }
+              if (widget.localCurrFromHome!.countryCode!.isNotEmpty) {
+                widget.exchange=true;
+                return SelectedItemWidget(
+                  widget: widget,
+                  selectedItem: widget.localCurrFromHome,
+                );
+              }
+                return Text(
+              'select currency',
+              style: TextStyle(color: MyColors.dropDownSearchfontColor),
             );
+            
+            }
+         
           } else {
             return Text(
               'select currency',
               style: TextStyle(color: MyColors.dropDownSearchfontColor),
             );
           }
+        
         },
         onChanged: (value) {
           if (value != null) {

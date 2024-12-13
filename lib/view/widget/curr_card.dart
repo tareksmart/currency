@@ -52,7 +52,13 @@ class _CurrencycardState extends State<Currencycard> {
     _localCurrData = localCurrD;
     debugPrint('******currLocalDataCallback ${localCurrD.countryName}');
   }
-
+  void _swapValues() {
+    setState(() {
+      var temp = _baseCurrData;
+      _baseCurrData = _localCurrData;
+      _localCurrData = temp;
+    });
+  }
   String result(String basePrice, String toPrice, String mony) {
     double base = double.parse(basePrice);
     double tPrice = double.parse(toPrice);
@@ -232,6 +238,7 @@ class _CurrencycardState extends State<Currencycard> {
                   debugPrint(
                       '******currLocalDataCallback ${_localCurrData.countryName}');
                   exchange = false;
+                  _swapValues();
                 },
                 label: Text('exchange'),
                 icon: Icon(Icons.currency_exchange_rounded),
