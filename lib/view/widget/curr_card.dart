@@ -32,8 +32,8 @@ class _CurrencycardState extends State<Currencycard> {
   CurrencyData _baseCurrData = CurrencyData();
   CurrencyData _localCurrData = CurrencyData();
   final _globalKey = GlobalKey<FormState>();
-  final Key baseKey = UniqueKey();
-  final Key localeKey = UniqueKey();
+  final Key baseKey = const Key('base');
+  final Key localeKey = const Key('locale');
   bool exchange = true;
   void basePriceCallBack(String baseCurr) {
     _basePrice = baseCurr;

@@ -56,6 +56,7 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
     super.initState();
     readHive();
     readLatestRate();
+    
   }
 
   readHive() async {
@@ -91,12 +92,13 @@ class _MyDropDownButtonComponentState extends State<MyDropDownButtonComponent> {
   // List<CurrencyData>? searchedCurrency(String searchArg) {
   @override
   Widget build(BuildContext context) {
+     
     return BlocBuilder<ReadCurrencyCubit, ReadCurrencyState>(
       buildWhen: (previous, current) => current is ReadCurrencysuccessState,
       builder: (context, state) {
         if (state is ReadCurrencysuccessState) {
           //debugPrint('*************hive number${state.currencyList.length}');
-          return MyDropDownMenuItem(
+          return MyDropDownMenuItem(key: widget.key,
             currencyDataList: state.currencyList,
             size: widget.size,
             basePriceFun: widget.basePriceFunc,
