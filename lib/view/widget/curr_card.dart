@@ -5,6 +5,9 @@ import 'package:currencypro/controller/cubit/hive_cubit/read_currency_hive_cubit
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
 import 'package:currencypro/controller/cubit/press_number_cubit/press_number_cubit_cubit.dart';
 import 'package:currencypro/model/currency_data.dart';
+import 'package:currencypro/services/hive_services.dart';
+import 'package:currencypro/view/widget/drop_down_search_widget_base_test.dart';
+import 'package:currencypro/view/widget/drop_down_search_widget_locale_test.dart';
 import 'package:currencypro/view/widget/waiting_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,6 +38,8 @@ class _CurrencycardState extends State<Currencycard> {
   final Key baseKey = const Key('base');
   final Key localeKey = const Key('locale');
   bool exchange = true;
+  HiveSevices hiveSevices = HiveSevices();
+  List<Map<dynamic, dynamic>> latestRate = [];
   void basePriceCallBack(String baseCurr) {
     _basePrice = baseCurr;
   }
@@ -52,6 +57,7 @@ class _CurrencycardState extends State<Currencycard> {
     _localCurrData = localCurrD;
     debugPrint('******currLocalDataCallback ${localCurrD.countryName}');
   }
+
   void _swapValues() {
     setState(() {
       var temp = _baseCurrData;
@@ -59,6 +65,7 @@ class _CurrencycardState extends State<Currencycard> {
       _localCurrData = temp;
     });
   }
+
   String result(String basePrice, String toPrice, String mony) {
     double base = double.parse(basePrice);
     double tPrice = double.parse(toPrice);
@@ -70,11 +77,16 @@ class _CurrencycardState extends State<Currencycard> {
   // _callLatestRate() async {
   //   await BlocProvider.of<LatestCurrCubit>(context).getRates();
   // }
+  readLatestRate() async {
+    latestRate = await hiveSevices.readLatestRate();
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     // triggerHiveCubit();
+    hiveSevices.readHive(context);
+    readLatestRate();
     super.initState();
 
     // _callLatestRate();
@@ -92,169 +104,192 @@ class _CurrencycardState extends State<Currencycard> {
     final size = MediaQuery.of(context).size;
     // String x = '0';
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        SizedBox(
-          height: size.height * .35,
-          width: size.width * .9,
-          child: Card(
-            elevation: 12,
-            color: MyColors.whiteColor,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Form(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: MyDropDownButtonComponent(
-                            key: baseKey,
-                            base: true,
-                            basePriceFunc: basePriceCallBack,
-                            localPriceFunc: localPriceCallBack,
-                            size: size,
-                            typeOfCurrency: MyconstantName.base,
-                            currBaseDataCallback: currBaseDataCallback,
-                            currLocalDataCallback: currLocalDataCallback,
-                            exchange: exchange,
-                            baseCurrFromHome: _localCurrData,
-                          localCurrFromHome: _baseCurrData,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Expanded(
-                          child: BlocConsumer<PressNumberCubit,
-                              PressNumberCubitState>(
-                            buildWhen: (previous, current) =>
-                                current is PressedNumber,
-                            listener: (context, state) {
-                              if (state is PressedNumber) {
-                                _baseCurrency_controller.text += state.number;
-                                if (state.number == '')
-                                  _baseCurrency_controller.text = '';
-                                //  _baseCurrency_controller.dispose();
-                              }
-                            },
-                            builder: (context, state) {
-                              return TextFormField(
-                                readOnly: true,
-                                keyboardType: TextInputType.number,
-                                controller: _baseCurrency_controller,
-                                decoration: InputDecoration(
-                                    labelStyle:
-                                        Theme.of(context).textTheme.bodyMedium),
-                              );
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: MyDropDownButtonComponent(
-                            key: localeKey,
-                            base: false,
-                            size: size,
-                            basePriceFunc: basePriceCallBack,
-                            localPriceFunc: localPriceCallBack,
-                            typeOfCurrency: MyconstantName.local,
-                            currBaseDataCallback: currBaseDataCallback,
-                            currLocalDataCallback: currLocalDataCallback,
-                            exchange: exchange,
-                            baseCurrFromHome: _localCurrData,
-                            localCurrFromHome: _baseCurrData,
-
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            readOnly: true,
-                            controller: _toCurr_controller,
-                            // onChanged: (value) {
-                            //   value = _selectedValue;
-                            //   // setState(() {});
-                            // },
-                            decoration: InputDecoration(
-                                labelStyle:
-                                    Theme.of(context).textTheme.bodyMedium),
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    BlocBuilder<AddCurrencyDataCubit, AddCurrencyDataState>(
-                      builder: (context, state) {
-                        if (state is AddCurrencyDataWaitingState) {
-                          return WaitingAlertDialog(
-                            title: 'please wait',
-                            progressColor: Colors.green,
-                          );
-                        } else if (state is AddCurrencyDataSuccess) {
-                        } else if (state is AddCurrencyDataFailure) {
-                          return WaitingAlertDialog(
-                            title: 'Fail loading',
-                            progressColor: Colors.red,
-                          );
-                        }
-                        return const Text('');
-                      },
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: Column(
+    return BlocBuilder<ReadCurrencyCubit, ReadCurrencyState>(
+      builder: (context, state) {
+        if (state is ReadCurrencysuccessState) {
+          return Stack(
+            alignment: Alignment.center,
             children: [
               SizedBox(
-                height: size.height * .37,
+                height: size.height * .35,
+                width: size.width * .9,
+                child: Card(
+                  elevation: 12,
+                  color: MyColors.whiteColor,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Form(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: DropDownSearchWidgetBaseTest(
+                                  currencyDataList: state.currencyList,
+                                  basePriceFun: basePriceCallBack,
+                                  size: size,
+                                  latestRate: latestRate,
+                                ),
+                                // child: MyDropDownButtonComponent(
+                                //   key: baseKey,
+                                //   base: true,
+                                //   basePriceFunc: basePriceCallBack,
+                                //   localPriceFunc: localPriceCallBack,
+                                //   size: size,
+                                //   typeOfCurrency: MyconstantName.base,
+                                //   currBaseDataCallback: currBaseDataCallback,
+                                //   currLocalDataCallback: currLocalDataCallback,
+                                //   exchange: exchange,
+                                //   baseCurrFromHome: _localCurrData,
+                                //   localCurrFromHome: _baseCurrData,
+                                // ),
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Expanded(
+                                child: BlocConsumer<PressNumberCubit,
+                                    PressNumberCubitState>(
+                                  buildWhen: (previous, current) =>
+                                      current is PressedNumber,
+                                  listener: (context, state) {
+                                    if (state is PressedNumber) {
+                                      _baseCurrency_controller.text +=
+                                          state.number;
+                                      if (state.number == '')
+                                        _baseCurrency_controller.text = '';
+                                      //  _baseCurrency_controller.dispose();
+                                    }
+                                  },
+                                  builder: (context, state) {
+                                    return TextFormField(
+                                      readOnly: true,
+                                      keyboardType: TextInputType.number,
+                                      controller: _baseCurrency_controller,
+                                      decoration: InputDecoration(
+                                          labelStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium),
+                                    );
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: DropDownSearchWidgetLocaleTest(
+                                    currencyDataList: state.currencyList,
+                                    size: size,
+                                    latestRate: latestRate,
+                                    localPriceFun: localPriceCallBack),
+                                // child: MyDropDownButtonComponent(
+                                //   key: localeKey,
+                                //   base: false,
+                                //   size: size,
+                                //   basePriceFunc: basePriceCallBack,
+                                //   localPriceFunc: localPriceCallBack,
+                                //   typeOfCurrency: MyconstantName.local,
+                                //   currBaseDataCallback: currBaseDataCallback,
+                                //   currLocalDataCallback: currLocalDataCallback,
+                                //   exchange: exchange,
+                                //   baseCurrFromHome: _localCurrData,
+                                //   localCurrFromHome: _baseCurrData,
+                                // ),
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  readOnly: true,
+                                  controller: _toCurr_controller,
+                                  // onChanged: (value) {
+                                  //   value = _selectedValue;
+                                  //   // setState(() {});
+                                  // },
+                                  decoration: InputDecoration(
+                                      labelStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium),
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          BlocBuilder<AddCurrencyDataCubit,
+                              AddCurrencyDataState>(
+                            builder: (context, state) {
+                              if (state is AddCurrencyDataWaitingState) {
+                                return WaitingAlertDialog(
+                                  title: 'please wait',
+                                  progressColor: Colors.green,
+                                );
+                              } else if (state is AddCurrencyDataSuccess) {
+                              } else if (state is AddCurrencyDataFailure) {
+                                return WaitingAlertDialog(
+                                  title: 'Fail loading',
+                                  progressColor: Colors.red,
+                                );
+                              }
+                              return const Text('');
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  debugPrint(
-                      '******currBaseDataCallback ${_baseCurrData.countryName}');
-                  debugPrint(
-                      '******currLocalDataCallback ${_localCurrData.countryName}');
-                  exchange = false;
-                  _swapValues();
-                },
-                label: Text('exchange'),
-                icon: Icon(Icons.currency_exchange_rounded),
-              ),
-              ConvertButton(
-                text: 'CONVERT',
-                onTab: () async {
-                  _toCurr_controller.text = result(_basePrice, _toPrice,
-                      _baseCurrency_controller.text.trim());
-                },
-                size: size,
-              ),
+              Align(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: size.height * .37,
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        debugPrint(
+                            '******currBaseDataCallback ${_baseCurrData.countryName}');
+                        debugPrint(
+                            '******currLocalDataCallback ${_localCurrData.countryName}');
+                        exchange = false;
+                        _swapValues();
+                        setState(() {});
+                      },
+                      label: Text('exchange'),
+                      icon: Icon(Icons.currency_exchange_rounded),
+                    ),
+                    ConvertButton(
+                      text: 'CONVERT',
+                      onTab: () async {
+                        _toCurr_controller.text = result(_basePrice, _toPrice,
+                            _baseCurrency_controller.text.trim());
+                      },
+                      size: size,
+                    ),
+                  ],
+                ),
+              )
             ],
-          ),
-        )
-      ],
+          );
+        } else {
+          return WaitingAlertDialog(title: 'please wait reading data');
+        }
+      },
     );
   }
 }

@@ -5,19 +5,15 @@ import 'package:currencypro/view/widget/drop_down_menu_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SelectedItemWidget extends StatelessWidget {
-   SelectedItemWidget({
-    super.key,
-    required this.widget,required this.selectedItem
-  });
+class SelectedItemWidgetTest extends StatelessWidget {
+  SelectedItemWidgetTest({super.key, required this.size, required this.selectedItem});
 
-  final MyDropDownMenuItem widget;
-  CurrencyData selectedItem;
-
+  final Size size;
+  final CurrencyData selectedItem;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: widget.size.height * .05,
+      height: size.height * .05,
       //  width: size.width * .6,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -25,7 +21,7 @@ class SelectedItemWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CachedNetworkImage(
-              imageUrl: selectedItem!.icon!,
+              imageUrl: selectedItem.icon!,
               fit: BoxFit.contain,
               width: 30,
               height: 30,

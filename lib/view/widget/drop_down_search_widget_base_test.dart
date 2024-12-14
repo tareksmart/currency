@@ -3,23 +3,34 @@ import 'package:currencypro/model/currency_data.dart';
 import 'package:currencypro/view/constant/myConstants.dart';
 import 'package:currencypro/view/widget/drop_down_menu_item.dart';
 import 'package:currencypro/view/widget/selected_item_widget.dart';
+import 'package:currencypro/view/widget/selected_item_widget_test.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DropDownSearchWidget extends StatelessWidget {
-  DropDownSearchWidget(
-      {super.key, required this.widget, this.exchangeSelectedItem});
+class DropDownSearchWidgetBaseTest extends StatelessWidget {
+  DropDownSearchWidgetBaseTest(
+      {super.key,
+         required this.basePriceFun,
+     
+      required this.currencyDataList,
+      required this.size, required this.latestRate});
 
-  final MyDropDownMenuItem widget;
+
   CurrencyData? exchangeSelectedItem;
+  final List<CurrencyData> currencyDataList;
+  final Size size;
+  Function(String) basePriceFun;
 
+  // Function(CurrencyData) currBaseDataCallback;
+  // Function(CurrencyData) currLocalDataCallback;
+  final List latestRate;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.size.width * .4,  
+      width: size.width * .4,
       child: DropdownSearch<CurrencyData>(
-        items: widget.currencyDataList,
+        items: currencyDataList,
         dropdownDecoratorProps: const DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
               filled: true,
@@ -28,15 +39,10 @@ class DropDownSearchWidget extends StatelessWidget {
         ),
         itemAsString: (item) => item.countryName ?? 'select currency',
         dropdownBuilder: (context, selectedItem) {
-          if (widget.exchange == true && selectedItem != null) {
-            return SelectedItemWidget(
-              widget: widget,
+          if (selectedItem != null) {
+            return SelectedItemWidgetTest(
+              size: size,
               selectedItem: selectedItem,
-            );
-          } else if (widget.exchange == true && exchangeSelectedItem != null) {
-            return SelectedItemWidget(
-              widget: widget,
-              selectedItem: exchangeSelectedItem!,
             );
           } else {
             return const Text('select currency');
@@ -44,14 +50,10 @@ class DropDownSearchWidget extends StatelessWidget {
         },
         onChanged: (value) {
           if (value != null) {
-            var price = widget.latestRate[0][value?.currencyCode!];
-            if (widget.typeOfCurrency == MyconstantName.base) {
-              widget.basePriceFun(price);
-              widget.currBaseDataCallback(value);
-            } else {
-              widget.localPriceFun(price);
-              widget.currLocalDataCallback(value);
-            }
+            var price =latestRate[0][value?.currencyCode!];
+
+            basePriceFun(price);
+            //widget.currBaseDataCallback(value);
           }
         },
         popupProps: PopupProps.menu(
