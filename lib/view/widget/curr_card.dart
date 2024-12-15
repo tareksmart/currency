@@ -40,6 +40,7 @@ class _CurrencycardState extends State<Currencycard> {
   bool exchange = true;
   HiveSevices hiveSevices = HiveSevices();
   List<Map<dynamic, dynamic>> latestRate = [];
+  bool _showFirstWidget = true;
   void basePriceCallBack(String baseCurr) {
     _basePrice = baseCurr;
   }
@@ -122,110 +123,118 @@ class _CurrencycardState extends State<Currencycard> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: DropDownSearchWidgetBaseTest(
-                                  currencyDataList: state.currencyList,
-                                  basePriceFun: basePriceCallBack,
-                                  size: size,
-                                  latestRate: latestRate,
-                                ),
-                                // child: MyDropDownButtonComponent(
-                                //   key: baseKey,
-                                //   base: true,
-                                //   basePriceFunc: basePriceCallBack,
-                                //   localPriceFunc: localPriceCallBack,
-                                //   size: size,
-                                //   typeOfCurrency: MyconstantName.base,
-                                //   currBaseDataCallback: currBaseDataCallback,
-                                //   currLocalDataCallback: currLocalDataCallback,
-                                //   exchange: exchange,
-                                //   baseCurrFromHome: _localCurrData,
-                                //   localCurrFromHome: _baseCurrData,
-                                // ),
+                          AnimatedCrossFade(
+                              firstChild: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: DropDownSearchWidgetBaseTest(
+                                      currencyDataList: state.currencyList,
+                                      basePriceFun: basePriceCallBack,
+                                      size: size,
+                                      latestRate: latestRate,
+                                    ),
+                                    // child: MyDropDownButtonComponent(
+                                    //   key: baseKey,
+                                    //   base: true,
+                                    //   basePriceFunc: basePriceCallBack,
+                                    //   localPriceFunc: localPriceCallBack,
+                                    //   size: size,
+                                    //   typeOfCurrency: MyconstantName.base,
+                                    //   currBaseDataCallback: currBaseDataCallback,
+                                    //   currLocalDataCallback: currLocalDataCallback,
+                                    //   exchange: exchange,
+                                    //   baseCurrFromHome: _localCurrData,
+                                    //   localCurrFromHome: _baseCurrData,
+                                    // ),
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Expanded(
+                                    child: BlocConsumer<PressNumberCubit,
+                                        PressNumberCubitState>(
+                                      buildWhen: (previous, current) =>
+                                          current is PressedNumber,
+                                      listener: (context, state) {
+                                        if (state is PressedNumber) {
+                                          _baseCurrency_controller.text +=
+                                              state.number;
+                                          if (state.number == '')
+                                            _baseCurrency_controller.text = '';
+                                          //  _baseCurrency_controller.dispose();
+                                        }
+                                      },
+                                      builder: (context, state) {
+                                        return TextFormField(
+                                          style: TextStyle(
+                                              height: size.height * .003,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                          readOnly: true,
+                                          keyboardType: TextInputType.number,
+                                          controller: _baseCurrency_controller,
+                                          decoration: InputDecoration(
+                                              labelStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium),
+                                        );
+                                      },
+                                    ),
+                                  )
+                                ],
                               ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Expanded(
-                                child: BlocConsumer<PressNumberCubit,
-                                    PressNumberCubitState>(
-                                  buildWhen: (previous, current) =>
-                                      current is PressedNumber,
-                                  listener: (context, state) {
-                                    if (state is PressedNumber) {
-                                      _baseCurrency_controller.text +=
-                                          state.number;
-                                      if (state.number == '')
-                                        _baseCurrency_controller.text = '';
-                                      //  _baseCurrency_controller.dispose();
-                                    }
-                                  },
-                                  builder: (context, state) {
-                                    return TextFormField(
-                                      readOnly: true,
+                              secondChild: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: DropDownSearchWidgetLocaleTest(
+                                        currencyDataList: state.currencyList,
+                                        size: size,
+                                        latestRate: latestRate,
+                                        localPriceFun: localPriceCallBack),
+                                    // child: MyDropDownButtonComponent(
+                                    //   key: localeKey,
+                                    //   base: false,
+                                    //   size: size,
+                                    //   basePriceFunc: basePriceCallBack,
+                                    //   localPriceFunc: localPriceCallBack,
+                                    //   typeOfCurrency: MyconstantName.local,
+                                    //   currBaseDataCallback: currBaseDataCallback,
+                                    //   currLocalDataCallback: currLocalDataCallback,
+                                    //   exchange: exchange,
+                                    //   baseCurrFromHome: _localCurrData,
+                                    //   localCurrFromHome: _baseCurrData,
+                                    // ),
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Expanded(
+                                    child: TextFormField(
                                       keyboardType: TextInputType.number,
-                                      controller: _baseCurrency_controller,
+                                      readOnly: true,
+                                      controller: _toCurr_controller,
+                                      // onChanged: (value) {
+                                      //   value = _selectedValue;
+                                      //   // setState(() {});
+                                      // },
                                       decoration: InputDecoration(
                                           labelStyle: Theme.of(context)
                                               .textTheme
                                               .bodyMedium),
-                                    );
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: DropDownSearchWidgetLocaleTest(
-                                    currencyDataList: state.currencyList,
-                                    size: size,
-                                    latestRate: latestRate,
-                                    localPriceFun: localPriceCallBack),
-                                // child: MyDropDownButtonComponent(
-                                //   key: localeKey,
-                                //   base: false,
-                                //   size: size,
-                                //   basePriceFunc: basePriceCallBack,
-                                //   localPriceFunc: localPriceCallBack,
-                                //   typeOfCurrency: MyconstantName.local,
-                                //   currBaseDataCallback: currBaseDataCallback,
-                                //   currLocalDataCallback: currLocalDataCallback,
-                                //   exchange: exchange,
-                                //   baseCurrFromHome: _localCurrData,
-                                //   localCurrFromHome: _baseCurrData,
-                                // ),
+                                    ),
+                                  )
+                                ],
                               ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Expanded(
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  readOnly: true,
-                                  controller: _toCurr_controller,
-                                  // onChanged: (value) {
-                                  //   value = _selectedValue;
-                                  //   // setState(() {});
-                                  // },
-                                  decoration: InputDecoration(
-                                      labelStyle: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium),
-                                ),
-                              )
-                            ],
-                          ),
+                              crossFadeState: _showFirstWidget
+                                  ? CrossFadeState.showFirst
+                                  : CrossFadeState.showSecond,
+                              duration: const Duration(seconds: 2)),
                           const SizedBox(
                             height: 12,
                           ),
@@ -238,6 +247,8 @@ class _CurrencycardState extends State<Currencycard> {
                                   progressColor: Colors.green,
                                 );
                               } else if (state is AddCurrencyDataSuccess) {
+                                hiveSevices.readHive(
+                                    context); //read curr when finished adding
                               } else if (state is AddCurrencyDataFailure) {
                                 return WaitingAlertDialog(
                                   title: 'Fail loading',
@@ -262,13 +273,9 @@ class _CurrencycardState extends State<Currencycard> {
                     ),
                     ElevatedButton.icon(
                       onPressed: () {
-                        debugPrint(
-                            '******currBaseDataCallback ${_baseCurrData.countryName}');
-                        debugPrint(
-                            '******currLocalDataCallback ${_localCurrData.countryName}');
-                        exchange = false;
-                        _swapValues();
-                        setState(() {});
+                        setState(() {
+                          _showFirstWidget = !_showFirstWidget;
+                        });
                       },
                       label: Text('exchange'),
                       icon: Icon(Icons.currency_exchange_rounded),
@@ -278,6 +285,9 @@ class _CurrencycardState extends State<Currencycard> {
                       onTab: () async {
                         _toCurr_controller.text = result(_basePrice, _toPrice,
                             _baseCurrency_controller.text.trim());
+                        setState(() {
+                          _showFirstWidget = !_showFirstWidget;
+                        });
                       },
                       size: size,
                     ),

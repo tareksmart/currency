@@ -28,7 +28,7 @@ class DropDownSearchWidgetBaseTest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: size.width * .4,
+      width: size.width * .6,
       child: DropdownSearch<CurrencyData>(
         items: currencyDataList,
         dropdownDecoratorProps: const DropDownDecoratorProps(
