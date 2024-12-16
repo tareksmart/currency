@@ -6,7 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SelectedItemWidgetTest extends StatelessWidget {
-  SelectedItemWidgetTest({super.key, required this.size, required this.selectedItem});
+  SelectedItemWidgetTest(
+      {super.key, required this.size, required this.selectedItem});
 
   final Size size;
   final CurrencyData selectedItem;
@@ -32,10 +33,10 @@ class SelectedItemWidgetTest extends StatelessWidget {
             ),
             Flexible(
               child: Text(
-                selectedItem!.countryName ?? 'select currency',
+                selectedItem!.currencyCode ?? 'select currency',
                 style: Theme.of(context)
                     .textTheme
-                    .labelLarge!
+                    .headlineSmall!
                     .copyWith(color: MyColors.dropDownSearchfontColor),
                 overflow: TextOverflow.ellipsis,
               ),

@@ -71,7 +71,7 @@ class _CurrencycardState extends State<Currencycard> {
     double base = double.parse(basePrice);
     double tPrice = double.parse(toPrice);
     double mny = double.parse(mony);
-    double result = (tPrice / base) * mny;
+    double result = ((tPrice / base) * mny).ceilToDouble();
     return result.toString();
   }
 
@@ -130,25 +130,27 @@ class _CurrencycardState extends State<Currencycard> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
-                                    child: DropDownSearchWidgetBaseTest(
-                                      currencyDataList: state.currencyList,
-                                      basePriceFun: basePriceCallBack,
-                                      size: size,
-                                      latestRate: latestRate,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            MyconstantName.amount,
+                                            style: TextStyle(
+                                                color: Colors.blue[300],
+                                                fontSize: 16),
+                                          ),
+                                        ),
+                                        DropDownSearchWidgetBaseTest(
+                                          currencyDataList: state.currencyList,
+                                          basePriceFun: basePriceCallBack,
+                                          size: size,
+                                          latestRate: latestRate,
+                                        ),
+                                      ],
                                     ),
-                                    // child: MyDropDownButtonComponent(
-                                    //   key: baseKey,
-                                    //   base: true,
-                                    //   basePriceFunc: basePriceCallBack,
-                                    //   localPriceFunc: localPriceCallBack,
-                                    //   size: size,
-                                    //   typeOfCurrency: MyconstantName.base,
-                                    //   currBaseDataCallback: currBaseDataCallback,
-                                    //   currLocalDataCallback: currLocalDataCallback,
-                                    //   exchange: exchange,
-                                    //   baseCurrFromHome: _localCurrData,
-                                    //   localCurrFromHome: _baseCurrData,
-                                    // ),
                                   ),
                                   const SizedBox(
                                     width: 4,
@@ -169,10 +171,11 @@ class _CurrencycardState extends State<Currencycard> {
                                       },
                                       builder: (context, state) {
                                         return TextFormField(
-                                          style: TextStyle(
-                                              height: size.height * .003,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headlineMedium!
+                                              .copyWith(
+                                                  color: MyColors.numberColor),
                                           readOnly: true,
                                           keyboardType: TextInputType.number,
                                           controller: _baseCurrency_controller,
@@ -192,41 +195,41 @@ class _CurrencycardState extends State<Currencycard> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
-                                    child: DropDownSearchWidgetLocaleTest(
-                                        currencyDataList: state.currencyList,
-                                        size: size,
-                                        latestRate: latestRate,
-                                        localPriceFun: localPriceCallBack),
-                                    // child: MyDropDownButtonComponent(
-                                    //   key: localeKey,
-                                    //   base: false,
-                                    //   size: size,
-                                    //   basePriceFunc: basePriceCallBack,
-                                    //   localPriceFunc: localPriceCallBack,
-                                    //   typeOfCurrency: MyconstantName.local,
-                                    //   currBaseDataCallback: currBaseDataCallback,
-                                    //   currLocalDataCallback: currLocalDataCallback,
-                                    //   exchange: exchange,
-                                    //   baseCurrFromHome: _localCurrData,
-                                    //   localCurrFromHome: _baseCurrData,
-                                    // ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            MyconstantName.convertedAmount,
+                                            style: TextStyle(
+                                                color: Colors.blue[300],
+                                                fontSize: 16),
+                                          ),
+                                        ),
+                                        DropDownSearchWidgetLocaleTest(
+                                            currencyDataList:
+                                                state.currencyList,
+                                            size: size,
+                                            latestRate: latestRate,
+                                            localPriceFun: localPriceCallBack),
+                                      ],
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 4,
                                   ),
                                   Expanded(
                                     child: TextFormField(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium!
+                                          .copyWith(
+                                              color: MyColors.numberColor),
                                       keyboardType: TextInputType.number,
                                       readOnly: true,
                                       controller: _toCurr_controller,
-                                      // onChanged: (value) {
-                                      //   value = _selectedValue;
-                                      //   // setState(() {});
-                                      // },
-                                      decoration: InputDecoration(
-                                          labelStyle: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium),
                                     ),
                                   )
                                 ],
@@ -234,7 +237,7 @@ class _CurrencycardState extends State<Currencycard> {
                               crossFadeState: _showFirstWidget
                                   ? CrossFadeState.showFirst
                                   : CrossFadeState.showSecond,
-                              duration: const Duration(seconds: 2)),
+                              duration: const Duration(seconds: 1)),
                           const SizedBox(
                             height: 12,
                           ),

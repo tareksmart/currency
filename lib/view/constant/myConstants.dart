@@ -7,7 +7,9 @@ class MyColors {
   static Color ButtonColor = Color(0xff6391ff);
   static Color primaryColor = Color(0xfffafbff);
   static Color backGroundTextFieldColor = Color(0xffeef2fe);
-  static Color dropDownSearchfontColor = Color(0xffee6391ff);//f9fbff
+  static Color dropDownSearchfontColor = Color(0xffee6391ff);//3C3C3C
+  static Color numberColor = Color(0xff3C3C3C);
+  
 
 }
 
@@ -16,8 +18,13 @@ class MyconstantName {
   static String local = 'local';
   static String currencyDataBox = 'currency_box';
   static String dateAddHiveBox = 'dateAddHive_box';
-  static String addDateKeyName = 'addDatekey';
+  static String addDateKeyName = 'addDatekey';//Amount
   static String latestRateBox = 'latestRateBox';
+  static String amount = 'Amount';
+  static String convertedAmount = 'ConvertedAmount';
+
+  
+
 
 
 
