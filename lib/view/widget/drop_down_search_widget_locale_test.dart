@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/model/currency_data.dart';
 import 'package:currencypro/view/constant/myConstants.dart';
+import 'package:currencypro/view/decoration/drop_down_search_decor.dart';
 import 'package:currencypro/view/widget/drop_down_menu_item.dart';
 import 'package:currencypro/view/widget/selected_item_widget.dart';
 import 'package:currencypro/view/widget/selected_item_widget_test.dart';
@@ -14,12 +15,11 @@ class DropDownSearchWidgetLocaleTest extends StatelessWidget {
       required this.currencyDataList,
       required this.size,
       required this.latestRate,
-   
       required this.localPriceFun});
 
   final List<CurrencyData> currencyDataList;
   final Size size;
- 
+
   Function(String) localPriceFun;
   // Function(CurrencyData) currBaseDataCallback;
   // Function(CurrencyData) currLocalDataCallback;
@@ -30,11 +30,8 @@ class DropDownSearchWidgetLocaleTest extends StatelessWidget {
       width: size.width * .4,
       child: DropdownSearch<CurrencyData>(
         items: currencyDataList,
-        dropdownDecoratorProps: const DropDownDecoratorProps(
-          dropdownSearchDecoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(gapPadding: 2)),
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          dropdownSearchDecoration: dropDownSearchDecor(),
         ),
         itemAsString: (item) => item.countryName ?? 'select currency',
         dropdownBuilder: (context, selectedItem) {
@@ -51,7 +48,7 @@ class DropDownSearchWidgetLocaleTest extends StatelessWidget {
           if (value != null) {
             var price = latestRate[0][value?.currencyCode!];
 
-           localPriceFun(price);
+            localPriceFun(price);
             // widget.currBaseDataCallback(value);
           }
         },

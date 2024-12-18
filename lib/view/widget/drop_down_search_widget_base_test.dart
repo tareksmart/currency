@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/model/currency_data.dart';
 import 'package:currencypro/view/constant/myConstants.dart';
+import 'package:currencypro/view/decoration/drop_down_search_decor.dart';
 import 'package:currencypro/view/widget/drop_down_menu_item.dart';
 import 'package:currencypro/view/widget/selected_item_widget.dart';
 import 'package:currencypro/view/widget/selected_item_widget_test.dart';
@@ -11,11 +12,10 @@ import 'package:flutter/material.dart';
 class DropDownSearchWidgetBaseTest extends StatelessWidget {
   DropDownSearchWidgetBaseTest(
       {super.key,
-         required this.basePriceFun,
-     
+      required this.basePriceFun,
       required this.currencyDataList,
-      required this.size, required this.latestRate});
-
+      required this.size,
+      required this.latestRate});
 
   CurrencyData? exchangeSelectedItem;
   final List<CurrencyData> currencyDataList;
@@ -28,14 +28,10 @@ class DropDownSearchWidgetBaseTest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: size.width * .6,
       child: DropdownSearch<CurrencyData>(
         items: currencyDataList,
-        dropdownDecoratorProps: const DropDownDecoratorProps(
-          dropdownSearchDecoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(gapPadding: 2)),
+        dropdownDecoratorProps:  DropDownDecoratorProps(
+          dropdownSearchDecoration: dropDownSearchDecor(),
         ),
         itemAsString: (item) => item.countryName ?? 'select currency',
         dropdownBuilder: (context, selectedItem) {
@@ -50,7 +46,7 @@ class DropDownSearchWidgetBaseTest extends StatelessWidget {
         },
         onChanged: (value) {
           if (value != null) {
-            var price =latestRate[0][value?.currencyCode!];
+            var price = latestRate[0][value?.currencyCode!];
 
             basePriceFun(price);
             //widget.currBaseDataCallback(value);
@@ -85,4 +81,6 @@ class DropDownSearchWidgetBaseTest extends StatelessWidget {
       ),
     );
   }
+
+
 }

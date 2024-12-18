@@ -157,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Column(
               children: [
                 SizedBox(
-                  height: size.height * .03,
+                  height: size.height * .05,
                 ),
                 BlocConsumer<CurrencyCubit, CurrencyState>(
                   buildWhen: (previous, current) => current is CurrenciesLoaded,
