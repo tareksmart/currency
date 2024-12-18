@@ -189,10 +189,12 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             );
                           });
+                    } else {
+                      return Currencycard(
+                          allCurrency: allCur ?? defaultList,
+                          allRate: allRate ?? defAllRate);
                     }
-                    return Currencycard(
-                        allCurrency: allCur ?? defaultList,
-                        allRate: allRate ?? defAllRate);
+                    return Text('no data');
                   },
                 ),
                 BlocConsumer<LatestCurrCubit, LatestCurrCubitState>(

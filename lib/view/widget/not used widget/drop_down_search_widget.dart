@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/model/currency_data.dart';
 import 'package:currencypro/view/constant/myConstants.dart';
-import 'package:currencypro/view/widget/drop_down_menu_item.dart';
-import 'package:currencypro/view/widget/selected_item_widget.dart';
+import 'package:currencypro/view/widget/not%20used%20widget/drop_down_menu_item.dart';
+import 'package:currencypro/view/widget/not%20used%20widget/selected_item_widget.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

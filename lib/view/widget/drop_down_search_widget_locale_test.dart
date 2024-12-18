@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:currencypro/model/currency_data.dart';
 import 'package:currencypro/view/constant/myConstants.dart';
 import 'package:currencypro/view/decoration/drop_down_search_decor.dart';
-import 'package:currencypro/view/widget/drop_down_menu_item.dart';
-import 'package:currencypro/view/widget/selected_item_widget.dart';
+import 'package:currencypro/view/widget/not%20used%20widget/drop_down_menu_item.dart';
+import 'package:currencypro/view/widget/not%20used%20widget/selected_item_widget.dart';
 import 'package:currencypro/view/widget/selected_item_widget_test.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,15 +15,19 @@ class DropDownSearchWidgetLocaleTest extends StatelessWidget {
       required this.currencyDataList,
       required this.size,
       required this.latestRate,
-      required this.localPriceFun});
+      required this.localPriceFun,
+      required this.currLocalDataCallback,
+      this.exchangeSelectedItem,
+      required this.swap});
 
   final List<CurrencyData> currencyDataList;
   final Size size;
-
+  CurrencyData? exchangeSelectedItem;
   Function(String) localPriceFun;
   // Function(CurrencyData) currBaseDataCallback;
-  // Function(CurrencyData) currLocalDataCallback;
+  Function(CurrencyData) currLocalDataCallback;
   final List latestRate;
+  final bool swap;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -36,12 +40,19 @@ class DropDownSearchWidgetLocaleTest extends StatelessWidget {
         itemAsString: (item) => item.countryName ?? 'select currency',
         dropdownBuilder: (context, selectedItem) {
           if (selectedItem != null) {
+            currLocalDataCallback(selectedItem);
             return SelectedItemWidgetTest(
               size: size,
               selectedItem: selectedItem,
             );
+          } else if (swap == true) {
+               selectedItem = null;
+            return SelectedItemWidgetTest(
+              size: size,
+              selectedItem: exchangeSelectedItem!,
+            );
           } else {
-            return const Text('select currency');
+            return Text('select currency');
           }
         },
         onChanged: (value) {

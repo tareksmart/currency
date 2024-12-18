@@ -16,7 +16,7 @@ import 'package:hive/hive.dart';
 
 import '../constant/myConstants.dart';
 import 'convert_button.dart';
-import 'dropDown_Button_component.dart';
+import 'not used widget/dropDown_Button_component.dart';
 
 class Currencycard extends StatefulWidget {
   Currencycard({Key? key, required this.allCurrency, this.allRate})
@@ -41,7 +41,7 @@ class _CurrencycardState extends State<Currencycard> {
   bool exchange = true;
   HiveSevices hiveSevices = HiveSevices();
   List<Map<dynamic, dynamic>> latestRate = [];
-  bool _showFirstWidget = true;
+  bool swap = false;
   void basePriceCallBack(String baseCurr) {
     _basePrice = baseCurr;
   }
@@ -50,12 +50,12 @@ class _CurrencycardState extends State<Currencycard> {
     _toPrice = localCurr;
   }
 
-  currBaseDataCallback(CurrencyData baseCurD) {
+  void currBaseDataCallback(CurrencyData baseCurD) {
     _baseCurrData = baseCurD;
     debugPrint('******currBaseDataCallback ${baseCurD.countryName}');
   }
 
-  currLocalDataCallback(CurrencyData localCurrD) {
+  void currLocalDataCallback(CurrencyData localCurrD) {
     _localCurrData = localCurrD;
     debugPrint('******currLocalDataCallback ${localCurrD.countryName}');
   }
@@ -65,6 +65,7 @@ class _CurrencycardState extends State<Currencycard> {
       var temp = _baseCurrData;
       _baseCurrData = _localCurrData;
       _localCurrData = temp;
+        swap = !swap;
     });
   }
 
@@ -145,6 +146,9 @@ class _CurrencycardState extends State<Currencycard> {
                                     basePriceFun: basePriceCallBack,
                                     size: size,
                                     latestRate: latestRate,
+                                    currBaseDataCallback: currBaseDataCallback,
+                                    exchangeSelectedItem: _baseCurrData,
+                                    swap: swap,
                                   ),
                                 ],
                               ),
@@ -192,9 +196,8 @@ class _CurrencycardState extends State<Currencycard> {
                           color: MyColors.ButtonColor,
                           iconSize: 42,
                           onPressed: () {
-                            setState(() {
-                              _showFirstWidget = !_showFirstWidget;
-                            });
+                          
+                            _swapValues();
                           },
                           icon: const Icon(Icons.currency_exchange_rounded),
                         ),
@@ -217,10 +220,14 @@ class _CurrencycardState extends State<Currencycard> {
                                     ),
                                   ),
                                   DropDownSearchWidgetLocaleTest(
-                                      currencyDataList: state.currencyList,
-                                      size: size,
-                                      latestRate: latestRate,
-                                      localPriceFun: localPriceCallBack),
+                                    currencyDataList: state.currencyList,
+                                    size: size,
+                                    latestRate: latestRate,
+                                    localPriceFun: localPriceCallBack,
+                                    currLocalDataCallback:
+                                        currLocalDataCallback,
+                                        swap: swap,
+                                  ),
                                 ],
                               ),
                             ),
@@ -257,8 +264,11 @@ class _CurrencycardState extends State<Currencycard> {
                                 progressColor: Colors.green,
                               );
                             } else if (state is AddCurrencyDataSuccess) {
-                              hiveSevices.readHive(
+                             
+                                 hiveSevices.readHive(
                                   context); //read curr when finished adding
+                             
+                             
                             } else if (state is AddCurrencyDataFailure) {
                               return WaitingAlertDialog(
                                 title: 'Fail loading',
@@ -285,9 +295,7 @@ class _CurrencycardState extends State<Currencycard> {
                       onTab: () async {
                         _toCurr_controller.text = result(_basePrice, _toPrice,
                             _baseCurrency_controller.text.trim());
-                        setState(() {
-                          _showFirstWidget = !_showFirstWidget;
-                        });
+                       
                       },
                       size: size,
                     ),

@@ -11,7 +11,7 @@ import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
-import 'currency_list_drawer.dart';
+import 'not used widget/currency_list_drawer.dart';
 
 class MyDrawer extends StatefulWidget {
   MyDrawer({Key? key, required this.size}) : super(key: key);

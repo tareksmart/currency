@@ -7,7 +7,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../model/currency_data.dart';
+import '../../../model/currency_data.dart';
 
 class CurrencyListDrawer extends StatelessWidget {
   const CurrencyListDrawer({super.key, required this.Cur});
