@@ -33,7 +33,7 @@ class _CurrencycardState extends State<Currencycard> {
   String _selectedValue = '0';
   String _basePrice = '0';
   String _toPrice = '0';
-  CurrencyData _baseCurrData = CurrencyData();
+   CurrencyData _baseCurrData = CurrencyData();
   CurrencyData _localCurrData = CurrencyData();
   final _globalKey = GlobalKey<FormState>();
   final Key baseKey = const Key('base');
@@ -42,6 +42,7 @@ class _CurrencycardState extends State<Currencycard> {
   HiveSevices hiveSevices = HiveSevices();
   List<Map<dynamic, dynamic>> latestRate = [];
   bool swap = false;
+
   void basePriceCallBack(String baseCurr) {
     _basePrice = baseCurr;
   }
@@ -52,21 +53,25 @@ class _CurrencycardState extends State<Currencycard> {
 
   void currBaseDataCallback(CurrencyData baseCurD) {
     _baseCurrData = baseCurD;
-    debugPrint('******currBaseDataCallback ${baseCurD.countryName}');
+   // debugPrint('******currBaseDataCallback ${baseCurD.countryName}');
   }
 
   void currLocalDataCallback(CurrencyData localCurrD) {
     _localCurrData = localCurrD;
-    debugPrint('******currLocalDataCallback ${localCurrD.countryName}');
+    //debugPrint('******currLocalDataCallback ${localCurrD.countryName}');
   }
 
   void _swapValues() {
+    
     setState(() {
-      var temp = _baseCurrData;
-      _baseCurrData = _localCurrData;
-      _localCurrData = temp;
-        swap = !swap;
+       swap = !swap;
+    //   final temp = _baseCurrData;
+    //   _baseCurrData = _localCurrData;
+    //  _localCurrData = temp;
+     
+
     });
+  
   }
 
   String result(String basePrice, String toPrice, String mony) {
@@ -106,10 +111,12 @@ class _CurrencycardState extends State<Currencycard> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     // String x = '0';
-
+ 
     return BlocBuilder<ReadCurrencyCubit, ReadCurrencyState>(
       builder: (context, state) {
         if (state is ReadCurrencysuccessState) {
+           debugPrint('+++++ReadCurrencysuccessState++++${_baseCurrData.countryName}');
+       debugPrint('+++++ReadCurrencysuccessState++++${_localCurrData.countryName}');
           return Stack(
             alignment: Alignment.center,
             children: [
@@ -147,7 +154,7 @@ class _CurrencycardState extends State<Currencycard> {
                                     size: size,
                                     latestRate: latestRate,
                                     currBaseDataCallback: currBaseDataCallback,
-                                    exchangeSelectedItem: _baseCurrData,
+                                    exchangeSelectedItem: _localCurrData,
                                     swap: swap,
                                   ),
                                 ],
@@ -227,6 +234,7 @@ class _CurrencycardState extends State<Currencycard> {
                                     currLocalDataCallback:
                                         currLocalDataCallback,
                                         swap: swap,
+                                    exchangeSelectedItem:temp
                                   ),
                                 ],
                               ),

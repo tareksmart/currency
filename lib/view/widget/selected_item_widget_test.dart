@@ -13,6 +13,7 @@ class SelectedItemWidgetTest extends StatelessWidget {
   final CurrencyData selectedItem;
   @override
   Widget build(BuildContext context) {
+    debugPrint('*******inside selected item++++${selectedItem.countryName}');
     return SizedBox(
       height: size.height * 0.05,
       //  width: size.width * .6,
