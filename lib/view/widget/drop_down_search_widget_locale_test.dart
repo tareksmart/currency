@@ -9,7 +9,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DropDownSearchWidgetLocaleTest extends StatelessWidget {
+class DropDownSearchWidgetLocaleTest extends StatefulWidget {
   DropDownSearchWidgetLocaleTest(
       {super.key,
       required this.currencyDataList,
@@ -28,38 +28,42 @@ class DropDownSearchWidgetLocaleTest extends StatelessWidget {
   Function(CurrencyData) currLocalDataCallback;
   final List latestRate;
   final bool swap;
+
+  @override
+  State<DropDownSearchWidgetLocaleTest> createState() => _DropDownSearchWidgetLocaleTestState();
+}
+
+class _DropDownSearchWidgetLocaleTestState extends State<DropDownSearchWidgetLocaleTest> {
+  CurrencyData? selectedItemLocal;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: size.width * .4,
+      width: widget.size.width * .4,
       child: DropdownSearch<CurrencyData>(
-        items: currencyDataList,
+        items: widget.currencyDataList,
         dropdownDecoratorProps: DropDownDecoratorProps(
           dropdownSearchDecoration: dropDownSearchDecor(),
         ),
         itemAsString: (item) => item.countryName ?? 'select currency',
+        selectedItem:widget.swap?widget.exchangeSelectedItem: selectedItemLocal,
+        //لبناء الشكل او العنصر المختار فقط
         dropdownBuilder: (context, selectedItem) {
-          if (selectedItem != null) {
-            currLocalDataCallback(selectedItem);
-            return SelectedItemWidgetTest(
-              size: size,
-              selectedItem: selectedItem,
-            );
-          } else if (swap == true) {
-               selectedItem = null;
-            return SelectedItemWidgetTest(
-              size: size,
-              selectedItem: exchangeSelectedItem!,
-            );
-          } else {
-            return Text('select currency');
-          }
+         if(selectedItem!=null) {
+          var price = widget.latestRate[0][selectedItem?.currencyCode!];
+            widget.localPriceFun(price);
+             widget.currLocalDataCallback(selectedItem);
+           return SelectedItemWidgetTest(size: widget.size, selectedItem: selectedItem);
+         }
+         return  Text('select currency');
         },
         onChanged: (value) {
           if (value != null) {
-            var price = latestRate[0][value?.currencyCode!];
-
-            localPriceFun(price);
+          
+             setState(() {
+                 selectedItemLocal=value;
+            
+             });
             // widget.currBaseDataCallback(value);
           }
         },

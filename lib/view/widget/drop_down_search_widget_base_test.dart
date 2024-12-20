@@ -9,7 +9,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DropDownSearchWidgetBaseTest extends StatelessWidget {
+class DropDownSearchWidgetBaseTest extends StatefulWidget {
   DropDownSearchWidgetBaseTest(
       {super.key,
       required this.basePriceFun,
@@ -29,40 +29,46 @@ class DropDownSearchWidgetBaseTest extends StatelessWidget {
   // Function(CurrencyData) currBaseDataCallback;
   // Function(CurrencyData) currLocalDataCallback;
   final List latestRate;
+
+  @override
+  State<DropDownSearchWidgetBaseTest> createState() => _DropDownSearchWidgetBaseTestState();
+}
+
+class _DropDownSearchWidgetBaseTestState extends State<DropDownSearchWidgetBaseTest> {
+  CurrencyData? selectedItemBase;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: DropdownSearch<CurrencyData>(
-        items: currencyDataList,
+        items: widget.currencyDataList,
         dropdownDecoratorProps: DropDownDecoratorProps(
           dropdownSearchDecoration: dropDownSearchDecor(),
         ),
         itemAsString: (item) => item.countryName ?? 'select currency',
+        selectedItem: widget.swap ? widget.exchangeSelectedItem : selectedItemBase,
+        //لبناء الشكل او العنصر المختار فقط
         dropdownBuilder: (context, selectedItem) {
-          if (selectedItem != null && swap == false) {
-            currBaseDataCallback(selectedItem);
-            return SelectedItemWidgetTest(
-              size: size,
-              selectedItem: selectedItem,
-            );
-          } else if (swap == true) {
-            selectedItem = null;
-            return SelectedItemWidgetTest(
-              size: size,
-              selectedItem: exchangeSelectedItem!,
-            );
-          } else {
-            return Text('select currency');
-          }
+         if(selectedItem!=null) {
+          debugPrint('///////////////${selectedItem.currencyCode}');
+            var price = widget.latestRate[0][selectedItem?.currencyCode!];
+
+            widget.basePriceFun(price);
+            widget.currBaseDataCallback(selectedItem);
+           return SelectedItemWidgetTest(size: widget.size, selectedItem: selectedItem);
+         }
+         return  Text('select currency');
         },
         onChanged: (value) {
           if (value != null) {
-            var price = latestRate[0][value?.currencyCode!];
-
-            basePriceFun(price);
-            //widget.currBaseDataCallback(value);
+         
+            setState(() {
+                 selectedItemBase = value;
+          
+            });
           }
         },
+     
         popupProps: PopupProps.menu(
             fit: FlexFit.loose,
             showSearchBox: true,
