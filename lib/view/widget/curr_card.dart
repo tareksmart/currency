@@ -1,3 +1,4 @@
+import 'package:currencypro/controller/cubit/all_currency_cubit/currency_states.dart';
 import 'package:currencypro/controller/cubit/hive_cubit/add_currency_data_hive_cubit/add_currency_data_cubit.dart';
 
 import 'package:currencypro/controller/cubit/hive_cubit/read_currency_hive_cubit/cubit/read_currency_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../constant/myConstants.dart';
 import 'convert_button.dart';
+
 class Currencycard extends StatefulWidget {
   Currencycard({Key? key, required this.allCurrency, this.allRate})
       : super(key: key);
@@ -20,6 +22,7 @@ class Currencycard extends StatefulWidget {
   @override
   State<Currencycard> createState() => _CurrencycardState();
 }
+
 class _CurrencycardState extends State<Currencycard> {
   final _baseCurrency_controller = TextEditingController();
 
@@ -78,7 +81,7 @@ class _CurrencycardState extends State<Currencycard> {
     double mny = double.parse(mony);
     double result = ((tPrice / base) * mny);
 
-    return result.toStringAsFixed(2);//تقريب الى عددين
+    return result.toStringAsFixed(2); //تقريب الى عددين
   }
 
   // _callLatestRate() async {
@@ -114,173 +117,164 @@ class _CurrencycardState extends State<Currencycard> {
     return BlocBuilder<ReadCurrencyCubit, ReadCurrencyState>(
       builder: (context, state) {
         if (state is ReadCurrencysuccessState) {
-          return Stack(
-            alignment: Alignment.center,
+          return Column(
+            //alignment: Alignment.center,
             children: [
-              SizedBox(
-                height: size.height * .35,
-                width: size.width * .9,
-                child: Card(
-                  elevation: 12,
-                  color: Colors.white,
-                  child: Form(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    child: Text(
-                                      MyconstantName.amount,
-                                      style: TextStyle(
-                                          color: Colors.blue[300],
-                                          fontSize: 16),
-                                    ),
+              Card(
+                elevation: 12,
+                color: Colors.white,
+                child: Form(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(
+                                    MyconstantName.amount,
+                                    style: TextStyle(
+                                        color: Colors.blue[300], fontSize: 16),
                                   ),
-                                  DropDownSearchWidgetBaseTest(
+                                ),
+                                DropDownSearchWidgetBaseTest(
+                                  currencyDataList: state.currencyList,
+                                  basePriceFun: basePriceCallBack,
+                                  size: size,
+                                  latestRate: latestRate,
+                                  currBaseDataCallback: currBaseDataCallback,
+                                  exchangeSelectedItem: _localCurrData,
+                                  swap: swap,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 32,
+                          ),
+                          Expanded(
+                            child: BlocConsumer<PressNumberCubit,
+                                PressNumberCubitState>(
+                              buildWhen: (previous, current) =>
+                                  current is PressedNumber,
+                              listener: (context, state) {
+                                if (state is PressedNumber) {
+                                  _baseCurrency_controller.text += state.number;
+                                  if (state.number == '')
+                                    _baseCurrency_controller.text = '';
+                                  //  _baseCurrency_controller.dispose();
+                                }
+                              },
+                              builder: (context, state) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4, horizontal: 16),
+                                  child: TextFormField(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall!
+                                        .copyWith(color: MyColors.numberColor),
+                                    readOnly: true,
+                                    keyboardType: TextInputType.number,
+                                    controller: _baseCurrency_controller,
+                                    decoration:
+                                        text_form_field_decoration(context),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                      IconButton(
+                        color: MyColors.ButtonColor,
+                        iconSize: 42,
+                        onPressed: () {
+                          _swapValues();
+                          _toCurr_controller.text = result(_basePrice, _toPrice,
+                              _baseCurrency_controller.text.trim());
+                        },
+                        icon: const Icon(Icons.currency_exchange_rounded),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(
+                                    MyconstantName.convertedAmount,
+                                    style: TextStyle(
+                                        color: Colors.blue[300], fontSize: 16),
+                                  ),
+                                ),
+                                DropDownSearchWidgetLocaleTest(
                                     currencyDataList: state.currencyList,
-                                    basePriceFun: basePriceCallBack,
                                     size: size,
                                     latestRate: latestRate,
-                                    currBaseDataCallback: currBaseDataCallback,
-                                    exchangeSelectedItem: _localCurrData,
+                                    localPriceFun: localPriceCallBack,
+                                    currLocalDataCallback:
+                                        currLocalDataCallback,
                                     swap: swap,
-                                  ),
-                                ],
+                                    exchangeSelectedItem: baseCallBackReturn()),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 32,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 16),
+                              child: TextFormField(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall!
+                                    .copyWith(color: MyColors.numberColor),
+                                keyboardType: TextInputType.number,
+                                readOnly: true,
+                                controller: _toCurr_controller,
+                                decoration: text_form_field_decoration(context),
                               ),
                             ),
-                            const SizedBox(
-                              width: 32,
-                            ),
-                            Expanded(
-                              child: BlocConsumer<PressNumberCubit,
-                                  PressNumberCubitState>(
-                                buildWhen: (previous, current) =>
-                                    current is PressedNumber,
-                                listener: (context, state) {
-                                  if (state is PressedNumber) {
-                                    _baseCurrency_controller.text +=
-                                        state.number;
-                                    if (state.number == '')
-                                      _baseCurrency_controller.text = '';
-                                    //  _baseCurrency_controller.dispose();
-                                  }
-                                },
-                                builder: (context, state) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 16),
-                                    child: TextFormField(
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall!
-                                          .copyWith(
-                                              color: MyColors.numberColor),
-                                      readOnly: true,
-                                      keyboardType: TextInputType.number,
-                                      controller: _baseCurrency_controller,
-                                      decoration:
-                                          text_form_field_decoration(context),
-                                    ),
-                                  );
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                        IconButton(
-                          color: MyColors.ButtonColor,
-                          iconSize: 42,
-                          onPressed: () {
-                            _swapValues();
-                          },
-                          icon: const Icon(Icons.currency_exchange_rounded),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 8),
-                                    child: Text(
-                                      MyconstantName.convertedAmount,
-                                      style: TextStyle(
-                                          color: Colors.blue[300],
-                                          fontSize: 16),
-                                    ),
-                                  ),
-                                  DropDownSearchWidgetLocaleTest(
-                                      currencyDataList: state.currencyList,
-                                      size: size,
-                                      latestRate: latestRate,
-                                      localPriceFun: localPriceCallBack,
-                                      currLocalDataCallback:
-                                          currLocalDataCallback,
-                                      swap: swap,
-                                      exchangeSelectedItem:
-                                          baseCallBackReturn()),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 32,
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
-                                child: TextFormField(
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall!
-                                      .copyWith(color: MyColors.numberColor),
-                                  keyboardType: TextInputType.number,
-                                  readOnly: true,
-                                  controller: _toCurr_controller,
-                                  decoration:
-                                      text_form_field_decoration(context),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        BlocBuilder<AddCurrencyDataCubit, AddCurrencyDataState>(
-                          builder: (context, state) {
-                            if (state is AddCurrencyDataWaitingState) {
-                              return WaitingAlertDialog(
-                                title: 'please wait',
-                                progressColor: Colors.green,
-                              );
-                            } else if (state is AddCurrencyDataSuccess) {
-                              hiveSevices.readHive(
-                                  context); //read curr when finished adding
-                            } else if (state is AddCurrencyDataFailure) {
-                              return WaitingAlertDialog(
-                                title: 'Fail loading',
-                                progressColor: Colors.red,
-                              );
-                            }
-                            return const Text('');
-                          },
-                        )
-                      ],
-                    ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      BlocBuilder<AddCurrencyDataCubit, AddCurrencyDataState>(
+                        builder: (context, state) {
+                          if (state is AddCurrencyDataWaitingState) {
+                            return WaitingAlertDialog(
+                              title: 'please wait',
+                              progressColor: Colors.green,
+                            );
+                          } else if (state is AddCurrencyDataSuccess) {
+                            hiveSevices.readHive(
+                                context); //read curr when finished adding
+                          } else if (state is AddCurrencyDataFailure) {
+                            return WaitingAlertDialog(
+                              title: 'Fail loading',
+                              progressColor: Colors.red,
+                            );
+                          }
+                          return const Text('');
+                        },
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -288,8 +282,8 @@ class _CurrencycardState extends State<Currencycard> {
                 alignment: Alignment.center,
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: size.height * .37,
+                    const SizedBox(
+                      height: 20,
                     ),
                     ConvertButton(
                       text: 'CONVERT',
@@ -302,19 +296,17 @@ class _CurrencycardState extends State<Currencycard> {
                   ],
                 ),
               ),
-              Positioned(
-                bottom: size.height * .4,
-                child: Text(
-                  'Currency Converter',
-                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontFamily: 'Roboto',
-                      color: MyColors.dropDownSearchfontColor),
-                ),
-              )
             ],
           );
-        } else {
+        } else if (state is ReadCurrencyWaitingState) {
           return WaitingAlertDialog(title: 'please wait reading data');
+        } else {
+          return const Column(
+            children: [
+              Icon(Icons.error),
+              Text('no data loaded please check internet connection')
+            ],
+          );
         }
       },
     );

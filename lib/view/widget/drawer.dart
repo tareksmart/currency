@@ -31,9 +31,9 @@ class _MyDrawerState extends State<MyDrawer> {
   bool _speechEnabled = false;
   String lastWords = '';
   List<LocaleName> _localeNames = [];
-   HiveSevices hiveSevices=HiveSevices();
+  HiveSevices hiveSevices = HiveSevices();
   List<Map<dynamic, dynamic>> latestRate = [];
-    List<CurrencyData>? searchedCurrency(
+  List<CurrencyData>? searchedCurrency(
       String searchArg, List<CurrencyData> currList) {
     if (currList.isNotEmpty) {
       if (searchArg.trim() != '' && currList.isNotEmpty) {
@@ -47,22 +47,24 @@ class _MyDrawerState extends State<MyDrawer> {
     }
     return null;
   }
+
 /////////////////////
-readLatestRate()async{
-latestRate=await hiveSevices.readLatestRate();
-}
+  readLatestRate() async {
+    latestRate = await hiveSevices.readLatestRate();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
-   
-   hiveSevices.readHive(context);
- 
-   readLatestRate();
+
+    hiveSevices.readHive(context);
+
+    readLatestRate();
 
     _speechToText = SpeechToText();
-    
+
     super.initState();
-    
+
     _initSpeech();
     searchController.addListener(() {
       setState(() {
@@ -81,7 +83,7 @@ latestRate=await hiveSevices.readLatestRate();
       onStatus: (val) => print('onStatus: $val'),
       onError: (val) => print('onError: $val'),
     );
-   // _localeNames = await _speechToText.locales();
+    // _localeNames = await _speechToText.locales();
     setState(() {});
   }
 
@@ -111,9 +113,8 @@ latestRate=await hiveSevices.readLatestRate();
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       lastWords = result.recognizedWords;
-         searchController.value = TextEditingValue(text: lastWords.toLowerCase());
+      searchController.value = TextEditingValue(text: lastWords.toLowerCase());
     });
-   
   }
 
   @override
@@ -156,9 +157,12 @@ latestRate=await hiveSevices.readLatestRate();
                           height: widget.size.height * .06,
                         ),
                       ),
-                      IconButton(icon:const Icon(Icons.close),onPressed: (){
-                        Scaffold.of(context).closeDrawer();
-                      },),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          Scaffold.of(context).closeDrawer();
+                        },
+                      ),
                     ],
                   ),
                   Padding(
@@ -166,7 +170,6 @@ latestRate=await hiveSevices.readLatestRate();
                     child: Stack(
                       children: [
                         SizedBox(
-                          width: widget.size.width * .8,
                           child: TextField(
                             controller: searchController,
                             decoration: InputDecoration(
@@ -188,14 +191,11 @@ latestRate=await hiveSevices.readLatestRate();
                         ),
                         Column(
                           children: [
-                            SizedBox(
-                              height: widget.size.height * .019,
-                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(
-                                  width: widget.size.width * .5,
+                                const SizedBox(
+                                  width: 20,
                                 ),
                                 IconButton(
                                   onPressed: () async {
@@ -203,11 +203,12 @@ latestRate=await hiveSevices.readLatestRate();
                                     _speechToText.isNotListening
                                         ? _startListening()
                                         : _stopListening();
-                                
+
                                     setState(() {});
                                   },
                                   icon: Icon(
-                                    (_speechToText.isNotListening||_speechToText.hasError)
+                                    (_speechToText.isNotListening ||
+                                            _speechToText.hasError)
                                         ? Icons.mic_off
                                         : Icons.mic,
                                     color: Colors.black26,

@@ -8,7 +8,8 @@ import 'package:currencypro/model/currency_data.dart';
 import 'package:currencypro/repo/currency_repository.dart';
 import 'package:currencypro/services/wep_services.dart';
 import 'package:currencypro/view/constant/myConstants.dart';
-import 'package:currencypro/view/pages/myHomePage.dart';
+import 'package:currencypro/view/pages/home_body.dart';
+import 'package:currencypro/view/pages/home_page_mobile_layout.dart';
 import 'package:currencypro/view/widget/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,16 +20,16 @@ void main() async {
   Hive.registerAdapter(CurrencyDataAdapter());
   await Hive.openBox<CurrencyData>(MyconstantName.currencyDataBox);
   await Hive.openBox<String>(MyconstantName.dateAddHiveBox);
-  await Hive.openBox<Map<dynamic,dynamic>>(MyconstantName.latestRateBox);
+  await Hive.openBox<Map<dynamic, dynamic>>(MyconstantName.latestRateBox);
 
   Bloc.observer = WatchingObserver();
-  
+
   runApp(BlocProvider(create: (context) => CurrencyCubit(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  late CurrencyRepository currRepo;
-  late CurrencyCubit cubit = CurrencyCubit();
+  // late CurrencyRepository currRepo;
+  // late CurrencyCubit cubit = CurrencyCubit();
   MyApp({super.key});
 
   // This widget is the root of your application.
@@ -40,12 +41,12 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => CurrencyCubit()),
-          BlocProvider(create: (context)=>LatestCurrCubit()),
+          BlocProvider(create: (context) => LatestCurrCubit()),
           BlocProvider(create: (context) => PressNumberCubit()),
-         BlocProvider(create: (context) => AddCurrencyDataCubit()),
+          BlocProvider(create: (context) => AddCurrencyDataCubit()),
           BlocProvider(create: (context) => ReadCurrencyCubit()),
         ],
-        child: MyHomePage(),
+        child: const HomeBody(),
       ),
     );
   }
