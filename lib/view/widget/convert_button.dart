@@ -12,7 +12,7 @@ class ConvertButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: size.height * .07,
+      height: size.height * .08,
       width: size.width * .45,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(

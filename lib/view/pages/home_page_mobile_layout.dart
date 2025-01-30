@@ -4,6 +4,7 @@ import 'package:currencypro/controller/cubit/all_currency_cubit/currency_states.
 import 'package:currencypro/controller/cubit/hive_cubit/read_currency_hive_cubit/cubit/read_currency_cubit.dart';
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
 import 'package:currencypro/controller/cubit/press_number_cubit/press_number_cubit_cubit.dart';
+import 'package:currencypro/view/widget/curr_card_mobile.dart';
 import 'package:currencypro/view/widget/digitals_widget.dart';
 import 'package:currencypro/view/widget/drawer.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +31,6 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
     super.initState();
     //_currLoad();
   }
-
-  // _currLoad() async {
-  //   await BlocProvider.of<CurrencyCubit>(context).getAllCurrData();
-  //   await BlocProvider.of<CurrencyCubit>(context).getRates();
-  // }
 
   _futureList() async {
     var dateBox = Hive.box<String>(MyconstantName.dateAddHiveBox);
@@ -77,13 +73,6 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     var allCur, allRate;
     final size = MediaQuery.of(context).size;
@@ -97,94 +86,87 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
 
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        flexibleSpace: Image.asset(
-          'assets/images/waves.png',
-          fit: BoxFit.cover,
+        backgroundColor: MyColors.ButtonColor,
+        title: Text(
+          'Currency Converter',
+          style: Theme.of(context)
+              .textTheme
+              .headlineMedium!
+              .copyWith(fontFamily: 'Roboto', color: MyColors.whiteColor),
         ),
+        elevation: 0,
       ),
       drawer: MyDrawer(size: size),
       resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Container(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: size.height * .35,
-                    width: double.infinity,
-                    child: Image.asset(
-                      'assets/images/waves.png',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height * .15,
-                  ),
-                  SizedBox(
-                    height: size.height * .6,
-                    child: DigitalWidget(),
-                  )
-                ],
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              SizedBox(
+                height: 200,
               ),
-            ),
-            Column(
-              children: [
-                SizedBox(
-                  height: size.height * .05,
-                ),
-                BlocConsumer<CurrencyCubit, CurrencyState>(
-                  buildWhen: (previous, current) => current is CurrenciesLoaded,
-                  listener: (context, state) {
-                    if (state is CurrenciesLoaded) {
-                      allCur = state.currencisList;
-                      triggerHiveCubit(allCur);
-                    }
-                  },
-                  builder: (context, state) {
+              Positioned(
+                top: 800,
+                child: SingleChildScrollView(
+                    child: SizedBox(height: 400, child: DigitalWidget())),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              SizedBox(
+                height: size.height * .05,
+              ),
+              BlocConsumer<CurrencyCubit, CurrencyState>(
+                buildWhen: (previous, current) => current is CurrenciesLoaded,
+                listener: (context, state) {
+                  if (state is CurrenciesLoaded) {
+                    allCur = state.currencisList;
+                    triggerHiveCubit(allCur);
+                  }
+                },
+                builder: (context, state) {
+                  print('satte isssssssss $state');
+                  if (state is CurrencyWaitingState) {
                     print('satte isssssssss $state');
-                    if (state is CurrencyWaitingState) {
-                      print('satte isssssssss $state');
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is FailurLoaded) {
-                      showBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return SizedBox(
-                              height: 200,
-                              child: Center(
-                                child: Text(state.errorMessage),
-                              ),
-                            );
-                          });
-                    } else {
-                      return Currencycard(
-                          allCurrency: allCur ?? defaultList,
-                          allRate: allRate ?? defAllRate);
-                    }
-                    return Text('no data');
-                  },
-                ),
-                BlocConsumer<LatestCurrCubit, LatestCurrCubitState>(
-                  listener: (context, state) {
-                    // TODO: implement listener
-                    if (state is LatestRateSuccessLoaded) {
-                      saveRate(state.currencyRatesModel.rates);
-                      print(
-                          '=*******rate number is ${state.currencyRatesModel.rates.length}');
-                    }
-                  },
-                  builder: (context, state) {
-                    return Container();
-                  },
-                )
-              ],
-            ),
-          ],
-        ),
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (state is FailurLoaded) {
+                    showBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return SizedBox(
+                            height: 200,
+                            child: Center(
+                              child: Text(state.errorMessage),
+                            ),
+                          );
+                        });
+                  } else {
+                    return CurrencycardMobile(
+                        allCurrency: allCur ?? defaultList,
+                        allRate: allRate ?? defAllRate);
+                  }
+                  return Text('no data');
+                },
+              ),
+              BlocConsumer<LatestCurrCubit, LatestCurrCubitState>(
+                listener: (context, state) {
+                  // TODO: implement listener
+                  if (state is LatestRateSuccessLoaded) {
+                    saveRate(state.currencyRatesModel.rates);
+                    print(
+                        '=*******rate number is ${state.currencyRatesModel.rates.length}');
+                  }
+                },
+                builder: (context, state) {
+                  return Container();
+                },
+              )
+            ],
+          ),
+        ],
       ),
     );
   }
