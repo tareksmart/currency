@@ -12,7 +12,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
-import '../widget/curr_card.dart';
+import '../widget/curr_card_tab.dart';
 import '../widget/text_button.dart';
 
 class HomePageTabLayout extends StatefulWidget {
@@ -112,62 +112,80 @@ class _HomePageTabLayoutState extends State<HomePageTabLayout> {
       body: Row(
         children: [
           Expanded(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: size.height * .05,
-                ),
-                BlocConsumer<CurrencyCubit, CurrencyState>(
-                  buildWhen: (previous, current) => current is CurrenciesLoaded,
-                  listener: (context, state) {
-                    if (state is CurrenciesLoaded) {
-                      allCur = state.currencisList;
-                      triggerHiveCubit(allCur);
-                    }
-                  },
-                  builder: (context, state) {
-                    print('satte isssssssss $state');
-                    if (state is CurrencyWaitingState) {
-                      print('satte isssssssss $state');
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is FailurLoaded) {
-                      showBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return SizedBox(
-                              height: 200,
-                              child: Center(
-                                child: Text(state.errorMessage),
-                              ),
+            child: SingleChildScrollView(
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: MyColors.ButtonColor,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(32),
+                            bottomRight: Radius.circular(32))),
+                    child: SizedBox(
+                      height: 280,
+                      width: double.infinity,
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      // SizedBox(
+                      //   height: size.height * .01,
+                      // ),
+                      BlocConsumer<CurrencyCubit, CurrencyState>(
+                        buildWhen: (previous, current) =>
+                            current is CurrenciesLoaded,
+                        listener: (context, state) {
+                          if (state is CurrenciesLoaded) {
+                            allCur = state.currencisList;
+                            triggerHiveCubit(allCur);
+                          }
+                        },
+                        builder: (context, state) {
+                          print('satte isssssssss $state');
+                          if (state is CurrencyWaitingState) {
+                            print('satte isssssssss $state');
+                            return const Center(
+                              child: CircularProgressIndicator(),
                             );
-                          });
-                    } else {
-                      return Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: Currencycard(
-                            allCurrency: allCur ?? defaultList,
-                            allRate: allRate ?? defAllRate),
-                      );
-                    }
-                    return Text('no data');
-                  },
-                ),
-                BlocConsumer<LatestCurrCubit, LatestCurrCubitState>(
-                  listener: (context, state) {
-                    // TODO: implement listener
-                    if (state is LatestRateSuccessLoaded) {
-                      saveRate(state.currencyRatesModel.rates);
-                      print(
-                          '=*******rate number is ${state.currencyRatesModel.rates.length}');
-                    }
-                  },
-                  builder: (context, state) {
-                    return Container();
-                  },
-                )
-              ],
+                          } else if (state is FailurLoaded) {
+                            showBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return SizedBox(
+                                    height: 200,
+                                    child: Center(
+                                      child: Text(state.errorMessage),
+                                    ),
+                                  );
+                                });
+                          } else {
+                            return Padding(
+                              padding: const EdgeInsets.all(32.0),
+                              child: CurrencyCardTab(
+                                  allCurrency: allCur ?? defaultList,
+                                  allRate: allRate ?? defAllRate),
+                            );
+                          }
+                          return Text('no data');
+                        },
+                      ),
+                      BlocConsumer<LatestCurrCubit, LatestCurrCubitState>(
+                        listener: (context, state) {
+                          // TODO: implement listener
+                          if (state is LatestRateSuccessLoaded) {
+                            saveRate(state.currencyRatesModel.rates);
+                            print(
+                                '=*******rate number is ${state.currencyRatesModel.rates.length}');
+                          }
+                        },
+                        builder: (context, state) {
+                          return Container();
+                        },
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           const Expanded(

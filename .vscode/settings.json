@@ -1,8 +1,8 @@
 {
-    "editor.fontFamily": "Menlo",
+    "editor.fontFamily": "Cascadia mono extralight",
     "editor.fontSize": 13,
     "editor.lineHeight": 2.5,
    "window.zoomLevel":0,
-   "editor.fontWeight": "normal"
+   "editor.fontWeight": "bold"
     
 }

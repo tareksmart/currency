@@ -29,7 +29,7 @@ class AddCurrencyDataCubit extends Cubit<AddCurrencyDataState> {
       emit(AddCurrencyDataFailure(errorMessage: e.toString()));
     }
   }
-
+///get date of day
   String dateFormat(DateTime dateTime) {
     var date = dateTime.year.toString() +
         dateTime.month.toString() +

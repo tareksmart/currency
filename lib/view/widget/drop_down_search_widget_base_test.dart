@@ -39,63 +39,61 @@ class _DropDownSearchWidgetBaseTestState extends State<DropDownSearchWidgetBaseT
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: DropdownSearch<CurrencyData>(
-        items: widget.currencyDataList,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          dropdownSearchDecoration: dropDownSearchDecor(),
-        ),
-        itemAsString: (item) => item.countryName ?? 'select currency',
-        selectedItem: widget.swap ? widget.exchangeSelectedItem : selectedItemBase,
-        //لبناء الشكل او العنصر المختار فقط
-        dropdownBuilder: (context, selectedItem) {
-         if(selectedItem!=null) {
-          debugPrint('///////////////${selectedItem.currencyCode}');
-            var price = widget.latestRate[0][selectedItem?.currencyCode!];
-
-            widget.basePriceFun(price);
-            widget.currBaseDataCallback(selectedItem);
-           return SelectedItemWidgetTest(size: widget.size, selectedItem: selectedItem);
-         }
-         return  Text('select currency');
-        },
-        onChanged: (value) {
-          if (value != null) {
-         
-            setState(() {
-                 selectedItemBase = value;
-          
-            });
-          }
-        },
-     
-        popupProps: PopupProps.menu(
-            fit: FlexFit.loose,
-            showSearchBox: true,
-            itemBuilder: (context, item, isSelected) {
-              return ListTile(
-                title: Text(
-                  item.currencyName ?? 'knwon',
-                  style: const TextStyle(color: Colors.blue, fontSize: 12),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                leading: CachedNetworkImage(
-                  imageUrl: item.icon!,
-                  fit: BoxFit.contain,
-                  width: 30,
-                  height: 30,
-                  placeholder: (context, url) =>
-                      Image.asset('assets/images/Missing_flag.png'),
-                  errorWidget: (context, url, error) =>
-                      Image.asset('assets/images/Missing_flag.png'),
-                ),
-              );
-            },
-            title: const Text(
-              'search currency',
-              style: TextStyle(color: Colors.blue, fontSize: 10),
-            )),
+    return DropdownSearch<CurrencyData>(
+      items: widget.currencyDataList,
+      dropdownDecoratorProps: DropDownDecoratorProps(
+        dropdownSearchDecoration: dropDownSearchDecor(),
       ),
+      itemAsString: (item) => item.countryName ?? 'select currency',
+      selectedItem: widget.swap ? widget.exchangeSelectedItem : selectedItemBase,
+      //لبناء الشكل او العنصر المختار فقط
+      dropdownBuilder: (context, selectedItem) {
+       if(selectedItem!=null) {
+        debugPrint('///////////////${selectedItem.currencyCode}');
+          var price = widget.latestRate[0][selectedItem?.currencyCode!];
+    
+          widget.basePriceFun(price);
+          widget.currBaseDataCallback(selectedItem);
+         return SelectedItemWidgetTest(size: widget.size, selectedItem: selectedItem);
+       }
+       return  Text('select currency');
+      },
+      onChanged: (value) {
+        if (value != null) {
+       
+          setState(() {
+               selectedItemBase = value;
+        
+          });
+        }
+      },
+         
+      popupProps: PopupProps.menu(
+          fit: FlexFit.loose,
+          showSearchBox: true,
+          itemBuilder: (context, item, isSelected) {
+            return ListTile(
+              title: Text(
+                item.currencyName ?? 'knwon',
+                style: const TextStyle(color: Colors.blue, fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+              ),
+              leading: CachedNetworkImage(
+                imageUrl: item.icon!,
+                fit: BoxFit.contain,
+                width: 30,
+                height: 30,
+                placeholder: (context, url) =>
+                    Image.asset('assets/images/Missing_flag.png'),
+                errorWidget: (context, url, error) =>
+                    Image.asset('assets/images/Missing_flag.png'),
+              ),
+            );
+          },
+          title: const Text(
+            'search currency',
+            style: TextStyle(color: Colors.blue, fontSize: 10),
+          )),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:currencypro/controller/cubit/all_currency_cubit/currency_states.
 import 'package:currencypro/controller/cubit/hive_cubit/read_currency_hive_cubit/cubit/read_currency_cubit.dart';
 import 'package:currencypro/controller/cubit/latest_currency_cubit/latest_curr_cubit_cubit.dart';
 import 'package:currencypro/controller/cubit/press_number_cubit/press_number_cubit_cubit.dart';
+import 'package:currencypro/services/hive_services.dart';
 import 'package:currencypro/view/widget/curr_card_mobile.dart';
 import 'package:currencypro/view/widget/digitals_widget.dart';
 import 'package:currencypro/view/widget/drawer.dart';
@@ -13,63 +14,25 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../model/currency_data.dart';
 import '../constant/myConstants.dart';
-import '../widget/curr_card.dart';
+import '../widget/curr_card_tab.dart';
 import '../widget/text_button.dart';
 
 class HomePageMobileLayout extends StatefulWidget {
-  HomePageMobileLayout({Key? key}) : super(key: key);
+  const HomePageMobileLayout({Key? key}) : super(key: key);
 
   @override
   State<HomePageMobileLayout> createState() => _HomePageMobileLayoutState();
 }
 
 class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
+  late final HiveSevices hiveSevices;
   @override
   void initState() {
+    hiveSevices = HiveSevices();
     // TODO: implement initState
-    _futureList();
+    hiveSevices.futureList(context);
     super.initState();
     //_currLoad();
-  }
-
-  _futureList() async {
-    var dateBox = Hive.box<String>(MyconstantName.dateAddHiveBox);
-    var currBox = Hive.box<CurrencyData>(MyconstantName.currencyDataBox);
-    var rateBox = Hive.box<Map<dynamic, dynamic>>(MyconstantName.latestRateBox);
-
-    var date = dateBox.get(MyconstantName.addDateKeyName);
-    var addCubit = BlocProvider.of<AddCurrencyDataCubit>(context);
-    var datenow = addCubit.dateFormat(DateTime.now());
-    if (date != addCubit.dateFormat(DateTime.now()) ||
-        rateBox.length <= 0 ||
-        currBox.length <= 0) {
-      await currBox.deleteFromDisk();
-      await dateBox.deleteFromDisk();
-      await rateBox.deleteFromDisk();
-
-      await BlocProvider.of<CurrencyCubit>(context).getAllCurrData();
-      await BlocProvider.of<LatestCurrCubit>(context).getRates();
-    }
-  }
-
-  void triggerHiveCubit(var allCurrency) async {
-    await BlocProvider.of<AddCurrencyDataCubit>(context)
-        .addCurrencyData(allCurrency);
-    print('*********triggerHiveCubit');
-  }
-
-  saveRate(Map<dynamic, dynamic> ratesMap) async {
-    try {
-      var latestBox = await Hive.openBox<Map<dynamic, dynamic>>(
-          MyconstantName.latestRateBox);
-
-      // Hive.box<Map<dynamic, dynamic>>(MyconstantName.latestRateBox);
-      await Future.delayed(const Duration(seconds: 10));
-      await latestBox.put('latestRate', ratesMap);
-      print('*****saving rate to hive');
-    } catch (e) {
-      print('*****saving rate to hive${e.toString()}');
-    }
   }
 
   @override
@@ -102,14 +65,23 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
         children: [
           Column(
             children: [
-              SizedBox(
-                height: 200,
+              Container(
+                decoration: BoxDecoration(
+                    color: MyColors.ButtonColor,
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(32),
+                        bottomRight: Radius.circular(32))),
+                child: const SizedBox(
+                  height: 440,
+                  width: double.infinity,
+                ),
               ),
-              Positioned(
-                top: 800,
-                child: SingleChildScrollView(
-                    child: SizedBox(height: 400, child: DigitalWidget())),
+              const SizedBox(
+                height: 100,
               ),
+              const Flexible(
+                  fit: FlexFit.loose,
+                  child: SizedBox(height: 500, child: DigitalWidget())),
             ],
           ),
           Column(
@@ -122,7 +94,7 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
                 listener: (context, state) {
                   if (state is CurrenciesLoaded) {
                     allCur = state.currencisList;
-                    triggerHiveCubit(allCur);
+                    hiveSevices.triggerHiveCubit(allCur, context);
                   }
                 },
                 builder: (context, state) {
@@ -144,24 +116,26 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
                           );
                         });
                   } else {
-                    return CurrencycardMobile(
-                        allCurrency: allCur ?? defaultList,
-                        allRate: allRate ?? defAllRate);
+                    //return CurrencycardMobile();
                   }
-                  return Text('no data');
+                  return const Text('no data');
                 },
               ),
               BlocConsumer<LatestCurrCubit, LatestCurrCubitState>(
                 listener: (context, state) {
                   // TODO: implement listener
                   if (state is LatestRateSuccessLoaded) {
-                    saveRate(state.currencyRatesModel.rates);
+                    hiveSevices.saveRate(state.currencyRatesModel.rates);
+
                     print(
                         '=*******rate number is ${state.currencyRatesModel.rates.length}');
                   }
                 },
                 builder: (context, state) {
-                  return Container();
+                    hiveSevices.readHive(context);
+                  hiveSevices.readFromHiveLatestRate();
+                  
+                  return CurrencycardMobile();
                 },
               )
             ],

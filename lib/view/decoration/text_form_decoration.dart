@@ -7,7 +7,7 @@ InputDecoration text_form_field_decoration(BuildContext context) {
     focusColor: MyColors.greyColor,
     fillColor: MyColors.backGroundTextFieldColor,
     labelStyle: Theme.of(context).textTheme.bodyMedium,
-    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+    focusedBorder: const OutlineInputBorder(borderSide: BorderSide.none),
+    enabledBorder:const OutlineInputBorder(borderSide: BorderSide.none),
   );
 }

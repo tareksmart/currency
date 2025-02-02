@@ -50,7 +50,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
 /////////////////////
   readLatestRate() async {
-    latestRate = await hiveSevices.readLatestRate();
+    latestRate = await hiveSevices.readFromHiveLatestRate();
   }
 
   @override
@@ -143,152 +143,162 @@ class _MyDrawerState extends State<MyDrawer> {
           );
         if (state is ReadCurrencysuccessState && mounted) {
           currList = state.currencyList;
-          return Drawer(
-            backgroundColor: MyColors.backGroundTextFieldColor,
-            child: SafeArea(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          width: widget.size.width * .7,
-                          height: widget.size.height * .06,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          Scaffold.of(context).closeDrawer();
-                        },
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Stack(
+          return SizedBox(
+            height: 850,
+            child: Drawer(
+              backgroundColor: MyColors.drawerColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32)),
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          child: TextField(
-                            controller: searchController,
-                            decoration: InputDecoration(
-                              hintStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(color: Colors.black26),
-                              hintText: 'Search Country',
-                            ),
-                            onChanged: (val) {
-                              SearchedCurrList.clear();
-                              SearchedCurrList = searchedCurrency(
-                                      searchController.text, currList) ??
-                                  [];
-
-                              setState(() {});
-                            },
+                        Expanded(
+                          child: SizedBox(
+                            width: widget.size.width * .7,
+                            height: widget.size.height * .06,
                           ),
                         ),
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                IconButton(
-                                  onPressed: () async {
-                                    //excute
-                                    _speechToText.isNotListening
-                                        ? _startListening()
-                                        : _stopListening();
-
-                                    setState(() {});
-                                  },
-                                  icon: Icon(
-                                    (_speechToText.isNotListening ||
-                                            _speechToText.hasError)
-                                        ? Icons.mic_off
-                                        : Icons.mic,
-                                    color: Colors.black26,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                        IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            Scaffold.of(context).closeDrawer();
+                          },
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: widget.size.height * 0.8,
-                    // width: 300,
-                    child: ExpandableTheme(
-                      data: const ExpandableThemeData(
-                        iconColor: Colors.blue,
-                        useInkWell: true,
-                      ),
-                      child: Builder(builder: (context) {
-                        return ListView.separated(
-                          itemCount:
-                              checkCurrList(currList, SearchedCurrList).length,
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (BuildContext context, int index) {
-                            // children: state.currencyList
-                            //     .map((e) => CurrencyListDrawer(
-                            //           Cur: e,
-                            //         ))
-                            //     .toList(),
-                            return ExpansionTile(
-                              title: Text(checkCurrList(
-                                          currList, SearchedCurrList)[index]
-                                      .countryName ??
-                                  ''),
-                              leading: CachedNetworkImage(
-                                imageUrl: state.currencyList[index].icon!,
-                                fit: BoxFit.contain,
-                                width: 30,
-                                height: 30,
-                                placeholder: (context, url) => Image.asset(
-                                    'assets/images/Missing_flag.png'),
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(
-                                        'assets/images/Missing_flag.png'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            child: Card(
+                              elevation: 10,
+                              child: TextField(
+                                controller: searchController,
+                                decoration: InputDecoration(
+                                  hintStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(color: Colors.black26),
+                                  hintText: 'Search Country',
+                                ),
+                                onChanged: (val) {
+                                  SearchedCurrList.clear();
+                                  SearchedCurrList = searchedCurrency(
+                                          searchController.text, currList) ??
+                                      [];
+
+                                  setState(() {});
+                                },
                               ),
-                              children: [
-                                Text(checkCurrList(
-                                        currList, SearchedCurrList)[index]
-                                    .currencyName
-                                    .toString()),
-                                if (latestRate.length > 0 && mounted)
-                                  Text(latestRate[0][checkCurrList(
-                                              currList, SearchedCurrList)[index]
-                                          .currencyCode
-                                          .toString()] ??
-                                      'KNOWN')
-                                else
-                                  const LinearProgressIndicator(),
-                              ],
-                            );
-                            // CurrencyListDrawer(
-                            //   Cur: state.currencyList[index],
-                            // );
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return Divider();
-                          },
-                          /*  children: [
-                            Card4(
-                              Cur: allCur[0],
-                            )
-                          ],*/
-                        );
-                      }),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  IconButton(
+                                    onPressed: () async {
+                                      //excute
+                                      _speechToText.isNotListening
+                                          ? _startListening()
+                                          : _stopListening();
+
+                                      setState(() {});
+                                    },
+                                    icon: Icon(
+                                      (_speechToText.isNotListening ||
+                                              _speechToText.hasError)
+                                          ? Icons.mic_off
+                                          : Icons.mic,
+                                      color: Colors.black26,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: widget.size.height * 0.6,
+                      // width: 300,
+                      child: ExpandableTheme(
+                        data: const ExpandableThemeData(
+                          iconColor: Colors.blue,
+                          useInkWell: true,
+                        ),
+                        child: Builder(builder: (context) {
+                          return ListView.separated(
+                            itemCount: checkCurrList(currList, SearchedCurrList)
+                                .length,
+                            shrinkWrap: false,
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              // children: state.currencyList
+                              //     .map((e) => CurrencyListDrawer(
+                              //           Cur: e,
+                              //         ))
+                              //     .toList(),
+                              return ExpansionTile(
+                                title: Text(checkCurrList(
+                                            currList, SearchedCurrList)[index]
+                                        .countryName ??
+                                    ''),
+                                leading: CachedNetworkImage(
+                                  imageUrl: state.currencyList[index].icon!,
+                                  fit: BoxFit.contain,
+                                  width: 30,
+                                  height: 30,
+                                  placeholder: (context, url) => Image.asset(
+                                      'assets/images/Missing_flag.png'),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                          'assets/images/Missing_flag.png'),
+                                ),
+                                children: [
+                                  Text(checkCurrList(
+                                          currList, SearchedCurrList)[index]
+                                      .currencyName
+                                      .toString()),
+                                  if (latestRate.length > 0 && mounted)
+                                    Text(latestRate[0][checkCurrList(currList,
+                                                SearchedCurrList)[index]
+                                            .currencyCode
+                                            .toString()] ??
+                                        'KNOWN')
+                                  else
+                                    const LinearProgressIndicator(),
+                                ],
+                              );
+                              // CurrencyListDrawer(
+                              //   Cur: state.currencyList[index],
+                              // );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return Divider();
+                            },
+                            /*  children: [
+                              Card4(
+                                Cur: allCur[0],
+                              )
+                            ],*/
+                          );
+                        }),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
