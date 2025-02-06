@@ -13,12 +13,12 @@ import 'package:currencypro/view/widget/drop_down_search_widget_locale_test.dart
 import 'package:currencypro/view/widget/waiting_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../constant/myConstants.dart';
 import 'convert_button.dart';
 
 class CurrencycardMobile extends StatefulWidget {
-  const CurrencycardMobile({Key? key})
-      : super(key: key);
+  const CurrencycardMobile({Key? key}) : super(key: key);
   // final allCurrency, allRate;
   @override
   State<CurrencycardMobile> createState() => _CurrencycardMobileState();
@@ -93,11 +93,9 @@ class _CurrencycardMobileState extends State<CurrencycardMobile> {
   void initState() {
     // TODO: implement initState
     // triggerHiveCubit();
-   // hiveSevices.readHive(context);
+    // hiveSevices.readHive(context);
     readLatestRate();
     super.initState();
-
-   
   }
 
   @override
@@ -121,11 +119,11 @@ class _CurrencycardMobileState extends State<CurrencycardMobile> {
             children: [
               Column(
                 children: [
-                  const SizedBox(
-                    height: 50,
-                  ),
+                  // const SizedBox(
+                  //   height: 50,
+                  // ),
                   SizedBox(
-                    height: 400,
+                    height: size.height * .4,
                     child: Card(
                       margin: const EdgeInsets.all(15),
                       elevation: 12,
@@ -139,7 +137,9 @@ class _CurrencycardMobileState extends State<CurrencycardMobile> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Expanded(
+                                 
                                   child: Column(
+                                  
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
@@ -153,15 +153,18 @@ class _CurrencycardMobileState extends State<CurrencycardMobile> {
                                               fontSize: 16),
                                         ),
                                       ),
-                                      DropDownSearchWidgetBaseTest(
-                                        currencyDataList: state.currencyList,
-                                        basePriceFun: basePriceCallBack,
-                                        size: size,
-                                        latestRate: latestRate,
-                                        currBaseDataCallback:
-                                            currBaseDataCallback,
-                                        exchangeSelectedItem: _localCurrData,
-                                        swap: swap,
+                                      Flexible(
+                                        fit: FlexFit.loose,
+                                        child: DropDownSearchWidgetBaseTest(
+                                          currencyDataList: state.currencyList,
+                                          basePriceFun: basePriceCallBack,
+                                          size: size,
+                                          latestRate: latestRate,
+                                          currBaseDataCallback:
+                                              currBaseDataCallback,
+                                          exchangeSelectedItem: _localCurrData,
+                                          swap: swap,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -237,16 +240,20 @@ class _CurrencycardMobileState extends State<CurrencycardMobile> {
                                               fontSize: 16),
                                         ),
                                       ),
-                                      DropDownSearchWidgetLocaleTest(
-                                          currencyDataList: state.currencyList,
-                                          size: size,
-                                          latestRate: latestRate,
-                                          localPriceFun: localPriceCallBack,
-                                          currLocalDataCallback:
-                                              currLocalDataCallback,
-                                          swap: swap,
-                                          exchangeSelectedItem:
-                                              baseCallBackReturn()),
+                                      Flexible(
+                                        fit: FlexFit.loose,
+                                        child: DropDownSearchWidgetLocaleTest(
+                                            currencyDataList:
+                                                state.currencyList,
+                                            size: size,
+                                            latestRate: latestRate,
+                                            localPriceFun: localPriceCallBack,
+                                            currLocalDataCallback:
+                                                currLocalDataCallback,
+                                            swap: swap,
+                                            exchangeSelectedItem:
+                                                baseCallBackReturn()),
+                                      ),
                                     ],
                                   ),
                                 ),

@@ -143,13 +143,13 @@ class _MyDrawerState extends State<MyDrawer> {
           );
         if (state is ReadCurrencysuccessState && mounted) {
           currList = state.currencyList;
-          return SizedBox(
-            height: 850,
-            child: Drawer(
-              backgroundColor: MyColors.drawerColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32)),
-              child: SafeArea(
+          return SafeArea(
+            child: SizedBox(
+              height: widget.size.height * .9,
+              child: Drawer(
+                backgroundColor: MyColors.drawerColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32)),
                 child: Column(
                   children: [
                     Row(

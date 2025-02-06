@@ -50,13 +50,13 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.ButtonColor,
-        title: Text(
-          'Currency Converter',
-          style: Theme.of(context)
-              .textTheme
-              .headlineMedium!
-              .copyWith(fontFamily: 'Roboto', color: MyColors.whiteColor),
-        ),
+        // title: Text(
+        //   'Currency Converter',
+        //   style: Theme.of(context)
+        //       .textTheme
+        //       .headlineMedium!
+        //       .copyWith(fontFamily: 'Roboto', color: MyColors.whiteColor),
+        // ),
         elevation: 0,
       ),
       drawer: MyDrawer(size: size),
@@ -72,7 +72,7 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
                         bottomLeft: Radius.circular(32),
                         bottomRight: Radius.circular(32))),
                 child: const SizedBox(
-                  height: 440,
+                  height: 300,
                   width: double.infinity,
                 ),
               ),
@@ -80,15 +80,15 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
                 height: 100,
               ),
               const Flexible(
-                  fit: FlexFit.loose,
-                  child: SizedBox(height: 500, child: DigitalWidget())),
+                  fit: FlexFit.tight,
+                  child: SizedBox(height: 700, child: DigitalWidget())),
             ],
           ),
           Column(
             children: [
-              SizedBox(
-                height: size.height * .05,
-              ),
+              // SizedBox(
+              //   height: size.height * .05,
+              // ),
               BlocConsumer<CurrencyCubit, CurrencyState>(
                 buildWhen: (previous, current) => current is CurrenciesLoaded,
                 listener: (context, state) {
@@ -118,7 +118,7 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
                   } else {
                     //return CurrencycardMobile();
                   }
-                  return const Text('no data');
+                  return  Container();
                 },
               ),
               BlocConsumer<LatestCurrCubit, LatestCurrCubitState>(
@@ -132,9 +132,9 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
                   }
                 },
                 builder: (context, state) {
-                    hiveSevices.readHive(context);
+                  hiveSevices.readHive(context);
                   hiveSevices.readFromHiveLatestRate();
-                  
+
                   return CurrencycardMobile();
                 },
               )
