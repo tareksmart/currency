@@ -38,7 +38,7 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
   @override
   Widget build(BuildContext context) {
     var allCur, allRate;
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.sizeOf(context);
     List<CurrencyData> defaultList = [
       CurrencyData(
           currencyCode: 'USD',
@@ -72,16 +72,15 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
                         bottomLeft: Radius.circular(32),
                         bottomRight: Radius.circular(32))),
                 child: const SizedBox(
-                  height: 300,
+                  height: 300
+                  ,
                   width: double.infinity,
                 ),
               ),
-              const SizedBox(
-                height: 100,
+               SizedBox(
+                height:size.height*.2,
               ),
-              const Flexible(
-                  fit: FlexFit.tight,
-                  child: SizedBox(height: 700, child: DigitalWidget())),
+              const Expanded(child: SizedBox(height: 700, child: DigitalWidget())),
             ],
           ),
           Column(
@@ -135,7 +134,7 @@ class _HomePageMobileLayoutState extends State<HomePageMobileLayout> {
                   hiveSevices.readHive(context);
                   hiveSevices.readFromHiveLatestRate();
 
-                  return CurrencycardMobile();
+                  return CurrencycardMobile(size:size);
                 },
               )
             ],

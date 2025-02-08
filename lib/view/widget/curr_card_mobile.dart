@@ -18,15 +18,16 @@ import '../constant/myConstants.dart';
 import 'convert_button.dart';
 
 class CurrencycardMobile extends StatefulWidget {
-  const CurrencycardMobile({Key? key}) : super(key: key);
+  const CurrencycardMobile({Key? key, required this.size}) : super(key: key);
   // final allCurrency, allRate;
+  final Size size;
   @override
   State<CurrencycardMobile> createState() => _CurrencycardMobileState();
 }
 
 class _CurrencycardMobileState extends State<CurrencycardMobile> {
   final _baseCurrency_controller = TextEditingController();
-
+ 
   final _toCurr_controller = TextEditingController();
   final String _selectedValue = '0';
   String _basePrice = '0';
@@ -123,39 +124,39 @@ class _CurrencycardMobileState extends State<CurrencycardMobile> {
                   //   height: 50,
                   // ),
                   SizedBox(
-                    height: size.height * .4,
+                    height: size.height*.5,
                     child: Card(
                       margin: const EdgeInsets.all(15),
                       elevation: 12,
                       color: Colors.white,
                       child: Form(
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Expanded(
-                                 
-                                  child: Column(
-                                  
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8),
-                                        child: Text(
-                                          MyconstantName.amount,
-                                          style: TextStyle(
-                                              color: Colors.blue[300],
-                                              fontSize: 16),
+                            Expanded(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Expanded(
+                                   
+                                    child: Column(
+                                    
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: Text(
+                                            MyconstantName.amount,
+                                            style: TextStyle(
+                                                color: Colors.blue[300],
+                                                fontSize: 16),
+                                          ),
                                         ),
-                                      ),
-                                      Flexible(
-                                        fit: FlexFit.loose,
-                                        child: DropDownSearchWidgetBaseTest(
+                                        DropDownSearchWidgetBaseTest(
                                           currencyDataList: state.currencyList,
                                           basePriceFun: basePriceCallBack,
                                           size: size,
@@ -165,49 +166,49 @@ class _CurrencycardMobileState extends State<CurrencycardMobile> {
                                           exchangeSelectedItem: _localCurrData,
                                           swap: swap,
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 32,
-                                ),
-                                Expanded(
-                                  child: BlocConsumer<PressNumberCubit,
-                                      PressNumberCubitState>(
-                                    buildWhen: (previous, current) =>
-                                        current is PressedNumber,
-                                    listener: (context, state) {
-                                      if (state is PressedNumber) {
-                                        _baseCurrency_controller.text +=
-                                            state.number;
-                                        if (state.number == '')
-                                          _baseCurrency_controller.text = '';
-                                        //  _baseCurrency_controller.dispose();
-                                      }
-                                    },
-                                    builder: (context, state) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 4, horizontal: 16),
-                                        child: TextFormField(
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineSmall!
-                                              .copyWith(
-                                                  color: MyColors.numberColor),
-                                          readOnly: true,
-                                          keyboardType: TextInputType.number,
-                                          controller: _baseCurrency_controller,
-                                          decoration:
-                                              text_form_field_decoration(
-                                                  context),
-                                        ),
-                                      );
-                                    },
+                                  const SizedBox(
+                                    width: 32,
                                   ),
-                                )
-                              ],
+                                  Expanded(
+                                    child: BlocConsumer<PressNumberCubit,
+                                        PressNumberCubitState>(
+                                      buildWhen: (previous, current) =>
+                                          current is PressedNumber,
+                                      listener: (context, state) {
+                                        if (state is PressedNumber) {
+                                          _baseCurrency_controller.text +=
+                                              state.number;
+                                          if (state.number == '')
+                                            _baseCurrency_controller.text = '';
+                                          //  _baseCurrency_controller.dispose();
+                                        }
+                                      },
+                                      builder: (context, state) {
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 16),
+                                          child: TextFormField(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineSmall!
+                                                .copyWith(
+                                                    color: MyColors.numberColor),
+                                            readOnly: true,
+                                            keyboardType: TextInputType.number,
+                                            controller: _baseCurrency_controller,
+                                            decoration:
+                                                text_form_field_decoration(
+                                                    context),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                             IconButton(
                               color: MyColors.ButtonColor,
@@ -221,28 +222,27 @@ class _CurrencycardMobileState extends State<CurrencycardMobile> {
                               },
                               icon: const Icon(Icons.currency_exchange_rounded),
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8),
-                                        child: Text(
-                                          MyconstantName.convertedAmount,
-                                          style: TextStyle(
-                                              color: Colors.blue[300],
-                                              fontSize: 16),
+                            Expanded(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: Text(
+                                            MyconstantName.convertedAmount,
+                                            style: TextStyle(
+                                                color: Colors.blue[300],
+                                                fontSize: 16),
+                                          ),
                                         ),
-                                      ),
-                                      Flexible(
-                                        fit: FlexFit.loose,
-                                        child: DropDownSearchWidgetLocaleTest(
+                                        DropDownSearchWidgetLocaleTest(
                                             currencyDataList:
                                                 state.currencyList,
                                             size: size,
@@ -253,32 +253,32 @@ class _CurrencycardMobileState extends State<CurrencycardMobile> {
                                             swap: swap,
                                             exchangeSelectedItem:
                                                 baseCallBackReturn()),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 32,
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8, horizontal: 16),
-                                    child: TextFormField(
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall!
-                                          .copyWith(
-                                              color: MyColors.numberColor),
-                                      keyboardType: TextInputType.number,
-                                      readOnly: true,
-                                      controller: _toCurr_controller,
-                                      decoration:
-                                          text_form_field_decoration(context),
+                                      ],
                                     ),
                                   ),
-                                )
-                              ],
+                                  const SizedBox(
+                                    width: 32,
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 16),
+                                      child: TextFormField(
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineSmall!
+                                            .copyWith(
+                                                color: MyColors.numberColor),
+                                        keyboardType: TextInputType.number,
+                                        readOnly: true,
+                                        controller: _toCurr_controller,
+                                        decoration:
+                                            text_form_field_decoration(context),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                             const SizedBox(
                               height: 12,
@@ -314,9 +314,9 @@ class _CurrencycardMobileState extends State<CurrencycardMobile> {
                 alignment: Alignment.topCenter,
                 child: Column(
                   children: [
-                    const SizedBox(
-                      height: 270,
-                    ),
+                    // const SizedBox(
+                    //   height: 270,
+                    // ),
                     ConvertButton(
                       text: 'CONVERT',
                       onTab: () async {
